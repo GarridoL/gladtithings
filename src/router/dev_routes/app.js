@@ -52,14 +52,14 @@ export default{
   }, {
     path: '/request_reset_password',
     name: 'requestResetPassword',
-    component: resolve => require(['components/increment/basic/RequestResetPassword.vue'], resolve),
+    component: resolve => require(['modules/basic/RequestResetPassword.vue'], resolve),
     meta: {
       tokenRequired: false
     }
   }, {
     path: '/reset_password/:username/:code',
     name: 'resetPassword',
-    component: resolve => require(['components/increment/basic/ResetPassword.vue'], resolve),
+    component: resolve => require(['modules/basic/ResetPassword.vue'], resolve),
     meta: {
       tokenRequired: false
     }

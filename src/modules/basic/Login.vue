@@ -27,7 +27,7 @@
           </div>
           <div class="row" style="width: 100%; margin: 0 auto;">
             <div class="column" style="width: 50%; margin: 0;margin-top: 20px; margin-top: 25px;">
-              <p class="login-spacer" v-on:click="redirect('/request_reset_password')">Forgot your Password?</p>
+              <p class="login-spacer forgot" v-on:click="redirect('/request_reset_password')"><b>Forgot your Password?</b></p>
             </div>
             <div class="column" style="width: 50%;margin-top: 10px;">
               <button class="btn btn-secondary login-spacer login-button" v-on:click="logIn()">Login</button>
@@ -98,7 +98,7 @@
   width: auto !important;
 }
 
-.login-header img:hover{
+.login-header img:hover, .forgot{
   cursor: pointer;
 }
 
