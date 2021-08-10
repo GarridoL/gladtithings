@@ -148,7 +148,7 @@
 }
 /*-------------- Extra Small Screen for Mobile Phones --------------*/
 @media (max-width: 991px){
-  .custom-holder{
+  .tag-line{
     box-shadow: 0 0 0 0 #fff !important;
     margin-top: 50px !important;
   }

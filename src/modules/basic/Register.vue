@@ -73,7 +73,6 @@
   color: $primary;
 }
 
-
 .form-control-login{
   height: 45px !important;
   border-radius: 30px;
@@ -193,10 +192,10 @@
   cursor: pointer;
 }
 /*-------------- Extra Small Screen for Mobile Phones --------------*/
-@media (max-width: 991px){
-  .custom-holder{
-    box-shadow: 0 0 0 0 #fff !important;
-    margin-top: 50px !important;
+@media (max-width: 992px){
+  .login-wrapper{
+    width: 96%;
+    margin: 0 2% 0 2%;
   }
 }
 </style>
