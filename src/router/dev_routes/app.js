@@ -77,6 +77,14 @@ export default{
     meta: {
       tokenRequired: true
     }
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: resolve => require(['modules/events/List.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }
   ]
 }

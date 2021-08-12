@@ -1,7 +1,5 @@
 <template>
   <div class="ledger-summary-container">
-    <div class="incre-row">
-    </div>
     <basic-filter 
       v-bind:category="category" 
       :activeCategoryIndex="0"
@@ -13,32 +11,32 @@
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
-          <td>Date</td>
-          <td>Username</td>
-          <td>Email</td>
-          <td>Type</td>
-          <td>Status</td>
+          <td class="header"><b>Date</b></td>
+          <td class="header"><b>Username</b></td>
+          <td class="header"><b>Email</b></td>
+          <td class="header"><b>Type</b></td>
+          <td class="header"><b>Status</b></td>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
-          <td>{{item.created_at}}</td>
-          <td>
+          <td class="header">{{item.created_at}}</td>
+          <td class="header">
             <label class="action-link text-primary">{{item.username}}</label>
           </td>
-          <td>{{item.email}}</td>
-          <td>
+          <td class="header">{{item.email}}</td>
+          <td class="header">
             <label v-if="editTypeIndex !== index">{{item.account_type}}</label>
             <i class="fa fa-pencil text-primary" style="margin-left: 10px;" @click="setEditTypeIndex(index, item)" v-if="editTypeIndex !== index"></i>
             <span v-if="editTypeIndex === index">
               <select class="form-control" v-model="newAccountType" style="float: left; width: 70%;">
-                <option v-for="(typeItem, typeIndex) in ['USER', 'ADMIN']" :key="typeIndex">{{typeItem}}</option>
+                <option v-for="(typeItem, typeIndex) in ['USER', 'ADMIN', 'CHURCH']" :key="typeIndex">{{typeItem}}</option>
               </select>
               <i class="fa fa-check text-primary" style="margin-left: 5px; float: left;" @click="updateType(item, index)"></i>
               <i class="fa fa-times text-danger" style="margin-left: 5px; float: left;" @click="setEditTypeIndex(index, item)"></i>
             </span>
           </td>
-          <td>{{item.status}}</td>
+          <td class="header">{{item.status}}</td>
         </tr>
       </tbody>
     </table>
@@ -46,45 +44,20 @@
   </div>
 </template>
 <style scoped>
+.header {
+  text-align: center;
+}
+.table{
+  background-color: white;
+}
 .ledger-summary-container{
-  width: 100%;
+  width: 70%;
   float: left;
   height: auto;
   margin-bottom: 100px;
   margin-top: 25px;
+  margin-left: 15%;
 }
-
-.ledger-summary-container-header{
-  width: 100%;
-  float: left;
-  height: 70px;
-  border: solid 1px #ddd;
-}
-.summary-container-item{
-  width: 100%;
-  float: left;
-  border-radius: 5px;
-  min-height: 50px;
-  overflow-y: hidden;
-  border: solid 1px #ddd;
-  margin-top: 10px;
-  padding-left: 10px;
-}
-.summary-container-item .header{
-  width: 100%;
-  float: left;
-  height: 50px;
-  line-height: 50px;
-  color: #555;
-}
-.summary-container-item .body{
-  width: 100%;
-  float: left;
-  min-height: 50px;
-  overflow-y: hidden;
-  padding-right: 10px;
-}
-
 td i {
   padding-right: 0px !important;
   padding-left: 0px !important;
@@ -156,7 +129,7 @@ export default{
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'basic-filter': require('components/increment/generic/filter/Basic.vue'),
+    'basic-filter': require('modules/generic/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue')
   },
   methods: {

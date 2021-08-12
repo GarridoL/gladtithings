@@ -33,6 +33,9 @@
 .half-width{
   width: 50%
 }
+#app {
+  background-color: #F9F9F9;
+}
 .push-half-right{
   margin-left: 50%
 }
