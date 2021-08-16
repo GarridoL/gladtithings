@@ -25,7 +25,7 @@ class APIController extends Controller
   /*
     Author: Kennette Canales
     Version: 1.0
-    Company: Payhiram
+    Company: Incremetn Technologies
     Website: www.payhiram.ph
   */
   public $educationClass = 'App\Http\Controllers\EducationController';
