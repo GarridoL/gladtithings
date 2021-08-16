@@ -13,6 +13,9 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+button:focus{
+  outline: none;
+}
 .sort-button{
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;

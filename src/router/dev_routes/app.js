@@ -85,6 +85,35 @@ export default{
     meta: {
       tokenRequired: true
     }
-  }
-  ]
+  },
+  {
+    path: '/events/create',
+    name: 'createEvents',
+    component: resolve => require(['modules/events/Create.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: resolve => require(['modules/settings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/payment_methods',
+    name: 'paymentMethods',
+    component: resolve => require(['modules/settings/paymentMethods/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/notification_settings',
+    name: 'notificationSettings',
+    component: resolve => require(['modules/settings/notificationSettings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }]
 }

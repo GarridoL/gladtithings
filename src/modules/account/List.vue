@@ -1,14 +1,18 @@
 <template>
-  <div class="ledger-summary-container">
-    <basic-filter 
-      v-bind:category="category" 
-      :activeCategoryIndex="0"
-      :activeSortingIndex="0"
-      @changeSortEvent="retrieve($event.sort, $event.filter)"
-      @changeStyle="manageGrid($event)"
-      :grid="['list', 'th-large']"></basic-filter>
-    
-    <table class="table table-bordered table-responsive" v-if="data !== null">
+  <div class="container">
+    <div>
+      <basic-filter 
+        v-bind:category="category" 
+        :activeCategoryIndex="0"
+        :activeSortingIndex="0"
+        @changeSortEvent="retrieve($event.sort, $event.filter)"
+        @changeStyle="manageGrid($event)"
+        :grid="['list', 'th-large']">
+      </basic-filter>
+    </div>
+    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <div class="table-container" v-else>
+      <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
           <td class="header"><b>Date</b></td>
@@ -40,10 +44,17 @@
         </tr>
       </tbody>
     </table>
-    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    </div>
+    <Pager
+      :pages="numPages"
+      :active="activePage"
+      :limit="limit"
+      v-if="data !== null"
+    />
   </div>
 </template>
-<style scoped>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
 .header {
   text-align: center;
 }
@@ -57,6 +68,16 @@
   margin-bottom: 100px;
   margin-top: 25px;
   margin-left: 15%;
+}
+.table-container{
+  height: 50vh;
+  background-color: white;
+  margin-bottom: 10px;
+}
+.container{
+  width: 70%;
+  margin-bottom: 100px;
+  margin-top: 25px;
 }
 td i {
   padding-right: 0px !important;
@@ -73,6 +94,7 @@ td i {
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
@@ -124,13 +146,17 @@ export default{
       sort: null,
       editTypeIndex: null,
       newAccountType: null,
-      selectedAccount: null
+      selectedAccount: null,
+      limit: 5,
+      numPages: null,
+      activePage: 1
     }
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('modules/generic/Basic.vue'),
-    'increment-modal': require('components/increment/generic/modal/Modal.vue')
+    'increment-modal': require('components/increment/generic/modal/Modal.vue'),
+    Pager
   },
   methods: {
     setEditTypeIndex(index, item){

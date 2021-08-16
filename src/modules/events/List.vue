@@ -9,9 +9,10 @@
         @changeStyle="manageGrid($event)"
         :grid="['list', 'th-large']">
       </basic-filter>
-      <button class="text-center sort-button">Add Event</button>
+      <button class="text-center sort-button" @click="create()">Add Event</button>
     </div>
-    <div class="table-container">
+    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <div class="table-container" v-else>
       <table class="table table-bordered table-responsive" v-if="data !== null">
         <thead>
           <tr>
@@ -35,7 +36,7 @@
             <td class="header">
               <span>
                 <i class="fas fa-eye icon-eye"></i>
-                <i class="fas fa-edit icon-edit"></i>
+                <i class="fas fa-edit icon-edit" @click="create()"></i>
                 <i class="fas fa-trash-alt icon-trash"></i>
               </span>
             </td>
@@ -49,64 +50,8 @@
       :limit="limit"
       v-if="data !== null"
     />
-    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
   </div>
 </template>
-<style scoped lang="scss">
-@import "~assets/style/colors.scss";
-.sort-button{
-  border-radius: 25px;
-  width: 150px;
-  color: white;
-  border: 0px;
-  height: 40px;
-  background-color: $secondary;
-  margin-bottom: 10px;
-  float: right;
-}
-.icon-eye{
-  color: $secondary;
-  margin: 2px;
-}
-.icon-edit{
-  color: $primary;
-  margin:2px;
-}
-.icon-trash{
-  color: red;
-  margin: 2px;
-}
-.header {
-  text-align: center;
-}
-.table{
-  background-color: white;
-}
-.table-container{
-  height: 50vh;
-  background-color: white;
-  margin-bottom: 10px;
-  margin-top: 50px;
-}
-.container{
-  width: 70%;
-  margin-bottom: 100px;
-  margin-top: 25px;
-}
-td i {
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-
-@media (max-width: 992px){
-  .container{
-    width: 100%;
-  }
-  .table-container{
-   width: 70%;
-  }
-}
-</style>
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
@@ -170,6 +115,68 @@ export default{
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager
   },
-  methods: {}
+  methods: {
+    create(){
+      ROUTER.push('events/create')
+    }
+  }
 }
 </script>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
+button:focus{
+  outline: none;
+}
+.sort-button{
+  border-radius: 25px;
+  width: 150px;
+  color: white;
+  border: 0px;
+  height: 40px;
+  background-color: $secondary;
+  margin-bottom: 10px;
+  float: right;
+}
+.icon-eye{
+  color: $secondary;
+  margin: 2px;
+}
+.icon-edit{
+  color: $primary;
+  margin:2px;
+}
+.icon-trash{
+  color: red;
+  margin: 2px;
+}
+.header {
+  text-align: center;
+}
+.table{
+  background-color: white;
+}
+.table-container{
+  height: 50vh;
+  background-color: white;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+.container{
+  width: 70%;
+  margin-bottom: 100px;
+  margin-top: 25px;
+}
+td i {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
+@media (max-width: 992px){
+  .container{
+    width: 100%;
+  }
+  .table-container{
+   width: 70%;
+  }
+}
+</style>

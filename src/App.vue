@@ -35,6 +35,7 @@
 }
 #app {
   background-color: #F9F9F9;
+  overflow: auto;
 }
 .push-half-right{
   margin-left: 50%
@@ -45,11 +46,6 @@
 .dropdown-menu li a{
   padding: 10px;
 }
-.container {
-   min-height:100%;
-   position:relative;
-}
-
 /*
   BACKGROUND
 */
@@ -107,6 +103,9 @@
   height: 35px !important;
   border-color: $warning !important;
   color: white !important;
+}
+button:focus{
+  outline: none;
 }
 
 /* TEXT */
