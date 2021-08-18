@@ -52,14 +52,14 @@ export default{
   }, {
     path: '/request_reset_password',
     name: 'requestResetPassword',
-    component: resolve => require(['components/increment/basic/RequestResetPassword.vue'], resolve),
+    component: resolve => require(['modules/basic/RequestResetPassword.vue'], resolve),
     meta: {
       tokenRequired: false
     }
   }, {
     path: '/reset_password/:username/:code',
     name: 'resetPassword',
-    component: resolve => require(['components/increment/basic/ResetPassword.vue'], resolve),
+    component: resolve => require(['modules/basic/ResetPassword.vue'], resolve),
     meta: {
       tokenRequired: false
     }
@@ -77,6 +77,43 @@ export default{
     meta: {
       tokenRequired: true
     }
-  }
-  ]
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: resolve => require(['modules/events/List.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  },
+  {
+    path: '/events/create',
+    name: 'createEvents',
+    component: resolve => require(['modules/events/Create.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: resolve => require(['modules/settings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/payment_methods',
+    name: 'paymentMethods',
+    component: resolve => require(['modules/settings/paymentMethods/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/notification_settings',
+    name: 'notificationSettings',
+    component: resolve => require(['modules/settings/notificationSettings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }]
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="system-body"> 
-     <div class="main-sidebar sidebar-collapse navbar-collapse collapse" v-bind:class="hide" id="idfactory" >
+     <div class="main-sidebar sidebar-collapse navbar-collapse collapse" v-bind:class="hide" id="idfactory" style="border-right: 1px solid rgb(228, 228, 228);" >
       <div class="sidebar">
         <ul class="sidebar-menu">
             <li class="header">
@@ -56,7 +56,6 @@
         </transition>
       </div>
     </div>
-  </div>  
 </template>
 <style lang="scss">
 @import "~assets/style/colors.scss";
@@ -189,7 +188,7 @@
 
 .active-menu{
   color: $primary !important;
-  background-color: white;
+  background-color: #F9F9F9;
 }
 
 .menu-holder-hidden{

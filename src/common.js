@@ -3,7 +3,11 @@ let APP_EMAIL = 'support@siml.ph'
 export default {
   sidebarMenu: [
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Dashboard', icon: 'fa fa-home', path: 'dashboard', flag: false, subMenu: null},
-    {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Accounts', icon: 'fa fa-users', path: 'accounts', flag: false, subMenu: null}
+    {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Transactions', icon: 'fas fa-clipboard', path: 'transactions', flag: false, subMenu: null},
+    {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Events', icon: 'fas fa-calendar-alt', path: 'events', flag: false, subMenu: null},
+    {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Community', icon: 'fa fa-users', path: 'community', flag: false, subMenu: null},
+    {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Settings', icon: 'fas fa-cog', path: 'settings', flag: false, subMenu: null},
+    {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Accounts', icon: 'fas fa-users-cog', path: 'accounts', flag: false, subMenu: null}
   ],
   menuOff: [
     {id: 1, users: 'ALL', parent_id: 0, description: 'Dashboard', icon: 'fa fa-tachometer', path: 'dashboard', flag: false, subMenu: null}

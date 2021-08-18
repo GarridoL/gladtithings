@@ -1,4 +1,4 @@
- <template>
+<template>
   <div>
     <div class="system-header">
       <a class="navbar-brand" v-on:click="redirect('dashboard')">
@@ -152,53 +152,40 @@
 </template>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
-
 /*
         BODY
 */
-
 body{
   font-size: 13px;
   font-weight: 400;
 }
-
 .btn{ 
   font-size: 12px;
 }
 .btn:hover{
   cursor: pointer;
 }
-
-
 .account-picture i{
   font-size: 100px !important;
 }
-
 .arrow::before{
   border-right-color: #ed2a2a !important;
   position: relative;
   border-top-color: #ed2a2a !important;
 }
 /*------------------------------------
-
           TABLES
-
 --------------------------------------*/
-
 .table{
   font-size: 12px;
 }
-
 /*----------------------------------------
-
             Forms
-
 ------------------------------------------*/
 .form-control{
   height: 35px;
   font-size: 12px;
 }
-
   .system-header{
     float: left;
     height: 50px;
@@ -218,7 +205,6 @@ body{
     margin-left: 18%;
     z-index: 5000;
   }
-
   /*-- navbar --*/
   .system-header .navbar-brand{
     color: #fff;
@@ -228,10 +214,7 @@ body{
   
 /*---------------------------------------------
  
-
         HEADER ACCOUNT PROFILE
-
-
 -----------------------------------------------*/
   .header-navbar-nav{
       height: 50px;
@@ -249,22 +232,14 @@ body{
     font-size: 24px;
      padding: 10px 0 0 5%;
   }
-
   .header-navbar-nav:hover{
     cursor: pointer;
     background: $primary;
   }
-
-
 /*---------------------------------------------
        
-
-
                   ICONS
-
-
 -----------------------------------------------*/
-
 #messagesHeader{
   margin-left: 70%;
 }
@@ -284,12 +259,10 @@ body{
   position: fixed;
   z-index: 100;
 }
-
 .nav-item span i{
   padding: 12px 0 15px 0;
   font-size: 24px;
 }
-
 .nav-item span .notifications{
   color: #ffffff;
   border-radius: 5px;
@@ -301,11 +274,9 @@ body{
   text-align: center;
   padding-top: 2px;
 }
-
 .nav-item span .notifications:hover{
   cursor: pointer;
 }
-
 .nav-item .label{
   background: #ff0000;
   padding: 5px;
@@ -315,25 +286,21 @@ body{
   position: fixed;
   z-index: 1;
 }
-
 .nav-item:hover{
   background: $darkPrimary;
   cursor: pointer;
 }
-
 .dropdown-menu{
   width: 250px;
   min-height: 250px;
   border-radius: 0px !important;
   padding-bottom: 0px !important;
 }
-
 .dropdown-menu-notification{
   padding-top: 0px !important;
   width: 350px !important;
   height: 400px !important;
   overflow-y: auto;
-
 }
 .dropdown-item{
   width: 100% !important;
@@ -345,7 +312,6 @@ body{
 .dropdown-item:hover{
   background: #ddd !important;
 }
-
 .dropdown-item i{
   font-size: 14px !important;
   padding-right: 10px !important;
@@ -373,12 +339,10 @@ body{
   line-height: 40px;
   font-weight: 550;
 }
-
 .dropdown-item-menu-title:hover, .dropdown-item-menu-title label:hover{
   cursor: default;
   background: #fff !important;
 }
-
 #account{
   background: #fff;
 }
@@ -413,13 +377,10 @@ body{
   background: #ff0000;
   color: #fff;
 }
-
 /*---------------------------------------------
  
  
         HEADER TOGGLER MENU
-
-
 -----------------------------------------------*/
 .navbar-menu-toggler-md{
   height: 50px;
@@ -434,19 +395,13 @@ body{
   cursor: pointer;
   background: $primary;
 }
-
 .active-menu{
   background: $primary;
 }
-
-
 /*--------------------------------------
-
           PROFILE PICTURE
   
 ---------------------------------------*/
-
-
 .profile-photo-header{
   float: left;
   width: 100%;
@@ -465,15 +420,12 @@ body{
   height: 80px;
   border-radius: 50%;
 }
-
 .profile-photo-header i{
   float: left !important;
   font-size: 60px !important;
   line-height: 80px !important;
   width: 100% !important;
 }
-
-
 .logo-brand{
   width: 25px;
   height: 25px;
@@ -495,7 +447,6 @@ body{
   height: 36px !important;
   margin-left: 5px;
 }
-
 .semester-selector .dropdown-menu{
   min-height: 100px !important;
   overflow-y: hidden;
@@ -514,13 +465,9 @@ body{
 .semester-selector .dropdown-menu .dropdown-item:hover{
   cursor: pointer;
 }
-
 /*
-
       NOTIFICATION DROPDOWN
-
 */
-
 .notification-header{
   width: 100%;
   float: left;
@@ -534,16 +481,13 @@ body{
   float: left;
   border-bottom: solid 1px #ddd;
 }
-
 .notification-item:hover{
   cursor: pointer;
   background: #efefef;
 }
-
 .notification-item-unread{
   background: #efefef;
 }
-
 .notification-title{
   width: 96%;
   margin-right: 2%;
@@ -554,7 +498,6 @@ body{
   padding-bottom: 5px;
   font-weight: 600;
 }
-
 .notification-description{
   width: 96%;
   margin-right: 2%;
@@ -564,7 +507,6 @@ body{
   font-size: 12px;
   text-align: justify;
 }
-
 .notification-date{
   width: 96%;
   margin-right: 2%;
@@ -575,14 +517,10 @@ body{
   text-align: justify;
   margin-bottom: 5px; 
 }
-
 /*---------------------------------------------------------          
-
                   RESPONSIVE HANDLER
-
 -----------------------------------------------------------*/
 /*-------------- Medium and Large Screens for Tablets and Desktop --------------*/
-
  @media (min-width: 1200px){
     .system-header{
       width: 18%;
@@ -607,7 +545,6 @@ body{
       width: 5% !important;
     }
   }
-
  @media (max-width: 1199px){
     .system-header{
       width: 18%;
@@ -632,7 +569,6 @@ body{
       width: 10%;
     }
   }
-
 @media (max-width: 991px){
    .system-header{
       width: 30%;
@@ -659,7 +595,6 @@ body{
       width: 10%;
     }
  }
-
 /*-------------- Small Screen for Mobile Phones --------------*/
  @media (max-width: 767px){
     .header-margin{
@@ -679,29 +614,23 @@ body{
       width: 85%;
       margin-left: 15%;
     }
-
     .nav-item{
       width: 20%;
     }
-
     .logo-brand{
       width: 30px;
       height: 30px;
     }
-
     .left-menu-icons{
       width: 20% !important;
     }
-
     .right-menu-icons{
       width: 80% !important;
     }
-
     .hide-on-mobile{
       display: none !important;
     }
   }
-
   @media (max-width: 300px){
     .logo-brand{
       width: 30px;
