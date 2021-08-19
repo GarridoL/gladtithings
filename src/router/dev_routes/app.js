@@ -66,7 +66,7 @@ export default{
   }, {
     path: '/profile/:parameter?',
     name: 'profile',
-    component: resolve => require(['components/increment/settings/UpdateBasic.vue'], resolve),
+    component: resolve => require(['components/increment/settings/ProfileModule.vue'], resolve),
     meta: {
       tokenRequired: true
     }
@@ -82,6 +82,14 @@ export default{
     path: '/events',
     name: 'events',
     component: resolve => require(['modules/events/List.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  },
+  {
+    path: '/events/details',
+    name: 'eventDetails',
+    component: resolve => require(['modules/events/Details.vue'], resolve),
     meta: {
       tokenRequired: true
     }
@@ -104,14 +112,49 @@ export default{
   }, {
     path: '/payment_methods',
     name: 'paymentMethods',
-    component: resolve => require(['modules/settings/paymentMethods/index.vue'], resolve),
+    component: resolve => require(['modules/paymentMethods/index.vue'], resolve),
     meta: {
       tokenRequired: true
     }
   }, {
     path: '/notification_settings',
     name: 'notificationSettings',
-    component: resolve => require(['modules/settings/notificationSettings/index.vue'], resolve),
+    component: resolve => require(['modules/notificationSettings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/subscriptions',
+    name: 'subscriptions',
+    component: resolve => require(['modules/subscriptions/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/transactions',
+    name: 'transactions',
+    component: resolve => require(['modules/transactions/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/church_details',
+    name: 'churchDetails',
+    component: resolve => require(['modules/churchDetails/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/account_settings',
+    name: 'accountSettings',
+    component: resolve => require(['modules/accountSettings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/community',
+    name: 'community',
+    component: resolve => require(['modules/community/index.vue'], resolve),
     meta: {
       tokenRequired: true
     }

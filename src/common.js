@@ -33,8 +33,7 @@ export default {
   broadcastingFlag: true,
   header: ['status', 'notification'], // 'messenger', '',
   settingsMenu: [
-    {title: 'Profile', type: 'profile', allowed: ['cellular_number', 'address']},
-    {title: 'Account', type: 'account', allowed: []},
+    {title: 'Account Settings', type: 'account', allowed: []},
     {title: 'Business Setting', type: 'merchant', allowed: ['prefix', 'website', 'address', 'schedule', 'information']}
   ]
 }

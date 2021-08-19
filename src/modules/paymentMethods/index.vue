@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h3 style="margin-left: -15px;">Payment Methods</h3>
-    <div class="row mt-4" style="width: 60%;">
+    <div class="row mt-4" style="width: 100%;">
       <div class="column" style="width: 50%;">
         <p><b>Payment Methods</b></p>
       </div>
@@ -111,10 +111,10 @@ p{
 }
 .add-card{
   margin-top: 50px;
-  width: 60%;
+  width: 100%;
 }
 .container{
-  width: 70%;
+  width: 60%;
   margin-top: 15px;
   margin-bottom: 50px;
 }
@@ -123,7 +123,7 @@ p{
   float: right;
 }
 .card-container{
-  width: 60%;
+  width: 100%;
   margin-top: 10px;
   padding: 15px;
   background-color: white;
@@ -132,7 +132,7 @@ p{
 }
 @media (max-width: 992px){
   .container{
-    width: 70%;
+    width: 60%;
   }
 }
 </style>

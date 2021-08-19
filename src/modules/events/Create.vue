@@ -123,7 +123,7 @@ input, textarea, select {
   padding: 5px;
 }
 .container{
-  width: 70%;
+  width: 60%;
   background-color: white;
   padding: 30px;
 }
@@ -136,7 +136,7 @@ input, textarea, select {
 }
 @media (max-width: 992px){
   .container{
-    width: 70%;
+    width: 60%;
   }
 }
 </style>

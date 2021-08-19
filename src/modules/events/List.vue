@@ -9,7 +9,7 @@
         @changeStyle="manageGrid($event)"
         :grid="['list', 'th-large']">
       </basic-filter>
-      <button class="text-center sort-button" @click="create()">Add Event</button>
+      <button class="text-center sort-button" @click="redirect('events/create')">Add Event</button>
     </div>
     <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <div class="table-container" v-else>
@@ -35,8 +35,8 @@
             <td class="header">{{item.status}}</td>
             <td class="header">
               <span>
-                <i class="fas fa-eye icon-eye"></i>
-                <i class="fas fa-edit icon-edit" @click="create()"></i>
+                <i class="fas fa-eye icon-eye" @click="redirect('events/details')"></i>
+                <i class="fas fa-edit icon-edit" @click="redirect('events/create')"></i>
                 <i class="fas fa-trash-alt icon-trash"></i>
               </span>
             </td>
@@ -116,8 +116,8 @@ export default{
     Pager
   },
   methods: {
-    create(){
-      ROUTER.push('events/create')
+    redirect(route){
+      ROUTER.push(route)
     }
   }
 }
@@ -162,7 +162,7 @@ button:focus{
   margin-top: 50px;
 }
 .container{
-  width: 70%;
+  width: 65%;
   margin-bottom: 100px;
   margin-top: 25px;
 }
@@ -172,11 +172,8 @@ td i {
 }
 
 @media (max-width: 992px){
-  .container{
+  .container, .table{
     width: 100%;
-  }
-  .table-container{
-   width: 70%;
   }
 }
 </style>

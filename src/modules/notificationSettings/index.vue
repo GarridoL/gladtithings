@@ -1,12 +1,13 @@
 <template>
   <div class="container">
-   <h3 style="margin-left: -10px;">Settings</h3>
+   <h3 style="margin-left: -10px;">Notification Settings</h3>
    <div v-for="(item, index) in list" :key="index">
     <Cards
       :title="item.title"
       :description="item.description"
       :route="item.route"
-      :version="1"
+      :version="2"
+      :toggle="item.toggle"
     />
    </div>
   </div>
@@ -23,29 +24,24 @@ export default{
       user: AUTH.user,
       list: [
         {
-          title: 'Account Settings',
+          title: 'Email Login',
           description: 'Receives email address every time theres a login of the account',
-          route: '/account_settings'
+          toggle: false
         },
         {
-          title: 'Church Details',
+          title: 'Email OTP',
           description: 'OTP will be sent to your email address',
-          route: '/church_details'
+          toggle: true
         },
         {
-          title: 'Subscriptions',
-          description: 'OTP will be sent to your email address',
-          route: '/subscriptions'
-        },
-        {
-          title: 'Notification Settings',
+          title: 'SMS OTP',
           description: 'OTP will be sent to you via SMS using your registered mobile number',
-          route: '/notification_settings'
+          toggle: true
         },
         {
-          title: 'Payment Methods',
-          description: 'Receives events and many more to your registered email address',
-          route: '/payment_methods'
+          title: 'Subscribe to get our latest udpates',
+          description: 'Receives events, and many more to your registered email address',
+          toggle: false
         }
       ]
     }
@@ -61,7 +57,6 @@ export default{
   width: 60%;
   margin-top: 15px;
   margin-bottom: 50px;
-  align-items: center;
 }
 @media (max-width: 992px){
   .container{
