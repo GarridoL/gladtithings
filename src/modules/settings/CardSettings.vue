@@ -1,5 +1,17 @@
 <template>
-  <div class="containers row" @click="redirect(route)">
+<div class="containers row" @click="redirect(route)" v-if="version === 3">
+    <div class="column first" style="width: 7%;">
+      <i class="fas fa-church" style="font-size: 30px; line-height: inherit;"></i>
+    </div>
+    <div class="column second" style="width: 60%;">
+      <p><b>{{title}}</b></p>
+      <p>{{dates}}</p>
+    </div>
+    <div class="column third" style="width: 32%;">
+      <p class="amount"><b>{{amount}}</b></p>
+    </div>
+  </div>
+  <div class="containers row" @click="redirect(route)" v-else>
     <div class="column" style="width: 50%;">
       <p><b>{{title}}</b></p>
       <p>{{description}}</p>
@@ -17,7 +29,15 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 export default{
-  props: ['title', 'description', 'route', 'version', 'toggle'],
+  props: [
+    'title',
+    'description',
+    'route',
+    'version',
+    'toggle',
+    'amount',
+    'dates'
+  ],
   mounted(){},
   data(){
     return {
@@ -36,6 +56,14 @@ export default{
 p {
   margin: 1px;
 }
+.first{
+  text-align: center;
+  vertical-align: middle;
+}
+.amount{
+  color: $primary;
+  float: right;
+}
 .icon{
   float: right;
   font-size: 20px;
@@ -49,7 +77,7 @@ p {
   margin-top: 7px;
 }
 .containers{
-  width: 60%;
+  width: 100%;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
@@ -59,7 +87,7 @@ p {
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
   }
 }
 </style>
