@@ -15,17 +15,17 @@
       </span> -->
       <span class="right-menu-icons">
         <div class="dropdown"> 
-          <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-            <span v-if="user.profile !== null" style="width: 40px; height: 40px;">
+          <span style="padding-right: 200px; " class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
+            <span v-if="user.profile !== null" style="width: 40px; height: 40px; ">
               <img v-bind:src="config.BACKEND_URL + user.profile.url" style="width: 30px; height: 30px; border-radius: 100px; margin-top: 8px;">
             </span>
-            <i class="fa fa-user-circle-o profile-icon" style="margin-bottom: 20px;" v-else></i>
+            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 18px;" v-else>&nbsp&nbsp{{user.username}}</i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span class="dropdown-item-profile">
                 <span class="account-picture text-center">
                   <span class="profile-photo-header">
                     <span class="profile-image-holder-header"  v-if="user.profile !== null">
-                      <img v-bind:src="config.BACKEND_URL + user.profile.url">
+                      <img v-bind:src="config.BACKEND_URL + user.profile.url" >
                     </span>
                     <i class="fa fa-user-circle-o" v-else></i>
                   </span>
@@ -65,20 +65,20 @@
           </span>
         </div>
 
-<!--         <div class="dropdown"> 
+    <div class="dropdown"> 
           <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
             <span>
-              <i class="fa fa-bell"></i>
+              <i class="far fa-bell"></i>
             </span>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span v-for="item, index in data">
-                <i style="font-size:100%;" class="fa fa-bell">
+                <i style="font-size:100%;" class="far fa-bell">
                 {{item.display}} <p>{{item.created_at_human}}</p></i>
               </span>
             </span>
           </span>
         </div>     
- -->
+
         <div class="dropdown" v-if="user.messages.data !== null"> 
             <span class="nav-item" data-toggle="dropdown" id="notifications" aria-haspopup="true" aria-expanded="false">
               <span>
@@ -244,7 +244,7 @@ body{
   margin-left: 70%;
 }
 .nav-item{
-  width: 5%;
+  width: 15%;
   height: 50px;
   text-align: center;
   float: right;
