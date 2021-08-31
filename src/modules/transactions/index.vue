@@ -1,6 +1,19 @@
 <template>
   <div class="container">
-   <h3 style="margin-left: -10px;">Transactions</h3>
+  <div style="position: relative; right: 16px;">
+  <basic-filter
+        v-bind:category="category" 
+        :activeCategoryIndex="0"
+        :activeSortingIndex="0"
+        @changeSortEvent="retrieve($event.sort, $event.filter)"
+        @changeStyle="manageGrid($event)"
+        :grid="['list', 'th-large']">
+      </basic-filter>
+      <button class="text-center sort-button" @click="redirect('events/create')">Export to CSV</button>
+      <br><br>
+    </div>
+    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+  <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
    <div v-for="(item, index) in list" :key="index">
     <Cards
       :title="item.title"
@@ -42,16 +55,49 @@ export default{
           dates: 'June 13, 2013',
           amount: 'USD 10.00'
         }
-      ]
+      ],
+      auth: AUTH,
+      config: CONFIG,
+      category: [{
+        title: 'Sort by',
+        sorting: [{
+          title: 'Created Ascending',
+          payload: 'created_at',
+          payload_value: 'asc'
+        }, {
+          title: 'Created Descending',
+          payload: 'created_at',
+          payload_value: 'desc'
+        }, {
+          title: 'Event Name Ascending',
+          payload: 'event_name',
+          payload_value: 'asc'
+        }, {
+          title: 'Event Name Descending',
+          payload: 'event_name',
+          payload_value: 'desc'
+        }]
+      }]
     }
   },
   components: {
+    'basic-filter': require('modules/generic/Basic.vue'),
     Cards
   }
 }
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.sort-button{
+  border-radius: 25px;
+  width: 150px;
+  color: white;
+  border: 0px;
+  height: 40px;
+  background-color: $secondary;
+  margin-bottom: 10px;
+  float: right;
+}
 .container{
   width: 60%;
   margin-top: 15px;
