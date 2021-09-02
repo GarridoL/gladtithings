@@ -16,10 +16,15 @@
       <span class="right-menu-icons">
         <div class="dropdown"> 
           <span style="padding-right: 200px; " class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-            <span v-if="user.profile !== null" style="width: 40px; height: 40px; ">
-              <img v-bind:src="config.BACKEND_URL + user.profile.url" style="width: 30px; height: 30px; border-radius: 100px; margin-top: 8px;">
-            </span>
-            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 18px;" v-else>&nbsp&nbsp{{user.username}}</i>
+            <div v-if="user.profile !== null" style="width: 180px; height: 40px; margin-left: 20px;" class="row">
+              <div class="column">
+                 <img v-bind:src="config.BACKEND_URL + user.profile.url" style="width: 30px; height: 30px; border-radius: 100px; margin-top: 8px;">
+              </div>
+              <div class="column">
+                <p style="font-size: 1.4em; margin-top: 8px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
+              </div>
+            </div>
+            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else>&nbsp;&nbsp;{{user.username}}</i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span class="dropdown-item-profile">
                 <span class="account-picture text-center">
@@ -150,6 +155,174 @@
    </div>
   </div>
 </template>
+<script>
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
+import Echo from 'laravel-echo'
+import Vue from 'vue'
+export default {
+  mounted(){
+    console.log(this.user)
+    if(COMMON.broadcastingFlag === true){
+      this.initPusher()
+    }
+  },
+  data(){
+    return{
+      user: AUTH.user,
+      data: null,
+      tokenData: AUTH.tokenData,
+      settingFlag: false,
+      menuFlag: false,
+      notifFlag: false,
+      config: CONFIG,
+      confirmation: {
+        message: null,
+        action: null
+      },
+      sort: {
+        column: 'created_at',
+        value: 'desc'
+      },
+      accountNotif: null,
+      common: COMMON
+    }
+  },
+  methods: {
+    makeActive(icon){
+      if(icon === 'dropdown'){
+        this.settingFlag = true
+        this.menuFlag = false
+        this.notifFlag = false
+      }else if(icon === 'sidebar'){
+        this.settingFlag = false
+        this.menuFlag = true
+        this.notifFlag = false
+      }else if(icon === 'notif'){
+        this.settingFlag = false
+        this.menuFlag = false
+        this.notifFlag = true
+      }else{
+        this.settingFlag = false
+        this.menuFlag = false
+        this.notifFlag = false
+      }
+    },
+    logOut(){
+      AUTH.deaunthenticate()
+    },
+    redirect(parameter, item = null){
+      if(item === null){
+        AUTH.redirect(parameter)
+      }else{
+        this.updateMessages(parameter, item)
+      }
+    },
+    display(){
+    },
+    initPusher(){
+      console.log('hi')
+      if(CONFIG.PUSHER.flag === 'pusher'){
+        window.Echo = new Echo({
+          broadcaster: 'pusher',
+          key: CONFIG.PUSHER.key,
+          cluster: 'ap1',
+          encrypted: true
+        })
+      }else{
+        window.Echo = new Echo({
+          broadcaster: 'pusher',
+          key: CONFIG.PUSHER.key,
+          wsHost: CONFIG.PUSHER.wsHost,
+          wsPort: CONFIG.PUSHER.wsPort,
+          disableStats: true,
+          enabledTransports: ['ws', 'wss']
+        })
+      }
+      window.Echo.channel(COMMON.pusher.channel)
+      .listen('call', e => {
+        console.log(e)
+      })
+      .listen(COMMON.pusher.notifications, e => {
+        AUTH.addNotification(e.data)
+      })
+      .listen(COMMON.pusher.messages, e => {
+        AUTH.addMessage(e.data)
+      })
+      .listen(COMMON.pusher.messageGroup, e => {
+        if(parseInt(e.data.id) === AUTH.messenger.messengerGroupId){
+          console.log('group', e.data)
+          AUTH.messenger.group.status = parseInt(e.data.status)
+          AUTH.messenger.group.validations = e.data.validations
+          AUTH.messenger.group.rating = e.data.rating
+          AUTH.messenger.group.created_at_human = e.data.created_at_human
+          AUTH.playNotificationSound()
+          if(e.data.message_update === true){
+            // update messages
+            this.retrieveMessages(parseInt(e.data.id))
+          }
+        }
+      })
+    },
+    retrieveMessages(id){
+      let parameter = {
+        condition: [{
+          value: id,
+          column: 'messenger_group_id',
+          clause: '='
+        }],
+        sort: {
+          'created_at': 'ASC'
+        }
+      }
+      this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
+        if(response.data.length > 0){
+          AUTH.messenger.messages = response.data
+        }else{
+          AUTH.messenger.messages = null
+        }
+      })
+    },
+    openModal(id){
+      $('#profileModal').modal('hide')
+      $('#guideModal').modal('hide')
+      $('#privacyModal').modal('hide')
+      $('#termsAndConditionsModal').modal('hide')
+      setTimeout(() => {
+        $(id).modal('show')
+      }, 100)
+    },
+    updateNotification(item, current, index){
+      if(parseInt(current) > index){
+        let parameter = {
+          id: item.id
+        }
+        this.APIRequest('notifications/update', parameter).then(response => {
+          AUTH.retrieveNotifications(this.user.userID)
+          this.redirect(item.route)
+        })
+      }else{
+        this.redirect(item.route)
+      }
+    },
+    updateMessages(params, item){
+      if(item.total_unread_messages > 0){
+        let parameter = {
+          messenger_group_id: item.messenger_group_id
+        }
+        this.APIRequest('messenger_messages/update_by_status', parameter).then(response => {
+          AUTH.redirect(params)
+        })
+        item.total_unread_messages = 0
+      }else{
+        AUTH.redirect(params)
+      }
+    }
+  }
+}
+</script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
 /*
@@ -638,170 +811,3 @@ body{
     }
   }
 </style>
-<script>
-import ROUTER from 'src/router'
-import AUTH from 'src/services/auth'
-import CONFIG from 'src/config.js'
-import COMMON from 'src/common.js'
-import Echo from 'laravel-echo'
-import Vue from 'vue'
-export default {
-  mounted(){
-    if(COMMON.broadcastingFlag === true){
-      this.initPusher()
-    }
-  },
-  data(){
-    return{
-      user: AUTH.user,
-      data: null,
-      tokenData: AUTH.tokenData,
-      settingFlag: false,
-      menuFlag: false,
-      notifFlag: false,
-      config: CONFIG,
-      confirmation: {
-        message: null,
-        action: null
-      },
-      sort: {
-        column: 'created_at',
-        value: 'desc'
-      },
-      accountNotif: null,
-      common: COMMON
-    }
-  },
-  methods: {
-    makeActive(icon){
-      if(icon === 'dropdown'){
-        this.settingFlag = true
-        this.menuFlag = false
-        this.notifFlag = false
-      }else if(icon === 'sidebar'){
-        this.settingFlag = false
-        this.menuFlag = true
-        this.notifFlag = false
-      }else if(icon === 'notif'){
-        this.settingFlag = false
-        this.menuFlag = false
-        this.notifFlag = true
-      }else{
-        this.settingFlag = false
-        this.menuFlag = false
-        this.notifFlag = false
-      }
-    },
-    logOut(){
-      AUTH.deaunthenticate()
-    },
-    redirect(parameter, item = null){
-      if(item === null){
-        AUTH.redirect(parameter)
-      }else{
-        this.updateMessages(parameter, item)
-      }
-    },
-    display(){
-    },
-    initPusher(){
-      console.log('hi')
-      if(CONFIG.PUSHER.flag === 'pusher'){
-        window.Echo = new Echo({
-          broadcaster: 'pusher',
-          key: CONFIG.PUSHER.key,
-          cluster: 'ap1',
-          encrypted: true
-        })
-      }else{
-        window.Echo = new Echo({
-          broadcaster: 'pusher',
-          key: CONFIG.PUSHER.key,
-          wsHost: CONFIG.PUSHER.wsHost,
-          wsPort: CONFIG.PUSHER.wsPort,
-          disableStats: true,
-          enabledTransports: ['ws', 'wss']
-        })
-      }
-      window.Echo.channel(COMMON.pusher.channel)
-      .listen('call', e => {
-        console.log(e)
-      })
-      .listen(COMMON.pusher.notifications, e => {
-        AUTH.addNotification(e.data)
-      })
-      .listen(COMMON.pusher.messages, e => {
-        AUTH.addMessage(e.data)
-      })
-      .listen(COMMON.pusher.messageGroup, e => {
-        if(parseInt(e.data.id) === AUTH.messenger.messengerGroupId){
-          console.log('group', e.data)
-          AUTH.messenger.group.status = parseInt(e.data.status)
-          AUTH.messenger.group.validations = e.data.validations
-          AUTH.messenger.group.rating = e.data.rating
-          AUTH.messenger.group.created_at_human = e.data.created_at_human
-          AUTH.playNotificationSound()
-          if(e.data.message_update === true){
-            // update messages
-            this.retrieveMessages(parseInt(e.data.id))
-          }
-        }
-      })
-    },
-    retrieveMessages(id){
-      let parameter = {
-        condition: [{
-          value: id,
-          column: 'messenger_group_id',
-          clause: '='
-        }],
-        sort: {
-          'created_at': 'ASC'
-        }
-      }
-      this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
-        if(response.data.length > 0){
-          AUTH.messenger.messages = response.data
-        }else{
-          AUTH.messenger.messages = null
-        }
-      })
-    },
-    openModal(id){
-      $('#profileModal').modal('hide')
-      $('#guideModal').modal('hide')
-      $('#privacyModal').modal('hide')
-      $('#termsAndConditionsModal').modal('hide')
-      setTimeout(() => {
-        $(id).modal('show')
-      }, 100)
-    },
-    updateNotification(item, current, index){
-      if(parseInt(current) > index){
-        let parameter = {
-          id: item.id
-        }
-        this.APIRequest('notifications/update', parameter).then(response => {
-          AUTH.retrieveNotifications(this.user.userID)
-          this.redirect(item.route)
-        })
-      }else{
-        this.redirect(item.route)
-      }
-    },
-    updateMessages(params, item){
-      if(item.total_unread_messages > 0){
-        let parameter = {
-          messenger_group_id: item.messenger_group_id
-        }
-        this.APIRequest('messenger_messages/update_by_status', parameter).then(response => {
-          AUTH.redirect(params)
-        })
-        item.total_unread_messages = 0
-      }else{
-        AUTH.redirect(params)
-      }
-    }
-  }
-}
-</script>
