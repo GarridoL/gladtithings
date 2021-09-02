@@ -1,7 +1,7 @@
 <template>
   <div class="filter">
     <div class="input-group">
-    <!--  <button class="text-center sort-button">Sort by</button> -->
+     <button class="text-center sort-button">Sort by</button>
       <select class="btn sort-button-dropdown select-btn dropdown" v-model="sortValue" @change="changeSort" v-if="activeSort !== null">
         <option class="dropdown-title" v-for="(item, index) in activeSort" :value="index" :key="index">
           {{item.title}}
@@ -27,9 +27,6 @@ button:focus{
 .sort-button-dropdown{
   background-color: white;
   border: 0.5px solid rgb(228, 228, 228);
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  
 }
 .filter{
   width: 100%;
@@ -46,8 +43,8 @@ button:focus{
   height: 40px !important;
 }
 .select-btn{
-  border-top-left-radius: 30px !important;
-  border-bottom-left-radius: 30px !important;
+  // border-top-left-radius: 30px !important;
+  // border-bottom-left-radius: 30px !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
 }
