@@ -1,8 +1,11 @@
 <template>
   <div class="container" :style="fromProfile === true ? 'width: 90%;' : 'width: 60%;'">
    <h3>Account Settings</h3>
-   <span class="error text-danger" v-if="errorMessage1 !== null">
+    <span class="error text-danger" v-if="errorMessage1 !== null">
       <b>Oops!</b> {{errorMessage1}}
+    </span>
+    <span class="error text-danger" v-if="errorMessage2 !== null">
+      <b>Oops!</b> {{errorMessage2}}
     </span>
     <span class="error text-success" v-if="successMessage1 !== null">
       {{successMessage1}}
@@ -20,11 +23,11 @@
         <h3 style="margin-left: 2%;">Security</h3>
         <div class="input-container">
           <label><b>Password&nbsp;</b><span style="color: red;">*</span></label><br>
-          <input type="password" placeholder="Password" class="generic-input" v-model="password">
+          <input type="password" placeholder="Password" class="generic-input" v-model="password" v-on:key-up="validate()">
         </div>
         <div class="input-container">
           <label><b>Confirm Password&nbsp;</b><span style="color: red;">*</span></label><br>
-          <input type="password" placeholder="Confirm Password" class="generic-input" v-model="confirm_password">
+          <input type="password" placeholder="Confirm Password" class="generic-input" v-model="confirm_password" :disabled="!validate()">
         </div>
       </div>
       <div class="column" style="width: 20%; text-align: center;">
@@ -73,6 +76,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
 export default{
   props: ['fromProfile'],
   mounted(){
@@ -113,6 +117,7 @@ export default{
       confirm_password: null,
       account_information_id: null,
       errorMessage: null,
+      errorMessage2: null,
       successMessage: null,
       errorMessage1: null,
       successMessage1: null,
@@ -127,6 +132,19 @@ export default{
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
   },
   methods: {
+    validate(){
+      if(this.password !== null && this.password !== '') {
+        if(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/.test(this.password) || this.password.length >= COMMON.passwordLimit) {
+          this.errorMessage1 = null
+          return true
+        } else {
+          this.errorMessage1 = `Password must be atleast ${COMMON.passwordLimit} characters and must contain at least one (1) uppercase character, one (1) number and one (1) special character.`
+          return false
+        }
+      } else {
+        return false
+      }
+    },
     updatePhoto(object){
       $('#loading').css({'display': 'block'})
       this.APIRequest('account_profiles/update', object).then(response => {
@@ -218,8 +236,10 @@ export default{
         return
       }
       if(this.password !== this.confirm_password) {
-        this.errorMessage1 = 'Please confirm your password.'
+        this.errorMessage2 = 'Please confirm your password.'
         return
+      } else {
+        this.errorMessage2 = null
       }
       let parameter = {
         id: this.user.userID,
