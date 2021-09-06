@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-  <div style="position: relative; right: 16px;">
-  <basic-filter
+    <div style="position: relative; right: 16px;">
+      <basic-filter
         v-bind:category="category" 
         :activeCategoryIndex="0"
         :activeSortingIndex="0"
@@ -13,15 +13,15 @@
       <br><br>
     </div>
     <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
-  <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
-   <div v-for="(item, index) in list" :key="index">
+    <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
+    <div v-for="(item, index) in list" :key="index">
     <Cards
       :title="item.title"
       :dates="item.dates"
       :version="3"
       :amount="item.amount"
     />
-   </div>
+    </div>
   </div>
 </template>
 <script>
@@ -37,22 +37,22 @@ export default{
       list: [
         {
           title: 'Church 1',
-          dates: 'July 8, 2021',
+          dates: 'July 8, 2021 5:00 PM',
           amount: 'USD 10.00'
         },
         {
           title: 'Church 2',
-          dates: 'November 30, 2020',
+          dates: 'November 30, 2020 5:00 PM',
           amount: 'USD 10.00'
         },
         {
           title: 'Church 3',
-          dates: 'August 17, 2021',
+          dates: 'August 17, 2021 5:00 PM',
           amount: 'USD 10.00'
         },
         {
           title: 'Church 4',
-          dates: 'June 13, 2013',
+          dates: 'June 13, 2013 5:00 PM',
           amount: 'USD 10.00'
         }
       ],
