@@ -1,8 +1,12 @@
 @component('email.header')
 @endcomponent
 <span class="text">
-    <h3>Reset Password Request</h3>
-    Hello {{$user->username}}! 
+    <br>
+    <label>Reset Password Request</label>
+    <br>
+    <br>
+    Hello, {{$user->username}}! 
+    <br>
     <br>
     You've requested to reset your account password on {{env('APP_NAME')}}: using this email address at {{$user->email}}.
     <br>

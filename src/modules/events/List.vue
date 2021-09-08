@@ -36,7 +36,7 @@
             <td class="header">
               <span>
                 <i class="fas fa-eye icon-eye" @click="redirect('events/details')"></i>
-                <i class="fas fa-edit icon-edit" @click="redirect('events/create')"></i>
+                <i class="fas fa-edit icon-edit" @click="redirect('events/update')"></i>
                 <i class="fas fa-trash-alt icon-trash"></i>
               </span>
             </td>

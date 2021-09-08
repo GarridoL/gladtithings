@@ -3,8 +3,8 @@
     <div class="header-section">
       <span class="logo">
         <a class="navbar-brand" v-on:click="redirect('/')">
-          <img src="../../../assets/img/white_logo.png" style="margin-bottom: 5px; width:80px; height:80px">
-          <label><b>{{common.APP_NAME}}</b></label>
+          <img src="../../../assets/img/white_logo.png" style="margin-bottom: 5px; width:130px; height:80px;">
+          <!-- <label><b>{{common.APP_NAME}}</b></label> -->
         </a>
       </span>
       <span class="menu">

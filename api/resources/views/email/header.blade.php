@@ -8,13 +8,15 @@
         <title>{{env('APP_NAME')}}</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
 
         <!-- Styles -->
         <style>
             html, body {
                 background-color: #fff;
-                font-family: 'Raleway', sans-serif;
+                font-family: 'Poppins', sans-serif;
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
@@ -39,14 +41,13 @@
                 float: left;
             }
             .text-primary{
-                color:#005b96;   
+                color:#56C596;   
             }
             .text-secondary{
-                color:#005b96;
+                color:#56C596;
             }
             .text{
-                color: #555;
-                font-size: 18px;
+              font-size: 18px;
             }
             .holder{
                 width: 100%;
@@ -58,7 +59,7 @@
                 height: 200px;
                 width: 100%;
                 float: left;
-                background: #005b96;
+                background: #56C596;
                 color: #fff;
                 text-align: center;
                 border-top-right-radius: 5px;
@@ -74,6 +75,7 @@
             }
 
             .thank-you-item{
+                text-align: center;
                 height: 50px;
                 width: 100%;
                 float: left;
@@ -82,13 +84,13 @@
                 padding-left: 10px;
             }
             .thank-you-item label{
-                width: 25%;
+                width: 20%;
                 float: left;
             }
             .button{
                 width: 300px;
                 height: 50px;
-                background: #005b96;
+                background: #56C596;
                 border: none;
                 color: #fff;
                 font-size: 16px;
@@ -114,6 +116,6 @@
     </head>
     <body>
 		<span class="header">
-		    <img src="{{env('APP_URL')}}{{env('PACKAGE_ROUTE')}}/storage/logo/logo.png" height="60px" width="60px">
-		    <span><label class="text-secondary">{{env('APP_NAME')}}</label></span>
+      <img src="{{env('APP_URL')}}{{env('PACKAGE_ROUTE')}}/storage/logo/logo.png" height="60px" width="60px">
+		  <span style="margin-top: 5px;"><label class="text-secondary">{{env('APP_NAME')}}</label></span>
 		</span>

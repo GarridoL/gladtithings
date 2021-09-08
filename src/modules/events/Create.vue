@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <i class="fas fa-chevron-left mr-2" style="font-size: 22px; cursor: pointer;" @click="back()"></i>
-    <span style="font-size: 22px;"><b>Create Event</b></span>
+    <span style="font-size: 22px;"><b>{{status === 'create' ? 'Create Event' : 'Update Event'}}</b></span>
     <p style="margin-top: 10px;">Fill out the details below to create an event</p>
     <div style="margin-top: 30px;">
       <p><b>Basic Info</b></p>
@@ -79,10 +79,13 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.status = this.$route.params.status
+  },
   data(){
     return {
-      user: AUTH.user
+      user: AUTH.user,
+      status: 'create'
     }
   },
   methods: {
