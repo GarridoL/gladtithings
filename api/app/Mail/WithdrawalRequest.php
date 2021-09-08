@@ -7,24 +7,26 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Carbon\Carbon;
-class Receipt extends Mailable
+
+class WithdrawalRequest extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $user;
     public $date;
-    public $dataReceipt;
+    public $amount;
+
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $data, $timezone)
+    public function __construct($user, $timezone, $amount)
     {
         $this->user = $user;
-        $this->dataReceipt = $data;
-        // echo json_encode($data);
         $this->date = Carbon::now()->copy()->tz($timezone)->format('F j, Y h:i A');
+        $this->amount = $amount;
     }
 
     /**
@@ -35,6 +37,6 @@ class Receipt extends Mailable
 
     public function build()
     {
-        return $this->subject('Transaction Receipt')->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))->view('email.receiptofficial');
+        return $this->subject('Withdrawal Request')->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))->view('email.withdrawalrequest');
     }
 }

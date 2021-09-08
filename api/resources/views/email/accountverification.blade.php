@@ -2,7 +2,7 @@
 @endcomponent
 <span class="text">
     <br>
-    <label>Email Verification</label>
+    <label>Account Verification</label>
     <br>
     <br>
     <label>Hello, {{$user->username}}!</label>
@@ -11,13 +11,12 @@
     <label>Welcome to {{env('APP_NAME')}}!</label>
     <br>
     <br>
-    We just need to verify that {{$user->email}} is your email address.
-    <br>
+    We need to verify your account first for you to be able to continue to the app.
     <br>
     Click the button below to:
     <br>
     <a href="{{env('APP_FRONT_END_URL')}}/login_verification/{{$user->username}}/{{$user->code}}">
-        <button class="button">Confirm</button>
+        <button class="button">Verify</button>
     </a>
     <br>
 </span>
