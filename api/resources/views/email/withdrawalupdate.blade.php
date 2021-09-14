@@ -17,6 +17,8 @@
     <br>
     <label>Date processed: {{$date}}</label>
     <br>
+    <label>Account Balance: {{$balance}}</label>
+    <br>
     <br>
     Thank you!
     <br>
