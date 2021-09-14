@@ -15,6 +15,7 @@ class WithdrawalUpdate extends Mailable
     public $user;
     public $date;
     public $amount;
+    public $balance;
 
 
     /**
@@ -22,9 +23,10 @@ class WithdrawalUpdate extends Mailable
      *
      * @return void
      */
-    public function __construct($user, $timezone)
+    public function __construct($user, $timezone, $balance)
     {
         $this->user = $user;
+        $this->balance = $balance;
         $this->date = Carbon::now()->copy()->tz($timezone)->format('F j, Y h:i A');
         $this->amount = Carbon::now()->copy()->tz($timezone)->format('F j, Y h:i A');
     }

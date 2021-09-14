@@ -87,6 +87,18 @@
                 width: 20%;
                 float: left;
             }
+            .thank-you-item2{
+                text-align: center;
+                height: 50px;
+                width: 100%;
+                line-height: 50px;
+                border-bottom: solid 1px #eee;
+                padding-left: 10px;
+            }
+            .thank-you-item2 label{
+                width: 50%;
+                float: left;
+            }
             .button{
                 width: 300px;
                 height: 50px;

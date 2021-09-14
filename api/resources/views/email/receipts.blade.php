@@ -1,21 +1,32 @@
 @component('email.header')
 @endcomponent
 <span class="holder">
-    <span class="thank-you-header">
+    <!-- <span class="thank-you-header">
         <h1 style="line-height: 125px;">Receipt of Transaction</h1>
-        <label>{{$user->email}}</label>
-    </span>
-    <span class="thank-you-item">
+        <label>{{$user['email']}}</label>
+    </span> -->
+    <br>
+    <div class="thank-you-item2">
+        <label>&nbsp;</label>
         <label><b>Date</b></label>
-        <label><b>Church Name</b></label>
-        <label><b>Total Amount</b></label>
-        <label><b>Payment Method</b></label>
-        <label><b>Receipt No.</b></label>
-    </span>
-    <span class="thank-you-item">
         <label>{{$dataReceipt['date']}}</label>
+        <label>&nbsp;</label>
+    </div>
+    <div class="thank-you-item2">
+        <label>&nbsp;</label>
+        <label><b>Church Name</b></label>
         <label>{{$dataReceipt['title']}}</label>
+        <label>&nbsp;</label>
+    </div>
+    <div class="thank-you-item2">
+        <label>&nbsp;</label>
+        <label><b>Total Amount</b></label>
         <label>PHP {{$dataReceipt['amount']}}</label>
+        <label>&nbsp;</label>
+    </div>
+    <div class="thank-you-item2">
+        <label>&nbsp;</label>
+        <label><b>Payment Method</b></label>
         @if($dataReceipt['method']['stripe'] != null)
           <label>
               <i class="fa fa-credit-card"></i>
@@ -30,8 +41,7 @@
               No payment method
           </label>
         @endif
-        <label>#{{$dataReceipt['receipt_number']}}</label>
-    </span>
+    </div>
 </span>
 @component('email.footer')
 @endcomponent

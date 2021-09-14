@@ -48,10 +48,10 @@
                 <label>Documents</label>
               </span>
               <!--GUIDE-->
-              <span class="dropdown-item" @click="openModal('#guideModal')">
+              <!-- <span class="dropdown-item" @click="openModal('#guideModal')">
                 <i class="far fa-question-circle"></i>
                 <label>Guide</label>
-              </span>
+              </span> -->
               <!--PRIVACY POLICY-->
               <span class="dropdown-item" @click="openModal('#privacyModal')">
                 <i class="fas fa-shield-alt"></i>
