@@ -139,6 +139,8 @@ export default{
           return true
         } else {
           this.errorMessage1 = `Password must be atleast ${COMMON.passwordLimit} characters and must contain at least one (1) uppercase character, one (1) number and one (1) special character.`
+          this.successMessage1 = null
+          this.successMessage = null
           return false
         }
       } else {
@@ -213,6 +215,8 @@ export default{
     updateAccountInformation(){
       if(this.first_name === '' || this.first_name === null || this.last_name === null || this.last_name === '') {
         this.errorMessage = 'First Name and Last Name are required.'
+        this.successMessage = null
+        this.successMessage1 = null
         return
       }
       let parameter = {
@@ -227,16 +231,23 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data === true){
           this.successMessage = 'Updated successfully.'
+          this.errorMessage2 = null
+          this.errorMessage = null
+          this.errorMessage1 = null
         }
       })
     },
     updateAccount(){
       if(this.email === '' || this.email === null || this.password === null || this.password === '' || this.confirm_password === null || this.confirm_password === '') {
         this.errorMessage1 = 'Email and Password are required.'
+        this.successMessage = null
+        this.successMessage1 = null
         return
       }
       if(this.password !== this.confirm_password) {
         this.errorMessage2 = 'Please confirm your password.'
+        this.successMessage = null
+        this.successMessage1 = null
         return
       } else {
         this.errorMessage2 = null
@@ -253,6 +264,9 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data === true){
           this.successMessage1 = 'Updated successfully.'
+          this.errorMessage2 = null
+          this.errorMessage = null
+          this.errorMessage1 = null
         }
       })
     },
