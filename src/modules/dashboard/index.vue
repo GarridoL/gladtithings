@@ -64,7 +64,9 @@ import { DataSource, DataSourceInstaller } from '@progress/kendo-datasource-vue-
 Vue.use(ChartInstaller)
 Vue.use(DataSourceInstaller)
 export default{
-  mounted(){},
+  mounted(){
+    this.retrieveBalance()
+  },
   data(){
     return {
       user: AUTH.user,
@@ -96,6 +98,24 @@ export default{
     Posts,
     Chart,
     DataSource
+  },
+  methods: {
+    retrieveBalance(){
+      let parameter = {
+        condition: [
+          {
+            clause: '=',
+            column: 'account_id',
+            value: this.user.userID
+          }
+        ]
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledgers/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        console.log(response)
+      })
+    }
   }
 }
 </script>

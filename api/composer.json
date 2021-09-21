@@ -47,7 +47,8 @@
             "packages/increment/imarket/product/src/",
             "packages/increment/imarket/bundled/src/",
             "packages/increment/common/mycircle/src/",
-            "packages/increment/imarket/installment/src/"
+            "packages/increment/imarket/installment/src/",
+            "packages/increment/finance/src/"
         ],
         "psr-4": {
             "App\\": "app/",
@@ -67,7 +68,8 @@
             "Increment\\Imarket\\Product\\":"packages/increment/imarket/product/src/",
             "Increment\\Imarket\\Bundled\\":"packages/increment/imarket/bundled/src/",
             "Increment\\Common\\MyCircle\\":"packages/increment/common/mycircle/src/",
-            "Increment\\Imarket\\Installment\\":"packages/increment/imarket/installment/src/"
+            "Increment\\Imarket\\Installment\\":"packages/increment/imarket/installment/src/",
+            "Increment\\Finance\\":"packages/increment/finance/src/"
         }
     },
     "autoload-dev": {

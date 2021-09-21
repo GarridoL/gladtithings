@@ -187,6 +187,7 @@ return [
         Increment\Imarket\Bundled\BundledServiceProvider::class,
         Increment\Imarket\Installment\InstallmentServiceProvider::class,
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
+        Increment\Finance\FinanceProvider::class,
         /*
          * Application Service Providers...
          */
