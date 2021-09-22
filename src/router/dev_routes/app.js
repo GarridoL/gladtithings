@@ -101,8 +101,14 @@ export default{
     meta: {
       tokenRequired: true
     }
-  },
-  {
+  }, {
+    path: '/subscription_management',
+    name: 'subscriptionManagement',
+    component: resolve => require(['modules/subscriptionManagement/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/settings',
     name: 'settings',
     component: resolve => require(['modules/settings/index.vue'], resolve),
