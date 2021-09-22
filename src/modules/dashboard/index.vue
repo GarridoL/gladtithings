@@ -15,7 +15,7 @@
     <div class="row" style="width: 100%; margin-top: 40px;">
       <div class="column first">
         <p class="title">Available Balance</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>PHP 123, 456.35</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : ''}}</b></p>
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>
@@ -91,7 +91,13 @@ export default{
         labels: {
           format: `${0}`
         }
-      }]
+      }],
+      ledger: {
+        available_balance: null,
+        balance: null,
+        currency: null,
+        current_balance: null
+      }
     }
   },
   components: {
@@ -108,12 +114,16 @@ export default{
             column: 'account_id',
             value: this.user.userID
           }
-        ]
+        ],
+        account_code: this.user.code,
+        account_id: this.user.userID
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledgers/retrieve', parameter).then(response => {
+      this.APIRequest('ledger/dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        console.log(response)
+        if(response.data) {
+          this.ledger = response.data.ledger[0]
+        }
       })
     }
   }
