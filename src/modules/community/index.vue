@@ -8,10 +8,24 @@
       <input type="text" placeholder="Do you have something good to share?">
     </span>
     </div>
-   <div v-for="(item, index) in list" :key="index">
+    <br>
+    <div >
+      <button :class="firstClass" @click="messageClick()">Pope's Twitter Message</button>
+      <button :class="secondClass" @click="communityClick()">Communities</button>
+    </div>
+    
+    <br>
+    <br>
+   <div v-for="(item, index) in list" :key="index" v-if="defaults">
     <Posts
       :data="item"
     />
+   </div>
+   <div v-if="message">
+     Message
+   </div>
+   <div v-if="community">
+     Communities
    </div>
   </div>
 </template>
@@ -56,16 +70,74 @@ export default{
           text: 'We would like to thank everyone who donated to our campaigns. Heres the documentation.',
           replies: []
         }
-      ]
+      ],
+      defaults: true,
+      message: false,
+      community: false,
+      firstClass: 'text-center sort-button1 mr-2',
+      secondClass: 'text-center sort-button1 mr-2'
     }
   },
   components: {
     Posts
+  },
+  methods: {
+    messageClick(){
+      this.firstClass = this.firstClass + ' active'
+      let classes = this.secondClass.split(' ')
+      classes.splice(classes.length - 1, 1)
+      this.secondClass = classes.join(' ')
+      this.message = true
+      this.defaults = false
+      this.community = false
+    },
+    communityClick(){
+      this.secondClass = this.secondClass + ' active'
+      let classes = this.firstClass.split(' ')
+      classes.splice(classes.length - 1, 1)
+      this.firstClass = classes.join(' ')
+      this.message = false
+      this.defaults = false
+      this.community = true
+    }
   }
 }
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+button:focus{
+  outline: none;
+}
+.sort-button1{
+  border-radius: 25px;
+  width: 200px;
+  color: black;
+  border: 1px solid rgb(235, 235, 235);
+  height: 40px;
+  background-color: white;
+  margin-bottom: 10px;
+  float: left;
+}
+.active{
+  border-radius: 25px;
+  width: 200px;
+  color: white;
+  border: 0px;
+  height: 40px;
+  background-color: $secondary;
+  margin-bottom: 10px;
+  float: left;
+}
+.sort-button2{
+  border-radius: 25px;
+  width: 200px;
+  color: black;
+  border: 1px solid rgb(235, 235, 235);
+  height: 40px;
+  background-color: white;
+  margin-bottom: 10px;
+  float: left;
+}
 .container{
   width: 50%;
   margin-bottom: 50px;

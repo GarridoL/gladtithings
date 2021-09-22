@@ -6,6 +6,7 @@ export default {
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Transactions', icon: 'fas fa-clipboard', path: 'transactions', flag: false, subMenu: null},
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Events', icon: 'fas fa-calendar-alt', path: 'events', flag: false, subMenu: null},
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Community', icon: 'fa fa-users', path: 'community', flag: false, subMenu: null},
+    {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Subscriptions', icon: 'fas fa-user-check', path: 'subscription_management', flag: false, subMenu: null},
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Settings', icon: 'fas fa-cog', path: 'settings', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Accounts', icon: 'fas fa-users-cog', path: 'accounts', flag: false, subMenu: null}
   ],
