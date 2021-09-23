@@ -16,7 +16,7 @@
           <p style="color: white; margin: 0; font-size: 17px;"><b>30</b></p>
         </div>
         <div class="column third">
-          <p class="title">Subscribers Lats 24 Hours</p>
+          <p class="title">Subscribers Last 24 Hours</p>
           <p style="color: white; margin: 0; font-size: 17px;"><b>15</b></p>
         </div>
       </div>
