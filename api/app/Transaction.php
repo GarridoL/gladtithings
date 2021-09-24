@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Synqt extends APIModel
+class Transaction extends APIModel
 {
-    protected $table = 'synqts';
+    protected $table = 'transactions';
     protected $fillable = ['code', 'account_id', 'title', 'location_id', 'date', 'details', 'status'];
 }

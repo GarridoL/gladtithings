@@ -44,7 +44,7 @@
 }
 
 .tag-line{
-  width: 35%;
+  width: 25%;
   background-color: rgb(255, 255, 255);
   border-radius: 15px;
   padding: 30px;
@@ -101,7 +101,7 @@
 }
 
 .btn{
-  height: 50px !important;
+  height: 40px !important;
 }
 
 .form-control{
