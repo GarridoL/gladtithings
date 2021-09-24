@@ -13,25 +13,21 @@
       <div class="dropdown">
         <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
         <i class="fas fa-ellipsis-h icon"></i>
-        <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
+        <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings" style="font-weight: normal;">
             <span class="dropdown-item dropdown-item-menu-title">
               <i class="fas fa-cog post"></i>
               <label>Post Actions</label>
               <span class="dropdown-item">
-                <i class="fas fa-pencil-alt pencil"></i>
-                <label>Edit</label>
+                <i class="fas fa-pencil-alt pencil">&nbsp;&nbsp;&nbsp;Edit</i>
               </span>
               <span class="dropdown-item">
-                <i class="fas fa-file-alt file"></i>
-                <label>Report</label>
+                <i class="fas fa-file-alt file">&nbsp;&nbsp;&nbsp;&nbsp;Report</i>
               </span>
               <span class="dropdown-item">
-                 <i class="fas fa-eye-slash eye-slash"></i>
-                <label>Hide</label>
+                 <i class="fas fa-eye-slash eye-slash">&nbsp;&nbsp;&nbsp;Hide</i>
               </span>
               <span class="dropdown-item trash">
-                <i class="fas fa-trash-alt trash"></i>
-                <label>Delete</label>
+                <i class="fas fa-trash-alt trash">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i>
               </span>
             </span>
            </span>
@@ -70,17 +66,14 @@
                 <span class="dropdown-item dropdown-item-menu-title">
                   <i class="fas fa-cog post"></i>
                   <label>Comment Actions</label>
-                  <span class="dropdown-item pencil">
-                    <i class="fas fa-pencil-alt pencil"></i>
-                    <label>Edit</label>
+                 <span class="dropdown-item">
+                    <i class="fas fa-pencil-alt pencil">&nbsp;&nbsp;&nbsp;Edit</i>
                   </span>
-                  <span class="dropdown-item eye-slash">
-                    <i class="fas fa-eye-slash eye-slash"></i>
-                    <label>Hide</label>
+                  <span class="dropdown-item">
+                    <i class="fas fa-eye-slash eye-slash">&nbsp;&nbsp;&nbsp;Hide</i>
                   </span>
                   <span class="dropdown-item trash">
-                    <i class="fas fa-trash-alt trash"></i>
-                    <label>Delete</label>
+                    <i class="fas fa-trash-alt trash">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i>
                   </span>
                   </span>
                 </span>
@@ -197,6 +190,7 @@ p {
   float: left !important;
   background: #fff !important;
   padding-top: 0px !important;
+  font-weight: normal;
 }
 .dropdown-item .trash{
   color: red;

@@ -13,9 +13,15 @@
       <button :class="firstClass" @click="messageClick()">Pope's Twitter Message</button>
       <button :class="secondClass" @click="communityClick()">Communities</button>
     </div>
+    <br>
+    <br>
+    <div v-for="(item, index) in list" :key="index" v-if="defaults">
+      <Posts
+        :data="item"
+      />
+    <br>
+    </div>
     <div v-if="message" v-for="(item, index) in tweet" :key="index">
-      <br>
-      <br>
       <div class="message">
         <div class="row" style="width: 103%; margin-left: 0px;">
           <div class="column" style="margin-right: 10px; width: 9%;">
@@ -30,6 +36,7 @@
           <p style="margin-top: 10px;">{{item.text}}</p>
           </div>
         </div>
+        <br>
     </div>
     <div v-if="community">
       <div class="tabTitle" >
@@ -46,45 +53,45 @@
               <div>
                 <b style="font-size:18px;">{{item.name}}</b>
                 <p>{{item.date}}</p>
-                <i class="fas fa-bell bell" style="margin-bottom: 10px;"></i>
-                <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">Notifications</p>
               </div>
             </div>
+          </div>
+          <div style="margin-left: 15px;margin-top: 10px;">
+            <i class="fas fa-bell bell" style="margin-bottom: 10px;"></i>
+            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;&nbsp;Notifications</p>
           </div>
         </div>
       </div>
     </div>
     <br>
     <!-- manage -->
-    <div class="tabTitle">
-      <p style="margin-right: 95px;">Communities You Followed & Joined</p>
-      <p style="font-weight: normal; font-size: 12px; cursor: pointer;">View Recommendation</p>
-    </div>
-    <div v-for="(item, index) in commFollow" :key="index">
-      <div class="community">
-        <div class="row" style="width: 103%; margin-left: 0px;">
-          <div class="column" style="margin-right: 10px; width: 9%;">
-            <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px;">
-          </div>
-          <div class="column" style="margin-top: 6px; line-height: 10px;"> 
-            <div>
-              <b style="font-size:18px;">{{item.name}}</b>
-              <p>{{item.date}}</p>
-              <i class="fas fa-ban" style="margin-bottom: 10px; text-align: right;"></i>
-              <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">Unfollow</p>
+    <div v-if="community">
+      <div class="tabTitle">
+        <p style="margin-right: 95px;">Communities You Followed & Joined</p>
+        <p style="font-weight: normal; font-size: 12px; cursor: pointer;">View Recommendation</p>
+      </div>
+      <div v-for="(item, index) in commFollow" :key="index">
+        <div class="community">
+          <div class="row" style="width: 103%; margin-left: 0px;">
+            <div class="column" style="margin-right: 10px; width: 9%;">
+              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px;">
             </div>
+            <div class="column" style="margin-top: 6px; line-height: 10px;"> 
+              <div>
+                <b style="font-size:18px;">{{item.name}}</b>
+                <p>{{item.date}}</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 15px;margin-top: 10px;">
+            <i class="fas fa-ban ban" style="margin-bottom: 10px; text-align: right;"></i>
+            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;&nbsp;Unfollow</p>
           </div>
         </div>
       </div>
     </div>
     <br>
     <br>
-    <div v-for="(item, index) in list" :key="index" v-if="defaults">
-      <Posts
-        :data="item"
-      />
-    <br>
-    </div>
   </div>
 </template>
 <script>
@@ -141,7 +148,7 @@ export default{
         {
           name: 'Pope Francis',
           date: 'June 13, 2013',
-          text: 'Witnesses do not lose themselves in words, but rather they bear fruit.'
+          text: 'The Eucharist is here to remind us who God is. It does not do so just in words, but in a concrete way, showing us God as bread broken, as love crucified and bestowed. #EucharisticCongress #Budapest'
         },
         {
           name: 'Pope Francis',
@@ -215,6 +222,12 @@ button:focus{
   background-color: white;
   margin-left: 15px;
   float: right;
+}
+.bell{
+  font-size: 18px;
+}
+.ban{
+  font-size: 18px;
 }
 .plus{
   cursor: pointer;
