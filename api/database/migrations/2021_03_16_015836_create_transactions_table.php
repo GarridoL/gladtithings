@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTopChoicesTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateTopChoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('top_choices', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('code');
             $table->bigInteger('account_id');
-            $table->bigInteger('synqt_id');
+            $table->string('to');
             $table->string('payload');
             $table->longText('payload_value');
+            $table->double('amount');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +33,6 @@ class CreateTopChoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('top_choices');
+        Schema::dropIfExists('transactions');
     }
 }
