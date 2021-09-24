@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <label v-if="label"><b>{{title}}&nbsp;</b><span v-if="optional === false" style="color: red;">*</span></label><br>
-    <input :placeholder="placeholder" class="generic-input">
+    <label v-if="label"><b>{{title}}&nbsp;</b><span e v-if="optional === false" style="color: red;">*</span></label><br>
+    <input :disabled="enabled" :placeholder="placeholder" v-model="value" class="generic-input">
   </div>
 </template>
 <script>
@@ -14,7 +14,8 @@ export default{
     'title',
     'placeholder',
     'label',
-    'optional'
+    'optional',
+    'value'
   ],
   mounted(){},
   data(){
