@@ -14,14 +14,15 @@
     </div>
     <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
-    <div v-for="(item, index) in list" :key="index">
+    <div v-for="(item, index) in data" :key="index" v-if="data.length > 0" class="cards-container">
     <Cards
-      :title="item.title"
-      :dates="item.dates"
+      :title="item.receiver ? item.receiver.email : item.description"
+      :dates="item.created_at_human"
       :version="3"
-      :amount="item.amount"
+      :amount="item.currency + ' ' + item.amount"
     />
     </div>
+     <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
   </div>
 </template>
 <script>
@@ -30,32 +31,13 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Cards from 'src/modules/settings/CardSettings.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+  },
   data(){
     return {
       user: AUTH.user,
-      list: [
-        {
-          title: 'Church 1',
-          dates: 'July 8, 2021 5:00 PM',
-          amount: 'USD 10.00'
-        },
-        {
-          title: 'Church 2',
-          dates: 'November 30, 2020 5:00 PM',
-          amount: 'USD 10.00'
-        },
-        {
-          title: 'Church 3',
-          dates: 'August 17, 2021 5:00 PM',
-          amount: 'USD 10.00'
-        },
-        {
-          title: 'Church 4',
-          dates: 'June 13, 2013 5:00 PM',
-          amount: 'USD 10.00'
-        }
-      ],
+      data: [],
       auth: AUTH,
       config: CONFIG,
       category: [{
@@ -77,17 +59,65 @@ export default{
           payload: 'event_name',
           payload_value: 'desc'
         }]
-      }]
+      }],
+      filter: null,
+      sort: null,
+      limit: 5,
+      numPages: null,
+      activePage: 1,
+      offset: 0
     }
   },
   components: {
     'basic-filter': require('modules/generic/Basic.vue'),
+    'basic-pager': require('modules/generic/Pager.vue'),
     Cards
+  },
+  methods: {
+    retrieve(sort, filter){
+      if(sort !== null){
+        this.sort = sort
+      }
+      if(filter !== null){
+        this.filter = filter
+      }
+      if(sort === null && this.sort !== null){
+        sort = this.sort
+      }
+      if(filter === null && this.filter !== null){
+        filter = this.filter
+      }
+      let parameter = {
+        condition: [{
+          column: 'account_id',
+          value: this.user.userID,
+          clause: '='
+        }, {
+          column: 'account_id',
+          value: this.user.userID,
+          clause: 'or'
+        }],
+        sort: sort,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledger/transaction_history', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        console.log(response)
+        if(response.data.length > 0) {
+          this.data = response.data
+        }
+      })
+    }
   }
 }
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.cards-container {
+  margin-bottom: 25px;
+}
 .sort-button{
   border-radius: 25px;
   width: 150px;
