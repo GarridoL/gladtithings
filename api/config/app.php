@@ -180,12 +180,6 @@ return [
         Increment\Common\Notification\NotificationServiceProvider::class,
         Increment\Common\Invitation\InvitationServiceProvider::class,
         Increment\Messenger\MessengerServiceProvider::class,
-        Increment\Imarket\Merchant\MerchantServiceProvider::class,
-        Increment\Imarket\Reservation\ReservationServiceProvider::class,
-        Increment\Imarket\Location\LocationServiceProvider::class,
-        Increment\Imarket\Product\ProductServiceProvider::class,
-        Increment\Imarket\Bundled\BundledServiceProvider::class,
-        Increment\Imarket\Installment\InstallmentServiceProvider::class,
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
         Increment\Finance\FinanceProvider::class,
         /*
