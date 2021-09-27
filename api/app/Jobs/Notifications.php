@@ -54,7 +54,7 @@ class Notifications implements ShouldQueue
                 broadcast(new MessageGroup($this->data));
                 break;
             case 'notifications':
-                broadcast(new EventNotifications($this->data));
+                // broadcast(new EventNotifications($this->data));
                 break;
             case 'message':
                 broadcast(new Message($this->data));
