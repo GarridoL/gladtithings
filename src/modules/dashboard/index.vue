@@ -15,7 +15,8 @@
     <div class="row" style="width: 100%; margin-top: 40px;">
       <div class="column first">
         <p class="title">Available Balance</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : ''}}</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;" v-if="ledger && ledger.length > 0 || ledger"><b>{{ledger.currency}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : '0.0'}}</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;" v-else><b>0.0</b></p>
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>

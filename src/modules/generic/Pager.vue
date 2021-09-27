@@ -25,11 +25,12 @@
   height: 50px;
 }
 
+
 .btn-default{
   height: 40px !important;
-  border: solid 1px $primary !important;
-  margin-right: 5px;
+  border: solid 1px #ccc !important;
 }
+
 
 .page-link{
   line-height: 40px !important;
