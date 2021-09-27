@@ -14,7 +14,6 @@ use App\Mail\Receipt;
 use App\Mail\NewMessage;
 use App\Mail\Ledger;
 use App\Mail\Deposit;
-use App\Mail\ReceiptSynqt;
 use Illuminate\Http\Request;
 
 class EmailController extends APIController
@@ -164,15 +163,6 @@ class EmailController extends APIController
             $this->response['data'] = true;
         }
         return $this->response();
-    }
-
-    public function receipSynqt($data, $accountId){
-        $user = $this->retrieveAccountDetails($accountId);
-        if($user != null){
-            Mail::to($user['email'])->send(new ReceiptSynqt($user, $data, $this->response['timezone']));
-            return true;
-        }
-        return false;
     }
 
 

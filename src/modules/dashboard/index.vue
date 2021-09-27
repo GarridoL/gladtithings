@@ -6,7 +6,7 @@
         <p style="margin-top: 5px;">Here are the latest update of activities as of today in BUsiness Name</p>
       </div>
       <div class="column" style="width: 20%;">
-        <div style="float: right;">
+        <div style="float: right; cursor: pointer;" @click="showQr()">
           <span style="margin-right: 10px;">Click to show</span>
           <span><i class="fas fa-qrcode" style="font-size: 25px;"></i></span>
         </div>
@@ -15,7 +15,8 @@
     <div class="row" style="width: 100%; margin-top: 40px;">
       <div class="column first">
         <p class="title">Available Balance</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>PHP 123, 456.35</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;" v-if="ledger && ledger.length > 0 || ledger"><b>{{ledger.currency}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : '0.0'}}</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;" v-else><b>0.0</b></p>
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>
@@ -49,14 +50,33 @@
       :value-axis="valueAxis">
     </kendo-chart>
     </div>
+    <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Present this QR code for scanning...</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="text-align: center;">
+            <VueQrcode
+              :value="user.code"
+              :size="200"
+            />
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
-import CONFIG from 'src/config.js'
 import Posts from 'src/modules/generic/Posts.vue'
 import Vue from 'vue'
+import VueQrcode from 'qrcode.vue'
 import '@progress/kendo-ui'
 import '@progress/kendo-theme-default/dist/all.css'
 import { Chart, ChartInstaller } from '@progress/kendo-charts-vue-wrapper'
@@ -91,15 +111,25 @@ export default{
         labels: {
           format: `${0}`
         }
-      }]
+      }],
+      ledger: {
+        available_balance: null,
+        balance: null,
+        currency: null,
+        current_balance: null
+      }
     }
   },
   components: {
     Posts,
     Chart,
-    DataSource
+    DataSource,
+    VueQrcode
   },
   methods: {
+    showQr(){
+      $('#qrcode').modal('show')
+    },
     retrieveBalance(){
       let parameter = {
         condition: [
@@ -108,12 +138,16 @@ export default{
             column: 'account_id',
             value: this.user.userID
           }
-        ]
+        ],
+        account_code: this.user.code,
+        account_id: this.user.userID
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledgers/retrieve', parameter).then(response => {
+      this.APIRequest('ledger/dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        console.log(response)
+        if(response.data) {
+          this.ledger = response.data.ledger[0]
+        }
       })
     }
   }

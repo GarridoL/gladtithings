@@ -21,7 +21,7 @@
                  <img v-bind:src="config.BACKEND_URL + user.profile.url" style="width: 30px; height: 30px; border-radius: 100px; margin-top: 8px;">
               </div>
               <div class="column">
-                <p style="font-size: 1.4em; margin-top: 8px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
+                <p style="font-size: 17px; margin-top: 12px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
               </div>
             </div>
             <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else>&nbsp;&nbsp;{{user.username}}</i>

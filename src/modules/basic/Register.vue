@@ -92,7 +92,7 @@
 }
 
 .tag-line{
-  width: 70%;
+  width: 50%;
   background-color: rgb(255, 255, 255);
 	border-radius: 15px;
   padding: 60px;
@@ -138,7 +138,7 @@
   height: 45px !important;
 }
 .btn{
-  height: 50px !important;
+  height: 40px !important;
 }
 .input-group{
   margin-top: 5px;

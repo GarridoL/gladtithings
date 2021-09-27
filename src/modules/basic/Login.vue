@@ -9,7 +9,7 @@
     <div class="login-wrapper column">
       <div class="tag-line">
         <span style="width:100%;float:left;text-align:center;font-size:17px;margin-bottom:20px;">
-          <b>Login with {{common.APP_NAME}}</b>
+          <b>Login to {{common.APP_NAME}}</b>
         </span>
         <div class="login-message-holder login-spacer text-center" v-if="errorMessage != null">
           <span class="text-danger text-center"><b>Oops!</b> {{errorMessage}}</span>
@@ -77,7 +77,7 @@
 }
 
 .tag-line{
-  width: 70%;
+  width: 50%;
   background-color: rgb(255, 255, 255);
 	border-radius: 15px;
   padding: 60px;
@@ -123,7 +123,7 @@
 }
 
 .btn{
-  height: 50px !important;
+  height: 40px !important;
 }
 
 .input-group-addon{
