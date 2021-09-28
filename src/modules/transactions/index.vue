@@ -12,7 +12,7 @@
       <button class="text-center sort-button" @click="redirect('events/create')">Export to CSV</button>
       <br><br>
     </div>
-    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <empty v-if="data.length === 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
     <div v-for="(item, index) in data" :key="index" v-if="data.length > 0" class="cards-container">
     <Cards
@@ -30,6 +30,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Cards from 'src/modules/settings/CardSettings.vue'
+import Empty from 'components/increment/generic/empty/Empty.vue'
 export default{
   mounted(){
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
@@ -69,6 +70,7 @@ export default{
     }
   },
   components: {
+    'empty': Empty,
     'basic-filter': require('modules/generic/Basic.vue'),
     'basic-pager': require('modules/generic/Pager.vue'),
     Cards
