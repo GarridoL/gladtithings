@@ -695,7 +695,7 @@ class APIController extends Controller
 
     if($result['sub_account'] != null){
       $admin = $result['sub_account']['account_id'];
-      $result['sub_account']['merchant'] = app('Increment\Imarket\Merchant\Http\MerchantController')->getByParams('account_id', $admin);
+      $result['sub_account']['merchant'] = app('Increment\Account\Merchant\Http\MerchantController')->getByParams('account_id', $admin);
     }
     return $result;
   }

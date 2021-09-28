@@ -183,6 +183,7 @@ return [
         Increment\Messenger\MessengerServiceProvider::class,
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
         Increment\Finance\FinanceProvider::class,
+        Increment\Finance\Stripe\StripeServiceProvider::class,
         /*
          * Application Service Providers...
          */
