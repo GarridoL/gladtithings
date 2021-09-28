@@ -43,7 +43,8 @@
             "packages/increment/common/notification/src/",
             "packages/increment/account/merchant/src/",
             "packages/increment/common/mycircle/src/",
-            "packages/increment/finance/src/"
+            "packages/increment/finance/src/",
+            "packages/increment/finance/stripe/src/"
         ],
         "psr-4": {
             "App\\": "app/",
@@ -60,7 +61,8 @@
             "Increment\\Account\\Merchant\\": "packages/increment/account/merchant/src/",
             "Increment\\Imarket\\Bundled\\":"packages/increment/imarket/bundled/src/",
             "Increment\\Common\\MyCircle\\":"packages/increment/common/mycircle/src/",
-            "Increment\\Finance\\":"packages/increment/finance/src/"
+            "Increment\\Finance\\":"packages/increment/finance/src/",
+            "Increment\\Finance\\Stripe\\":"packages/increment/finance/stripe/src/"
         }
     },
     "autoload-dev": {
