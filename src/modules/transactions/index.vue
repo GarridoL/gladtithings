@@ -22,7 +22,7 @@
       :amount="item.currency + ' ' + item.amount"
     />
     </div>
-     <basic-pager v-if="" :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
+     <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
   </div>
 </template>
 <script>
