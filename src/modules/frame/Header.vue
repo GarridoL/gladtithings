@@ -2,7 +2,7 @@
   <div>
     <div class="system-header">
       <a class="navbar-brand" v-on:click="redirect('dashboard')">
-        <img :src="require('src/assets/img/white_logo.png')" class="logo-brand" style="margin-bottom: 5px; width:130px; height:45px; background-size: auto;">
+        <img :src="require('src/assets/img/white_logo.png')" class="logo-brand" style="margin-bottom: 5px; width:auto; height:45px; background-size: auto;">
         <!-- <label class="navbar-brand hide-on-mobile text-white" v-html="common.APP_NAME_HTML"></label> -->
       </a>
     </div>
