@@ -69,7 +69,7 @@
    </div>
    <button class="text-center sort-button" @click="updateAccountInformation()">Update</button>
    <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
-    <browse-images-modal :object="newProfile" v-if="user.profile === null"></browse-images-modal>
+  <browse-images-modal :object="newProfile" v-if="user.profile === null"></browse-images-modal>
   </div>
 </template>
 <script>
