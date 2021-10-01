@@ -19,7 +19,7 @@
       :title="item.receiver ? item.receiver.email : item.description"
       :dates="item.created_at_human"
       :version="3"
-      :amount="item.currency + ' ' + item.amount"
+      :amount="item.currency + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
     />
     </div>
      <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
