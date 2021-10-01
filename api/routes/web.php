@@ -123,10 +123,3 @@ Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'validate', $controller."retrieveByValidation");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
-
-$route = env('PACKAGE_ROUTE', '').'/transactions/';
-$controller = 'TransactionController@';
-Route::post($route.'create', $controller."create");
-Route::post($route.'retrieve', $controller."retrieve");
-Route::post($route.'delete', $controller."delete");
-Route::post($route.'update', $controller."update");
