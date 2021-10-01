@@ -158,5 +158,13 @@ export default{
     meta: {
       tokenRequired: true
     }
+  },
+  {
+    path: '/community/create',
+    name: 'createCommunity',
+    component: resolve => require(['modules/community/Create.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }]
 }
