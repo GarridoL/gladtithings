@@ -184,6 +184,7 @@ return [
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
         Increment\Finance\FinanceProvider::class,
         Increment\Finance\Stripe\StripeServiceProvider::class,
+        Increment\Finance\Paypal\PaypalServiceProvider::class,
         /*
          * Application Service Providers...
          */
