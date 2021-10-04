@@ -1,14 +1,14 @@
 <template>
   <div class="containers">
     <div class="row" style="width: 103%; margin-left: 0px;">
-      <div class="column" style="margin-right: 10px; width: 9%;">
-        <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px;">
+      <div class="column" style="margin-right: 10px;">
+        <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
-      <div class="column" style="margin-top: 7px; width: 82%; line-height: 10px;"> 
-        <b style="font-size:18px;">{{data.name}}</b>
+      <div class="column" style=" width: 82%; margin-top: 4px; line-height: 15px;"> 
+        <b>{{data.name}}</b>
         <p>{{data.date}}</p>
       </div>
-      <div class="column" style="width: 5%;">
+      <div class="column" style="padding-right: 8px;">
       <span class="right-menu-icons">
       <div class="dropdown">
         <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
@@ -42,20 +42,20 @@
       <img :src="require('src/assets/img/test.jpg')" width="100%" height="300px">
       </div>
       <i class="fas fa-praying-hands praying-hands"></i>
-      <span style="margin-left: 5px; margin-right: 50px; vertical-align: 2px;">Amen</span>
+      <span style=" margin-right: 50px; vertical-align: 2px;">Amen</span>
       <i class="fas fa-heart love"></i>
-      <span style="margin-left: 5px; margin-right: 50px; vertical-align: 3px;">Love</span>
+      <span style=" margin-right: 50px; vertical-align: 3px;">Love</span>
       <i class="fas fa-share share"></i>
-      <span style="margin-left: 5px; margin-right: 50px; vertical-align: 3px;">Share</span>
+      <span style=" margin-right: 50px; vertical-align: 3px;">Share</span>
     </div>
     <div style="width: 100%; margin-left: 0px; margin: 10px;" v-if="data.replies.length > 0">
       <div class="row" style="margin-left: 3px;" v-for="(item, index) in data.replies" :key="index">
-        <div class="column" style="margin-right: 10px; width: 9%;">
+        <div class="column" style="margin-right: 10px;">
           <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
         </div>
-        <div class="column" style="width: 80%; margin-top: 6px; line-height: 10px;">
-          <b style="font-size:18px;">{{item.name}}</b>
-          <p>{{item.date}}</p>
+        <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
+          <b>{{data.name}}</b>
+          <p>{{data.date}}</p>
         </div>
         <div class="column" style="width: 5%;">
           <span class="right-menu-icons">
@@ -123,7 +123,7 @@ p {
 .comment{
   font-size: 25px;
   margin-top: 20px;
-  color: black;
+  color: $secondary;
 }
 .inputs{
   border-radius: 20px;
@@ -137,24 +137,23 @@ p {
 .icon{
   font-size: 20px;
   margin-top: 7px;
-  position: relative;
-  right: 0px;
-  color: black;
+  float: left;
+  color: $secondary;
 }
 .praying-hands{
   font-size: 20px;
   margin-top: 20px;
-  color: black;
+  color: $secondary;
 }
 .love{
   font-size: 20px;
   margin-top: 20px;
-  color: black;
+  color: $secondary;
 }
 .share{
   font-size: 20px;
   margin-top: 20px;
-  color: black;
+  color: $secondary;
 }
 .containers{
   width: 100%;
@@ -174,44 +173,37 @@ p {
 .dropdown-menu{
   width: 250px;
   min-height: 250px;
-  border-radius: 0px !important;
-  padding-bottom: 0px !important;
-}
-.dropdown-menu-notification{
-  padding-top: 0px !important;
-  width: 350px !important;
-  height: 400px !important;
-  overflow-y: auto;
+  border-radius: 0px;
+  padding-bottom: 0px;
 }
 .dropdown-item{
   cursor: pointer;
-  width: 100% !important;
-  height: 40px !important;
-  float: left !important;
-  background: #fff !important;
-  padding-top: 0px !important;
+  width: 100%;
+  height: 40px;
+  float: left;
+  background: #fff;
+  padding-top: 0px;
   font-weight: normal;
 }
 .dropdown-item .trash{
   color: red;
 }
 .dropdown-item:hover{
-  background: #ddd !important;
+  background: #ddd;
 }
 .dropdown-item i{
-  font-size: 14px !important;
-  padding-right: 10px !important;
-  color: black;
+  font-size: 14px;
+  padding-right: 10px;
+  color: $secondary;
 }
 .dropdown-item label{
-  font-size: 14px !important;
+  font-size: 14px;
 }
 .dropdown-item label:hover, .dropdown-item i:hover{
   cursor: pointer;
 }
 .dropdown-header{
   padding: 5px 0 10px 0;
-  width: 100%;
   text-align: center;
   border-bottom: solid 1px #ccc;
 }
@@ -221,6 +213,6 @@ p {
 }
 .dropdown-item-menu-title:hover, .dropdown-item-menu-title label:hover{
   cursor: default;
-  background: #fff !important;
+  background: #fff 
 }
 </style>

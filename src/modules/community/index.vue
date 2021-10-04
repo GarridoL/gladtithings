@@ -21,44 +21,74 @@
       />
     <br>
     </div>
+    <!-- tweets -->
     <div v-if="message" v-for="(item, index) in tweet" :key="index">
       <div class="message">
         <div class="row" style="width: 103%; margin-left: 0px;">
-          <div class="column" style="margin-right: 10px; width: 9%;">
-            <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px; ">
+          <div class="column" style="padding-right: 8px;">
+            <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px; ">
           </div>
-          <div class="column" style="margin-top: 6px; line-height: 10px;"> 
-            <div>
-              <b style="font-size:18px;">{{item.name}}</b>
+          <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;"> 
+            <div >
+              <b>{{item.name}}</b>
               <p>{{item.date}}</p>
             </div>
           </div>
-          <p style="margin-top: 10px;">{{item.text}}</p>
+          <br>
+          <br>
+          <br>
+          <p style="margin-left: 15px; padding-right: 30px;">{{item.text}}</p>
           </div>
         </div>
         <br>
     </div>
+        <!-- recommendation -->
+    <div v-if="recommendation">
+      <div class="tabTitle">
+        <b>Communities You Might Interested In</b>
+      </div>
+      <div v-for="(item, index) in commFollow" :key="index">
+        <div class="community">
+          <div class="row" style="width: 103%; margin-left: 0px;">
+            <div class="column" style="padding-right: 8px;">
+              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
+            </div>
+            <div  class="column" style=" margin-top: 4px; line-height: 15px;"> 
+              <div>
+                <b>{{item.name}}</b>
+                <p>{{item.date}}</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 15px;margin-top: 10px;">
+            <i class="fas fa-users" style="margin-bottom: 10px; "></i>
+            <p style="display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Follow and Join</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- create community -->
     <div v-if="community">
       <div class="tabTitle" >
-        <p style="margin-bottom: 5px;">Communities You Manage</p>
-        <i class="fas fa-plus plus"><p style="font-weight: normal; font-size: 15px; vertical-align: 4px;">&nbsp;&nbsp;&nbsp;Create</p></i>
+        <b style="margin-bottom: 5px;">Communities You Manage</b>
+        <button class="fas fa-plus plus" @click="redirect('community/create')">&nbsp;&nbsp;Create</button>
       </div>
       <div v-for="(item, index) in comm" :key="index">
         <div class="community">
           <div class="row" style="width: 103%; margin-left: 0px;">
-            <div class="column" style="margin-right: 10px; width: 9%;">
-              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px;">
+            <div class="column" style="padding-right: 8px;">
+              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
             </div>
-            <div class="column"  style="margin-top: 6px; line-height: 10px;" > 
+            <div class="column"  style=" margin-top: 4px; line-height: 15px;"> 
               <div>
-                <b style="font-size:18px;">{{item.name}}</b>
+                <b>{{item.name}}</b>
                 <p>{{item.date}}</p>
               </div>
             </div>
           </div>
           <div style="margin-left: 15px;margin-top: 10px;">
             <i class="fas fa-bell bell" style="margin-bottom: 10px;"></i>
-            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;&nbsp;Notifications</p>
+            <p  style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Notifications</p>
           </div>
         </div>
       </div>
@@ -67,25 +97,25 @@
     <!-- manage -->
     <div v-if="community">
       <div class="tabTitle">
-        <p style="margin-right: 95px;">Communities You Followed & Joined</p>
-        <p style="font-weight: normal; font-size: 12px; cursor: pointer;">View Recommendation</p>
+        <b>Communities You Followed & Joined</b>
+        <button @click="recommendationClick()" class="recommendation">View Recommendation</button>
       </div>
       <div v-for="(item, index) in commFollow" :key="index">
         <div class="community">
           <div class="row" style="width: 103%; margin-left: 0px;">
-            <div class="column" style="margin-right: 10px; width: 9%;">
-              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 5px;">
+            <div class="column" style="padding-right: 8px;">
+              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
             </div>
-            <div class="column" style="margin-top: 6px; line-height: 10px;"> 
+            <div  class="column" style="margin-top: 4px; line-height: 15px;"> 
               <div>
-                <b style="font-size:18px;">{{item.name}}</b>
+                <b>{{item.name}}</b>
                 <p>{{item.date}}</p>
               </div>
             </div>
           </div>
           <div style="margin-left: 15px;margin-top: 10px;">
             <i class="fas fa-ban ban" style="margin-bottom: 10px; text-align: right;"></i>
-            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;&nbsp;Unfollow</p>
+            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Unfollow</p>
           </div>
         </div>
       </div>
@@ -179,9 +209,9 @@ export default{
       defaults: true,
       message: false,
       community: false,
+      recommendation: false,
       firstClass: 'text-center sort-button1 mr-2',
-      secondClass: 'text-center sort-button1 mr-2',
-      isHidden: false
+      secondClass: 'text-center sort-button1 mr-2'
     }
   },
   components: {
@@ -196,6 +226,7 @@ export default{
       this.message = true
       this.defaults = false
       this.community = false
+      this.recommendation = false
     },
     communityClick(){
       this.secondClass = this.secondClass + ' active'
@@ -205,6 +236,15 @@ export default{
       this.message = false
       this.defaults = false
       this.community = true
+      this.recommendation = false
+    },
+    recommendationClick(){
+      this.recommendation = true
+      this.message = false
+      this.community = false
+    },
+    redirect(route){
+      ROUTER.push(route)
     }
   }
 }
@@ -230,40 +270,13 @@ button:focus{
   font-size: 18px;
 }
 .plus{
-  cursor: pointer;
-  font-size: 25px;
-  color: black;
-  margin-left: 218px;
-}
-.sort-button1{
-  border-radius: 25px;
-  width: 200px;
-  color: black;
-  border: 1px solid rgb(235, 235, 235);
-  height: 40px;
+ padding: 0px;
+  width: 70px;
+  border: none;
   background-color: white;
-  margin-bottom: 10px;
-  float: left;
-}
-.active{
-  border-radius: 25px;
-  width: 200px;
-  color: white;
-  border: 0px;
-  height: 40px;
-  background-color: $secondary;
-  margin-bottom: 10px;
-  float: left;
-}
-.sort-button2{
-  border-radius: 25px;
-  width: 200px;
-  color: black;
-  border: 1px solid rgb(235, 235, 235);
-  height: 40px;
-  background-color: white;
-  margin-bottom: 10px;
-  float: left;
+  font-size: 15px; 
+  margin-top: 5px;
+  float: right;
 }
 .container{
   width: 50%;
@@ -283,6 +296,7 @@ button:focus{
   border: 1px solid rgb(235, 235, 235);
   height: 40px;
   background-color: white;
+  margin-right: 10px;
   margin-bottom: 10px;
   float: left;
 }
@@ -296,15 +310,15 @@ button:focus{
   margin-bottom: 10px;
   float: left;
 }
-.sort-button2{
-  border-radius: 25px;
-  width: 200px;
-  color: black;
-  border: 1px solid rgb(235, 235, 235);
-  height: 40px;
+.recommendation{
+  padding: 0px;
+  border: none;
   background-color: white;
-  margin-bottom: 10px;
-  float: left;
+  font-size: 12px; 
+  margin-top: 5px;
+  float: right;
+  font-weight: normal;
+ 
 }
 .message {
   text-align: justify;
@@ -330,10 +344,6 @@ button:focus{
 }
 .community p{
   padding-right: 15px;
-}
-.tabTitle{
-  font-size: 16px;
-  font-weight: bold;
 }
 .tabTitle p{
   display: inline-block;
