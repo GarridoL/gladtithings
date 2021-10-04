@@ -19,6 +19,7 @@
       :title="item.receiver ? item.receiver.email : item.description"
       :dates="item.created_at_human"
       :version="3"
+      :description="item.description"
       :amount="item.currency + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
     />
     </div>
