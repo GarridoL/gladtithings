@@ -10,8 +10,8 @@
     </div>
     <br>
     <div class="tabs" style="margin-bottom: 20px;">
-      <button :class="firstClass" @click="messageClick()">Pope's Twitter Message</button>
       <button :class="secondClass" @click="communityClick()">Communities</button>
+      <button :class="firstClass" @click="messageClick()">Pope's Messages</button>
     </div>
     <br>
     <br>
@@ -291,21 +291,21 @@ button:focus{
 }
 .sort-button1{
   border-radius: 25px;
-  width: 200px;
-  color: black;
+  width: 190px;
+  color: $secondary;
   border: 1px solid rgb(235, 235, 235);
-  height: 40px;
+  height: 45px;
   background-color: white;
-  margin-right: 10px;
+  margin-right: 13px;
   margin-bottom: 10px;
   float: left;
 }
 .active{
   border-radius: 25px;
-  width: 200px;
+  width: 190px;
   color: white;
   border: 0px;
-  height: 40px;
+  height: 45px;
   background-color: $secondary;
   margin-bottom: 10px;
   float: left;
