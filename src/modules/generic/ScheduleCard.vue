@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="width: 100%;">
-    <input type="checkbox">&nbsp;&nbsp;{{title}}
+    <input type="checkbox" :checked="data && data.length > 0">&nbsp;&nbsp;{{title}}
     </div>
   <div class="container">
     <div class="containers row" v-for="(item, index) in data" :key="index">
@@ -12,12 +12,12 @@
       </div>
       <div class="column" style="width: 25%;">
         <span>
-          <i class="fas fa-times-circle delete"></i>
-          <i class="fas fa-pencil-alt icons mr-1"></i>
+          <i class="fas fa-times-circle delete" @click="remove(item, index)"></i>
+          <i class="fas fa-pencil-alt icons mr-1" @click="addSched(item, index)"></i>
         </span>
       </div>
     </div>
-    <div class="container-add" @click="addSched()">
+    <div class="container-add" @click="addSched(null, null)">
       <i class="fas fa-plus-circle" style="font-size: 40px;"></i>
     </div>
   </div>
@@ -43,9 +43,13 @@ export default{
     redirect(route) {
       ROUTER.push(route)
     },
-    addSched() {
-      this.$parent.addSchedModal()
+    addSched(item, index) {
+      this.$parent.addSchedModal(item, index)
       this.$parent.selectedDay = this.title
+    },
+    remove(index) {
+      this.$parent.selectedDay = this.title
+      this.$parent.remove(index)
     }
   }
 }
