@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h3 style="margin-left: -13px;">Church Details</h3>
-    <div class="row" style="width: 100%; margin-top: 10px;">
+    <h3>Church Details</h3>
+    <div class="row top">
       <div class="column" style="width: 60%; margin-right: 10%;">
         <span class="error text-danger" v-if="errorMessage">
           <b>Oops!</b> {{errorMessage}}
@@ -23,10 +23,19 @@
         </span>
         <p style="cursor: pointer; margin-top: 10px;" @click="showImages()">Click to edit profile</p>
       </div>
-      <button class="text-center sort-button" @click="update()">Update</button>
     </div>
+    <featured-images-modal :object="photoObject"></featured-images-modal>
+    <br>
+    <button class="text-center sort-button" @click="update()">Update</button>
     <div>
       <h3 style="margin-bottom: 15px;">Mass Schedules</h3>
+      <span class="error text-danger" v-if="errorMessage">
+          <b>Oops!</b> {{errorMessage1}}
+        </span>
+        <span class="success" v-if="successMessage1">
+          {{successMessage1}}
+        </span>
+        <br>
       <br>
       <div v-for="(item, index) in days" :key="index">
         <Cards
@@ -35,7 +44,7 @@
         />
       </div>
     </div>
-    <button class="text-center sort-button">Update</button>
+    <button class="text-center sort-button" @click="updateSchedule()">Update</button>
     <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
 
 <!-- Modal -->
@@ -55,20 +64,24 @@
             <div class="row time-row">
               <div class="column time">
                 <label><b>Start Time&nbsp;</b><span style="color: red;">*</span></label><br>
-                <input placeholder="Start Time" class="generic-input" type="time" v-model="schedStartTime">
+                <input placeholder="Start Time" class="generic-input" type="time" v-model="item.startTime" v-if="item">
+                <input placeholder="Start Time" class="generic-input" type="time" v-model="schedStartTime" v-else>
               </div>
                <div class="column time">
                 <label><b>End Time&nbsp;</b><span style="color: red;">*</span></label><br>
-                <input placeholder="Start Time" class="generic-input" type="time" v-model="schedEndTime">
+                <input placeholder="End Time" class="generic-input" type="time" v-model="item.endTime" v-if="item">
+                <input placeholder="End Time" class="generic-input" type="time" v-model="schedEndTime" v-else>
               </div>
             </div>
             <label><b>Name&nbsp;</b><span style="color: red;">*</span></label><br>
-            <input placeholder="Name" class="generic-input" v-model="schedName">
+            <input placeholder="Name" class="generic-input" v-model="item.name" v-if="item">
+            <input placeholder="Name" class="generic-input" v-model="schedName" v-else>
             <label><b>Language&nbsp;</b><span style="color: red;">*</span></label><br>
-            <input placeholder="Language" class="generic-input" v-model="schedLanguage">
+            <input placeholder="Language" class="generic-input" v-model="item.language" v-if="item">
+            <input placeholder="Language" class="generic-input" v-model="schedLanguage" v-else>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="addToSchedulePerDay()">Add</button>
+            <button type="button" class="btn btn-primary" @click="addToSchedulePerDay(item ? 'update' : 'add')">{{item ? 'Update' : 'Add'}}</button>
           </div>
         </div>
       </div>
@@ -84,6 +97,7 @@ import Input from 'src/modules/generic/InputField.vue'
 export default{
   mounted(){
     this.retrieve()
+    this.retrieveFeaturedPhotos()
   },
   data(){
     return {
@@ -93,10 +107,11 @@ export default{
       successMessage: null,
       errorMessage: null,
       modalErrorMessage: null,
+      errorMessage1: null,
+      successMessage1: null,
       church: null,
       logo: null,
       config: CONFIG,
-      schedule: [],
       schedName: null,
       schedLanguage: null,
       schedStartTime: null,
@@ -109,38 +124,83 @@ export default{
         {title: 'Wednesday', schedule: []},
         {title: 'Friday', schedule: []},
         {title: 'Saturday', schedule: []}
-      ]
+      ],
+      item: null,
+      images: [],
+      photoObject: {
+        url: null
+      }
     }
   },
   components: {
     Cards,
     Input,
+    'featured-images-modal': require('modules/churchDetails/FeaturedPhotos.vue'),
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
   },
   methods: {
-    addSchedModal() {
+    updateSchedule(){
+      let status = false
+      this.days.forEach(element => {
+        if(element.schedule.length > 0) {
+          status = true
+        }
+      })
+      let parameter = {
+        id: this.church.id,
+        schedule: status === false ? null : JSON.stringify(this.days)
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('account_merchants/update', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data) {
+          this.errorMessage1 = null
+          this.successMessage1 = 'Successfully updated.'
+        }
+      })
+    },
+    remove(index) {
+      let i = this.days.map(e => e.title).indexOf(this.selectedDay)
+      this.days[i].schedule.splice(index, 1)
+    },
+    addSchedModal(item, index) {
+      if(item !== null && index !== null) {
+        item['index'] = index
+        this.item = item
+      }
       this.modalErrorMessage = null
       $('#addSched').modal('show')
     },
-    addToSchedulePerDay() {
-      if(this.schedName === '' || this.schedName === null || this.schedStartTime === null || this.schedStartTime === '' || this.schedEndTime === null || this.schedEndTime === '' || this.schedLanguage === null || this.schedLanguage === '') {
-        this.modalErrorMessage = 'All fields are required.'
-        return
-      }
-      let index = this.days.map(e => e.title).indexOf(this.selectedDay)
-      this.days[index].schedule.push(
-        {
-          startTime: this.schedStartTime,
-          endTime: this.schedEndTime,
-          name: this.schedName,
-          language: this.schedLanguage
+    addToSchedulePerDay(option) {
+      if(option === 'add') {
+        if(this.schedName === '' || this.schedName === null || this.schedStartTime === null || this.schedStartTime === '' || this.schedEndTime === null || this.schedEndTime === '' || this.schedLanguage === null || this.schedLanguage === '') {
+          this.modalErrorMessage = 'All fields are required.'
+          return
         }
-      )
-      this.schedLanguage = null
-      this.schedStartTime = null
-      this.schedEndTime = null
-      this.schedName = null
-      $('#addSched').modal('hide')
+        let index = this.days.map(e => e.title).indexOf(this.selectedDay)
+        this.days[index].schedule.push(
+          {
+            startTime: this.schedStartTime,
+            endTime: this.schedEndTime,
+            name: this.schedName,
+            language: this.schedLanguage
+          }
+        )
+        this.schedLanguage = null
+        this.schedStartTime = null
+        this.schedEndTime = null
+        this.schedName = null
+        $('#addSched').modal('hide')
+      } else {
+        if(this.item.name === '' || this.item.name === null || this.item.startTime === null || this.item.startTime === '' || this.item.endTime === null || this.item.endTime === '' || this.item.language === null || this.item.language === '') {
+          this.modalErrorMessage = 'All fields are required.'
+          return
+        }
+        let index = this.days.map(e => e.title).indexOf(this.selectedDay)
+        this.days[index].schedule[this.item.index] = this.item
+        $('#addSched').modal('hide')
+      }
+      this.item = null
     },
     retrieve() {
       let parameter = {
@@ -159,11 +219,8 @@ export default{
           this.church = response.data[0]
           this.logo = response.data[0].logo
           if(response.data[0].schedule) {
-            this.schedule = JSON.parse(response.data[0].schedule)
-          } else {
-            this.schedule = []
+            this.days = JSON.parse(response.data[0].schedule)
           }
-          console.log(this.schedule)
         }
       })
     },
@@ -217,12 +274,38 @@ export default{
       this.APIRequest('images/delete', parameter).then(response => {
         this.church.logo = null
       })
+    },
+    retrieveFeaturedPhotos(){
+      const parameter = {
+        condition: [{
+          value: this.user.userID,
+          column: 'account_id',
+          clause: '='
+        }, {
+          value: 'featured-photo',
+          column: 'category',
+          clause: '='
+        }],
+        sort: {
+          created_at: 'desc'
+        }
+      }
+      $('#loading').css({display: 'none'})
+      this.APIRequest('images/retrieve', parameter).done(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.images = response.data
+        }
+      })
     }
   }
 }
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.top{
+  margin-left: 0px;
+}
 .success{
   color: $primary;
 }
