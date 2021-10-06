@@ -80,24 +80,21 @@ class AuthenticateController extends Controller
       // something went wrong
       return response()->json(['error' => 'could_not_create_token'], 500);
     }
-    // if no errors are encountered we can return a JWT
+    
+    $token = compact('token');
     if(sizeof($result) > 0){
-      // $notifResult = NotificationSetting::where('account_id', '=', $result[0]['id'])->get();
-      // if(sizeof($notifResult) > 0){
-      //   if($notifResult[0]['email'] === "ON"){
-      //     // Notify via email
-      //     dispatch(new Email($result[0], 'login'));
-      //   }else if($notifResult[0]['sms'] === "ON"){
-      //     // Notify via SMS
-      //   }else if($notifResult[0]['fb_messenger'] === "ON"){
-      //     // Notify via FB Messenger
-      //   }
-      // }
-        
-    }else{
-      //
+      app('App\Http\Controllers\NotificationSettingController')->manageNotification($result[0]['id']);
+      if($token && isset($token['token'])){
+        Account::where('id', '=', $result[0]['id'])->update(array(
+          'token' => $token['token']
+        ));
+      }
     }
-    return response()->json(compact('token'));
+    
+    return response()->json(array(
+      'token' => $token['token']
+    ));
+    
   }
   public function deauthenticate(){
     JWTAuth::invalidate(JWTAuth::getToken());
