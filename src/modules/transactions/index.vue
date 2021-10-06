@@ -53,12 +53,12 @@ export default{
           payload: 'created_at',
           payload_value: 'desc'
         }, {
-          title: 'Event Name Ascending',
-          payload: 'event_name',
+          title: 'Description Ascending',
+          payload: 'description',
           payload_value: 'asc'
         }, {
-          title: 'Event Name Descending',
-          payload: 'event_name',
+          title: 'Description Descending',
+          payload: 'description',
           payload_value: 'desc'
         }]
       }],
