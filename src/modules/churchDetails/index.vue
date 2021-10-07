@@ -61,16 +61,20 @@
             <span class="error text-danger" v-if="modalErrorMessage">
               <b>Oops!</b> {{modalErrorMessage}}
             </span>
+            <br>
+            <span class="error text-danger" v-if="dateErrorMessage">
+              <b>Oops!</b> {{dateErrorMessage}}
+            </span>
             <div class="row time-row">
               <div class="column time">
                 <label><b>Start Time&nbsp;</b><span style="color: red;">*</span></label><br>
-                <input placeholder="Start Time" class="generic-input" type="time" v-model="item.startTime" v-if="item">
-                <input placeholder="Start Time" class="generic-input" type="time" v-model="schedStartTime" v-else>
+                <input placeholder="Start Time" class="generic-input" type="time" v-model="item.startTime" v-if="item" @change="checkTime(item.startTime, item.endTime)">
+                <input placeholder="Start Time" class="generic-input" type="time" v-model="schedStartTime" v-else @change="checkTime(schedStartTime, schedEndTime)">
               </div>
                <div class="column time">
                 <label><b>End Time&nbsp;</b><span style="color: red;">*</span></label><br>
-                <input placeholder="End Time" class="generic-input" type="time" v-model="item.endTime" v-if="item">
-                <input placeholder="End Time" class="generic-input" type="time" v-model="schedEndTime" v-else>
+                <input placeholder="End Time" class="generic-input" type="time" v-model="item.endTime" v-if="item" @change="checkTime(item.startTime, item.endTime)">
+                <input placeholder="End Time" class="generic-input" type="time" v-model="schedEndTime" v-else @change="checkTime(schedStartTime, schedEndTime)">
               </div>
             </div>
             <label><b>Name&nbsp;</b><span style="color: red;">*</span></label><br>
@@ -122,6 +126,7 @@ export default{
         {title: 'Monday', schedule: []},
         {title: 'Tuesday', schedule: []},
         {title: 'Wednesday', schedule: []},
+        {title: 'Thursday', schedule: []},
         {title: 'Friday', schedule: []},
         {title: 'Saturday', schedule: []}
       ],
@@ -129,7 +134,8 @@ export default{
       images: [],
       photoObject: {
         url: null
-      }
+      },
+      dateErrorMessage: null
     }
   },
   components: {
@@ -139,6 +145,21 @@ export default{
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
   },
   methods: {
+    checkTime(startTime, endTime) {
+      let a = null
+      let b = null
+      if(startTime) {
+        a = new Date('01-01-2021 ' + startTime)
+      }
+      if(endTime) {
+        b = new Date('01-01-2021 ' + endTime)
+      }
+      if(a >= b) {
+        this.dateErrorMessage = 'Start time should be less than end time.'
+      } else {
+        this.dateErrorMessage = null
+      }
+    },
     updateSchedule(){
       let status = false
       this.days.forEach(element => {
@@ -176,6 +197,11 @@ export default{
         if(this.schedName === '' || this.schedName === null || this.schedStartTime === null || this.schedStartTime === '' || this.schedEndTime === null || this.schedEndTime === '' || this.schedLanguage === null || this.schedLanguage === '') {
           this.modalErrorMessage = 'All fields are required.'
           return
+        } else {
+          this.modalErrorMessage = null
+        }
+        if(this.dateErrorMessage !== null) {
+          return
         }
         let index = this.days.map(e => e.title).indexOf(this.selectedDay)
         this.days[index].schedule.push(
@@ -194,6 +220,9 @@ export default{
       } else {
         if(this.item.name === '' || this.item.name === null || this.item.startTime === null || this.item.startTime === '' || this.item.endTime === null || this.item.endTime === '' || this.item.language === null || this.item.language === '') {
           this.modalErrorMessage = 'All fields are required.'
+          return
+        }
+        if(this.dateErrorMessage !== null) {
           return
         }
         let index = this.days.map(e => e.title).indexOf(this.selectedDay)
