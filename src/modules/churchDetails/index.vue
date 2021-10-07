@@ -149,15 +149,16 @@ export default{
       let a = null
       let b = null
       if(startTime) {
-        a = new Date('01-01-2021 ' + startTime)
+        a = new Date(`01-01-2021 ${startTime}:00`)
       }
       if(endTime) {
-        b = new Date('01-01-2021 ' + endTime)
+        b = new Date(`01-01-2021 ${endTime}:00`)
       }
-      if(a >= b) {
-        this.dateErrorMessage = 'Start time should be less than end time.'
+      if((a && a.getTime()) === (b && b.getTime())) {
+        this.dateErrorMessage = 'Start time and End time should not be equal.'
       } else {
         this.dateErrorMessage = null
+        console.log(a, b)
       }
     },
     updateSchedule(){
