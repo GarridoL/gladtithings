@@ -24,12 +24,11 @@
         <p style="cursor: pointer; margin-top: 10px;" @click="showImages()">Click to edit profile</p>
       </div>
     </div>
-    <featured-images-modal :object="photoObject"></featured-images-modal>
-    <br>
     <button class="text-center sort-button" @click="update()">Update</button>
+    <featured-images-modal ref="featured" :object="photoObject"></featured-images-modal>
     <div>
       <h3 style="margin-bottom: 15px;">Mass Schedules</h3>
-      <span class="error text-danger" v-if="errorMessage">
+      <span class="error text-danger" v-if="errorMessage1">
           <b>Oops!</b> {{errorMessage1}}
         </span>
         <span class="success" v-if="successMessage1">
@@ -45,7 +44,7 @@
       </div>
     </div>
     <button class="text-center sort-button" @click="updateSchedule()">Update</button>
-    <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
+    <browse-images-modal :object="user.profile"></browse-images-modal>
 
 <!-- Modal -->
     <div class="modal fade" id="addSched">
@@ -135,7 +134,8 @@ export default{
       photoObject: {
         url: null
       },
-      dateErrorMessage: null
+      dateErrorMessage: null,
+      status: 'create'
     }
   },
   components: {
@@ -244,6 +244,7 @@ export default{
       this.APIRequest('account_merchants/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
+          this.status = 'udpate'
           this.name = response.data[0].name
           this.address = response.data[0].address
           this.church = response.data[0]
@@ -251,25 +252,58 @@ export default{
           if(response.data[0].schedule) {
             this.days = JSON.parse(response.data[0].schedule)
           }
+        } else {
+          this.status = 'create'
         }
       })
     },
     update() {
+      if(this.status === 'udpate') {
+        if(this.name === null || this.address === null || this.name === '' || this.address === '') {
+          this.successMessage = null
+          this.errorMessage = 'All fields are required.'
+          this.errorMessage1 = null
+          this.$refs.featured.errorMessage = null
+          return
+        }
+        let parameter = {
+          id: this.church.id,
+          name: this.name,
+          address: this.address
+        }
+        $('#loading').css({display: 'block'})
+        this.APIRequest('account_merchants/update', parameter).then(response => {
+          $('#loading').css({display: 'none'})
+          if(response.data) {
+            this.errorMessage = null
+            this.successMessage = 'Successfully updated.'
+          }
+        })
+      } else {
+        this.create()
+      }
+    },
+    create() {
       if(this.name === null || this.address === null || this.name === '' || this.address === '') {
         this.successMessage = null
+        this.errorMessage1 = null
         this.errorMessage = 'All fields are required.'
+        this.$refs.featured.errorMessage = null
         return
       }
       let parameter = {
-        id: this.church.id,
+        account_id: this.user.userID,
         name: this.name,
         address: this.address
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('account_merchants/update', parameter).then(response => {
+      this.APIRequest('account_merchants/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
+          this.retrieve()
+          this.status = 'udpate'
           this.errorMessage = null
+          this.errorMessage1 = null
           this.successMessage = 'Successfully updated.'
         }
       })
@@ -291,8 +325,20 @@ export default{
       this.logo = url
       this.updatePhoto(c)
     },
+    clear() {
+      this.$refs.featured.errorMessage = null
+    },
     showImages() {
-      $('#browseImagesModal').modal('show')
+      if(this.church === null) {
+        this.errorMessage = 'No existing church. Please update your church details.'
+        this.errorMessage1 = null
+        this.$refs.featured.errorMessage = null
+        return
+      } else {
+        console.log(this.church)
+        $('#browseImagesModal').modal('show')
+        this.errorMessage = null
+      }
     },
     hideImages(){
       $('#browseImagesModal').modal('hide')

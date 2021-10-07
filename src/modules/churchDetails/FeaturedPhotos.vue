@@ -82,6 +82,13 @@ export default {
       ROUTER.push(parameter)
     },
     addImage(){
+      if(this.$parent.church === null) {
+        this.errorMessage = 'No existing church. Please update your church details.'
+        this.$parent.errorMessage = null
+        return
+      } else {
+        this.errorMessage = null
+      }
       $('#FeaturedImage')[0].click()
     },
     setUpFileUpload(event){

@@ -44,7 +44,19 @@ export default{
       ROUTER.push(route)
     },
     addSched(item, index) {
+      if(this.$parent.church === null) {
+        this.$parent.clear()
+        this.$parent.errorMessage = null
+        this.$parent.errorMessage1 = 'No existing church. Please update your church details.'
+        return
+      }
       this.$parent.addSchedModal(item, index)
+      if(item === null) {
+        this.$parent.schedName = null
+        this.$parent.schedStartTime = null
+        this.$parent.schedEndTime = null
+        this.$parent.schedLanguage = null
+      }
       this.$parent.selectedDay = this.title
     },
     remove(index) {
