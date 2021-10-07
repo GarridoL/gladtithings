@@ -24,12 +24,11 @@
         <p style="cursor: pointer; margin-top: 10px;" @click="showImages()">Click to edit profile</p>
       </div>
     </div>
-    <featured-images-modal :object="photoObject"></featured-images-modal>
-    <br>
     <button class="text-center sort-button" @click="update()">Update</button>
+    <featured-images-modal ref="featured" :object="photoObject"></featured-images-modal>
     <div>
       <h3 style="margin-bottom: 15px;">Mass Schedules</h3>
-      <span class="error text-danger" v-if="errorMessage">
+      <span class="error text-danger" v-if="errorMessage1">
           <b>Oops!</b> {{errorMessage1}}
         </span>
         <span class="success" v-if="successMessage1">
@@ -45,7 +44,7 @@
       </div>
     </div>
     <button class="text-center sort-button" @click="updateSchedule()">Update</button>
-    <browse-images-modal :object="user.profile" v-if="user.profile !== null"></browse-images-modal>
+    <browse-images-modal :object="user.profile"></browse-images-modal>
 
 <!-- Modal -->
     <div class="modal fade" id="addSched">
@@ -262,6 +261,8 @@ export default{
         if(this.name === null || this.address === null || this.name === '' || this.address === '') {
           this.successMessage = null
           this.errorMessage = 'All fields are required.'
+          this.errorMessage1 = null
+          this.$refs.featured.errorMessage = null
           return
         }
         let parameter = {
@@ -284,7 +285,9 @@ export default{
     create() {
       if(this.name === null || this.address === null || this.name === '' || this.address === '') {
         this.successMessage = null
+        this.errorMessage1 = null
         this.errorMessage = 'All fields are required.'
+        this.$refs.featured.errorMessage = null
         return
       }
       let parameter = {
@@ -299,6 +302,7 @@ export default{
           this.retrieve()
           this.status = 'udpate'
           this.errorMessage = null
+          this.errorMessage1 = null
           this.successMessage = 'Successfully updated.'
         }
       })
@@ -320,8 +324,20 @@ export default{
       this.logo = url
       this.updatePhoto(c)
     },
+    clear() {
+      this.$refs.featured.errorMessage = null
+    },
     showImages() {
-      $('#browseImagesModal').modal('show')
+      if(this.church === null) {
+        this.errorMessage = 'No existing church. Please update your church details.'
+        this.errorMessage1 = null
+        this.$refs.featured.errorMessage = null
+        return
+      } else {
+        console.log(this.church)
+        $('#browseImagesModal').modal('show')
+        this.errorMessage = null
+      }
     },
     hideImages(){
       $('#browseImagesModal').modal('hide')
