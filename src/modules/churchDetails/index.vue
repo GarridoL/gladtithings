@@ -135,7 +135,8 @@ export default{
       photoObject: {
         url: null
       },
-      dateErrorMessage: null
+      dateErrorMessage: null,
+      status: 'create'
     }
   },
   components: {
@@ -243,6 +244,7 @@ export default{
       this.APIRequest('account_merchants/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
+          this.status = 'udpate'
           this.name = response.data[0].name
           this.address = response.data[0].address
           this.church = response.data[0]
@@ -250,24 +252,52 @@ export default{
           if(response.data[0].schedule) {
             this.days = JSON.parse(response.data[0].schedule)
           }
+        } else {
+          this.status = 'create'
         }
       })
     },
     update() {
+      if(this.status === 'udpate') {
+        if(this.name === null || this.address === null || this.name === '' || this.address === '') {
+          this.successMessage = null
+          this.errorMessage = 'All fields are required.'
+          return
+        }
+        let parameter = {
+          id: this.church.id,
+          name: this.name,
+          address: this.address
+        }
+        $('#loading').css({display: 'block'})
+        this.APIRequest('account_merchants/update', parameter).then(response => {
+          $('#loading').css({display: 'none'})
+          if(response.data) {
+            this.errorMessage = null
+            this.successMessage = 'Successfully updated.'
+          }
+        })
+      } else {
+        this.create()
+      }
+    },
+    create() {
       if(this.name === null || this.address === null || this.name === '' || this.address === '') {
         this.successMessage = null
         this.errorMessage = 'All fields are required.'
         return
       }
       let parameter = {
-        id: this.church.id,
+        account_id: this.user.userID,
         name: this.name,
         address: this.address
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('account_merchants/update', parameter).then(response => {
+      this.APIRequest('account_merchants/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
+          this.retrieve()
+          this.status = 'udpate'
           this.errorMessage = null
           this.successMessage = 'Successfully updated.'
         }

@@ -45,6 +45,12 @@ export default{
     },
     addSched(item, index) {
       this.$parent.addSchedModal(item, index)
+      if(item === null) {
+        this.$parent.schedName = null
+        this.$parent.schedStartTime = null
+        this.$parent.schedEndTime = null
+        this.$parent.schedLanguage = null
+      }
       this.$parent.selectedDay = this.title
     },
     remove(index) {
