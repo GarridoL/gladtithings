@@ -4,30 +4,35 @@
       <div class="column" style="margin-right: 10px;">
         <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
-      <div class="column" style=" width: 82%; margin-top: 4px; line-height: 15px;"> 
+      <div class="column" style=" width: 84%; margin-top: 4px; line-height: 15px;"> 
         <b>{{data.name}}</b>
         <p>{{data.date}}</p>
       </div>
+      
       <div class="column" style="padding-right: 8px;">
       <span class="right-menu-icons">
-      <div class="dropdown">
-        <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-        <i class="fas fa-ellipsis-h icon"></i>
-        <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings" style="font-weight: normal;">
+      <div class="dropdown" >
+        <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
+        <i class="icon">...</i>
+        <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings" style="font-weight: 400;">
             <span class="dropdown-item dropdown-item-menu-title">
               <i class="fas fa-cog post"></i>
               <label>Post Actions</label>
               <span class="dropdown-item">
-                <i class="fas fa-pencil-alt pencil">&nbsp;&nbsp;&nbsp;Edit</i>
+                <i class="fas fa-pencil-alt pencil"></i>
+                <label style="cursor: pointer;">Edit</label>
               </span>
               <span class="dropdown-item">
-                <i class="fas fa-file-alt file">&nbsp;&nbsp;&nbsp;&nbsp;Report</i>
+                <i class="fas fa-file-alt file"></i>
+                <label style="cursor: pointer;">Report</label>
               </span>
               <span class="dropdown-item">
-                 <i class="fas fa-eye-slash eye-slash">&nbsp;&nbsp;&nbsp;Hide</i>
+                 <i class="fas fa-eye-slash eye-slash"></i>
+                 <label style="cursor: pointer;">Hide</label>
               </span>
-              <span class="dropdown-item trash">
-                <i class="fas fa-trash-alt trash">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i>
+              <span class="dropdown-item">
+                <i class="fas fa-trash-alt trash"></i>
+                <label style="color: red; cursor: pointer;">Delete</label>
               </span>
             </span>
            </span>
@@ -60,21 +65,24 @@
         <div class="column" style="width: 5%;">
           <span class="right-menu-icons">
           <div class="dropdown">
-            <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-            <i class="fas fa-ellipsis-h icon"></i>
+            <span class="nav-item" data-toggle="dropdown" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
+            <i class="icon">...</i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
                 <span class="dropdown-item dropdown-item-menu-title">
                   <i class="fas fa-cog post"></i>
                   <label>Comment Actions</label>
-                 <span class="dropdown-item">
-                    <i class="fas fa-pencil-alt pencil">&nbsp;&nbsp;&nbsp;Edit</i>
-                  </span>
                   <span class="dropdown-item">
-                    <i class="fas fa-eye-slash eye-slash">&nbsp;&nbsp;&nbsp;Hide</i>
-                  </span>
-                  <span class="dropdown-item trash">
-                    <i class="fas fa-trash-alt trash">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i>
-                  </span>
+                      <i class="fas fa-pencil-alt pencil"></i>
+                      <label style="cursor: pointer;">Edit</label>
+                    </span>
+                    <span class="dropdown-item">
+                      <i class="fas fa-eye-slash eye-slash"></i>
+                      <label style="cursor: pointer;">Hide</label>
+                    </span>
+                    <span class="dropdown-item trash">
+                      <i class="fas fa-trash-alt trash"></i>
+                      <label style="color: red; cursor: pointer;">Delete</label>
+                    </span>
                   </span>
                 </span>
               </span>
@@ -101,12 +109,13 @@ export default{
   mounted(){},
   data(){
     return {
-      user: AUTH.user
+      user: AUTH.user,
+      dropdown: 'dropdown-menu'
     }
   },
   methods: {
     makeActive(icon){
-      if(icon === 'dropdown'){
+      if(icon === 'dropdown-menu'){
         this.settingFlag = true
         this.menuFlag = true
         this.notifFlag = false
@@ -135,9 +144,8 @@ p {
   padding: 15px;
 }
 .icon{
-  font-size: 20px;
-  margin-top: 7px;
-  float: left;
+  font-size: 24px;
+  float: right;
   color: $secondary;
 }
 .praying-hands{
@@ -161,7 +169,6 @@ p {
   padding: 10px;
   border-radius: 10px;
   border: .5px solid rgb(235, 235, 235);
-  // margin-top: 10px;
   cursor: pointer;
 }
 @media (max-width: 992px){
@@ -169,50 +176,55 @@ p {
     width: 100%;
   }
 }
-// dropdown
-.dropdown-menu{
-  width: 250px;
-  min-height: 250px;
-  border-radius: 0px;
-  padding-bottom: 0px;
+
+.dropdown-menu.show{
+  position: absolute;
+  margin: 40px -25px;
+  
 }
-.dropdown-item{
-  cursor: pointer;
-  width: 100%;
-  height: 40px;
-  float: left;
-  background: #fff;
-  padding-top: 0px;
-  font-weight: normal;
+.dropdown-menu{
+  margin-top: 40px;
+  width: 240px;
+  min-height: 230px;
+  padding-bottom: 0px !important;
+
+  
 }
 .dropdown-item .trash{
   color: red;
 }
-.dropdown-item:hover{
-  background: #ddd;
+.dropdown-item{
+  width: 100% !important;
+  height: 40px !important;
+  float: left !important;
+  background: #fff !important;
+  padding-top: 0px !important;
+  cursor: pointer !important;
 }
 .dropdown-item i{
-  font-size: 14px;
-  padding-right: 10px;
-  color: $secondary;
+  font-size: 14px !important;
+  padding-right: 10px !important;
+  color: black ;
+  cursor: pointer !important;
 }
 .dropdown-item label{
-  font-size: 14px;
-}
-.dropdown-item label:hover, .dropdown-item i:hover{
+  font-size: 14px !important;
   cursor: pointer;
 }
 .dropdown-header{
   padding: 5px 0 10px 0;
+  width: 100%;
   text-align: center;
   border-bottom: solid 1px #ccc;
 }
 .dropdown-item-menu-title label{
+  margin-bottom: 0px;
   line-height: 40px;
   font-weight: 550;
 }
 .dropdown-item-menu-title:hover, .dropdown-item-menu-title label:hover{
   cursor: default;
-  background: #fff 
+  background: #fff !important;
 }
+
 </style>

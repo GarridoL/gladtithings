@@ -9,9 +9,9 @@
       </span>
     </div>
     <br>
-    <div class="tabs" style="margin-bottom: 20px;">
-      <button :class="firstClass" @click="messageClick()">Pope's Twitter Message</button>
+    <div class="tabs" style="margin-bottom: 30px;">
       <button :class="secondClass" @click="communityClick()">Communities</button>
+      <button :class="firstClass" @click="messageClick()">Pope's Messages</button>
     </div>
     <br>
     <br>
@@ -30,8 +30,8 @@
           </div>
           <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;"> 
             <div >
-              <b>{{item.name}}</b>
-              <p>{{item.date}}</p>
+              <b style="font-size: 14px;">{{item.name}}</b>
+              <p style="font-size: 12px;">{{item.date}}</p>
             </div>
           </div>
           <br>
@@ -55,8 +55,8 @@
             </div>
             <div  class="column" style=" margin-top: 4px; line-height: 15px;"> 
               <div>
-                <b>{{item.name}}</b>
-                <p>{{item.date}}</p>
+                <b style="font-size: 14px;">{{item.name}}</b>
+                <p style="font-size: 12px;">{{item.date}}</p>
               </div>
             </div>
           </div>
@@ -70,8 +70,8 @@
     <!-- create community -->
     <div v-if="community">
       <div class="tabTitle" >
-        <b style="margin-bottom: 5px;">Communities You Manage</b>
-        <button class="fas fa-plus plus" @click="redirect('community/create')">&nbsp;&nbsp;Create</button>
+        <p style="margin-bottom: 5px; font-weight: 700;">Communities You Manage</p>
+        <button class="fas fa-plus plus" @click="redirect('community/create')">&nbsp;&nbsp;<p>Create</p></button>
       </div>
       <div v-for="(item, index) in comm" :key="index">
         <div class="community">
@@ -81,14 +81,14 @@
             </div>
             <div class="column"  style=" margin-top: 4px; line-height: 15px;"> 
               <div>
-                <b>{{item.name}}</b>
-                <p>{{item.date}}</p>
+                <b style="font-size: 14px;">{{item.name}}</b>
+                <p style="font-size: 12px;">{{item.date}}</p>
               </div>
             </div>
           </div>
           <div style="margin-left: 15px;margin-top: 10px;">
             <i class="fas fa-bell bell" style="margin-bottom: 10px;"></i>
-            <p  style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Notifications</p>
+            <p  style="font-weight: normal; display: inline; font-size: 10px; vertical-align: 1px;">&nbsp;&nbsp;Notifications</p>
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@
     <div v-if="community">
       <div class="tabTitle">
         <b>Communities You Followed & Joined</b>
-        <button @click="recommendationClick()" class="recommendation">View Recommendation</button>
+        <button @click="recommendationClick()" class="recommendation"><p>View Recommendation</p></button>
       </div>
       <div v-for="(item, index) in commFollow" :key="index">
         <div class="community">
@@ -108,14 +108,14 @@
             </div>
             <div  class="column" style="margin-top: 4px; line-height: 15px;"> 
               <div>
-                <b>{{item.name}}</b>
-                <p>{{item.date}}</p>
+                <b style="font-size: 14px;">{{item.name}}</b>
+                <p style="font-size: 12px;">{{item.date}}</p>
               </div>
             </div>
           </div>
           <div style="margin-left: 15px;margin-top: 10px;">
             <i class="fas fa-ban ban" style="margin-bottom: 10px; text-align: right;"></i>
-            <p style="font-weight: normal; display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Unfollow</p>
+            <p style="font-weight: normal; display: inline; font-size: 10px; vertical-align: 1px;">&nbsp;&nbsp;Unfollow</p>
           </div>
         </div>
       </div>
@@ -270,13 +270,19 @@ button:focus{
   font-size: 18px;
 }
 .plus{
- padding: 0px;
+  padding: 0px;
   width: 70px;
   border: none;
   background-color: white;
-  font-size: 15px; 
+  font-size: 18px; 
   margin-top: 5px;
   float: right;
+}
+.plus p{
+  font-weight: normal;
+  font-size: 12px;
+  vertical-align: 2px;
+  
 }
 .container{
   width: 50%;
@@ -292,9 +298,9 @@ button:focus{
 .sort-button1{
   border-radius: 25px;
   width: 200px;
-  color: black;
+  height: 50px;
+  color: $secondary;
   border: 1px solid rgb(235, 235, 235);
-  height: 40px;
   background-color: white;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -303,22 +309,22 @@ button:focus{
 .active{
   border-radius: 25px;
   width: 200px;
+  height: 50px;
   color: white;
   border: 0px;
-  height: 40px;
   background-color: $secondary;
   margin-bottom: 10px;
+  margin-right: 13px;
   float: left;
 }
 .recommendation{
   padding: 0px;
   border: none;
   background-color: white;
-  font-size: 12px; 
+  font-size: 10px; 
   margin-top: 5px;
   float: right;
-  font-weight: normal;
- 
+  line-height: 12px;
 }
 .message {
   text-align: justify;
@@ -347,6 +353,8 @@ button:focus{
 }
 .tabTitle p{
   display: inline-block;
+  color: #000000;
+  font-weight: normal;
 }
 .create-post{
   padding: 10px;
