@@ -22,10 +22,18 @@
                   <i v-bind:class="itemSub.icon" class=" visible"></i>
                   <label>{{itemSub.description}}</label>
                 </li>
+                <li v-on:click="logOut()" class="log-out menu-holder">
+                  <i class="fas fa-sign-out-alt visible"></i>
+                  <label>Logout</label>
+                </li>
               </ul>
             </li>
             <li v-for="item, index in menuOff" v-bind:class="{ 'active-menu': item.flag === true }" v-on:click="setActiveOff(index)" v-if="(((item.accountType === user.type || item.accountType === 'ALL') && user.type !== 'ADMIN') || (user.type === 'ADMIN' && item.showOnAdmin === true)) && menuFlag === false" class="menu-holder-hidden">
               <i v-bind:class="item.icon"></i>
+            </li>
+            <li v-on:click="logOut()" class="log-out menu-holder">
+              <i class="fas fa-sign-out-alt visible"></i>
+              <label>Logout</label>
             </li>
           </ul>
         </div>
@@ -57,6 +65,141 @@
       </div>
     </div>
 </template>
+<script>
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
+import COMMON from 'src/common.js'
+import ROUTER from 'src/router'
+export default {
+  mounted(){
+  },
+  data(){
+    return{
+      user: AUTH.user,
+      config: CONFIG,
+      menu: COMMON.sidebarMenu,
+      menuOff: COMMON.sidebarMenu,
+      toggleSidebar: 'fa fa-toggle-on',
+      hide: '',
+      flag: false,
+      confirmation: {
+        message: null,
+        action: null
+      },
+      prevMenu: 0,
+      subPrevMenu: 0,
+      menuFlag: true
+    }
+  },
+  components: {
+    // 'system-notification': require('components/increment/generic/system/Notifications.vue')
+  },
+  watch: {
+    '$route' (to, from) {
+      let index = null
+      for(var i = 0; i < COMMON.sidebarMenu.length && !index; i++) {
+        let item = COMMON.sidebarMenu[i]
+        if(to.path === '/' + item.path) {
+          index = i
+        }
+      }
+      if(index !== null){
+        this.setActiveOnWatch(index, to.path)
+      }else{
+        if(this.prevMenu !== null){
+          this.menu[this.prevMenu].flag = false
+        }
+      }
+    }
+  },
+  methods: {
+    logOut(){
+      AUTH.deaunthenticate()
+    },
+    setActive(index, code = null){
+      if(this.prevMenu !== index){
+        this.menu[this.prevMenu].flag = false
+        this.menu[index].flag = true
+        if(this.menu[this.prevMenu].subMenu !== null){
+          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        }
+        this.prevMenu = index
+      }
+      if(this.menu[index].subMenu === null){
+        ROUTER.push('/' + this.menu[this.prevMenu].path)
+        $('.navbar-collapse').collapse('hide')
+      }
+    },
+    setActiveOnWatch(index, path){
+      if(this.prevMenu !== index){
+        this.menu[this.prevMenu].flag = false
+        this.menu[index].flag = true
+        if(this.menu[this.prevMenu].subMenu !== null){
+          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        }
+        this.prevMenu = index
+      }
+      if(this.menu[index].subMenu === null){
+        ROUTER.push(path)
+        $('.navbar-collapse').collapse('hide')
+      }
+    },
+    setActiveOff(index){
+      if(this.prevMenu !== index){
+        this.menuOff[this.prevMenu].flag = false
+        this.menuOff[index].flag = true
+        this.prevMenu = index
+      }
+      if(this.menuOff[index].subMenu === null){
+        ROUTER.push('/' + this.menuOff[this.prevMenu].path)
+        $('.navbar-collapse').collapse('hide')
+      }
+    },
+    setActiveSubMenu(index, subIndex){
+      if(this.prevMenu !== index){
+        this.menu[this.prevMenu].flag = false
+        this.menu[index].flag = true
+        if(this.menu[index].subMenu !== null){
+          this.menu[index].subMenu[subIndex].flag = true
+        }
+        if(this.menu[this.prevMenu].subMenu !== null){
+          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        }
+        this.prevMenu = index
+        this.subPrevMenu = subIndex
+      }else{
+        if(this.subPrevMenu !== subIndex){
+          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+          this.menu[index].subMenu[subIndex].flag = true
+          this.subPrevMenu = subIndex
+        }else{
+          this.subPrevMenu = subIndex
+        }
+      }
+      ROUTER.push('/' + this.menu[this.prevMenu].subMenu[this.subPrevMenu].path)
+      $('.navbar-collapse').collapse('hide')
+    },
+    changeToggleSidebarIcon(){
+      if(this.menuFlag === false){
+        // from off
+        this.menuOff[this.prevMenu].flag = false
+        this.prevMenu = 0
+      }else{
+        // from on
+        this.menu[this.prevMenu].flag = false
+        if(this.menu[this.prevMenu].subMenu !== null){
+          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        }
+        this.prevMenu = 0
+        this.subPrevMenu = 0
+      }
+      this.menuFlag = !this.menuFlag
+      this.toggleSidebar = (this.menuFlag === false) ? 'fa fa-toggle-off' : 'fa fa-toggle-on'
+      this.hide = (this.menuFlag === false) ? 'hidden' : ''
+    }
+  }
+}
+</script>
 <style lang="scss">
 @import "~assets/style/colors.scss";
 .main-sidebar, .content-holder{  
@@ -104,6 +247,14 @@
 .header i:hover{
   cursor: pointer;
   color: $primary;
+}
+
+.log-out:hover{
+  color: $primary;
+}
+
+.log-out{
+  cursor: pointer;
 }
 
 .profile-photo{
@@ -388,135 +539,3 @@
   }
 }
 </style>
-<script>
-import AUTH from 'src/services/auth'
-import CONFIG from 'src/config.js'
-import COMMON from 'src/common.js'
-import ROUTER from 'src/router'
-export default {
-  mounted(){
-  },
-  data(){
-    return{
-      user: AUTH.user,
-      config: CONFIG,
-      menu: COMMON.sidebarMenu,
-      menuOff: COMMON.sidebarMenu,
-      toggleSidebar: 'fa fa-toggle-on',
-      hide: '',
-      flag: false,
-      confirmation: {
-        message: null,
-        action: null
-      },
-      prevMenu: 0,
-      subPrevMenu: 0,
-      menuFlag: true
-    }
-  },
-  components: {
-    // 'system-notification': require('components/increment/generic/system/Notifications.vue')
-  },
-  watch: {
-    '$route' (to, from) {
-      let index = null
-      for(var i = 0; i < COMMON.sidebarMenu.length && !index; i++) {
-        let item = COMMON.sidebarMenu[i]
-        if(to.path === '/' + item.path) {
-          index = i
-        }
-      }
-      if(index !== null){
-        this.setActiveOnWatch(index, to.path)
-      }else{
-        if(this.prevMenu !== null){
-          this.menu[this.prevMenu].flag = false
-        }
-      }
-    }
-  },
-  methods: {
-    setActive(index, code = null){
-      if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-        }
-        this.prevMenu = index
-      }
-      if(this.menu[index].subMenu === null){
-        ROUTER.push('/' + this.menu[this.prevMenu].path)
-        $('.navbar-collapse').collapse('hide')
-      }
-    },
-    setActiveOnWatch(index, path){
-      if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-        }
-        this.prevMenu = index
-      }
-      if(this.menu[index].subMenu === null){
-        ROUTER.push(path)
-        $('.navbar-collapse').collapse('hide')
-      }
-    },
-    setActiveOff(index){
-      if(this.prevMenu !== index){
-        this.menuOff[this.prevMenu].flag = false
-        this.menuOff[index].flag = true
-        this.prevMenu = index
-      }
-      if(this.menuOff[index].subMenu === null){
-        ROUTER.push('/' + this.menuOff[this.prevMenu].path)
-        $('.navbar-collapse').collapse('hide')
-      }
-    },
-    setActiveSubMenu(index, subIndex){
-      if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[index].subMenu !== null){
-          this.menu[index].subMenu[subIndex].flag = true
-        }
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-        }
-        this.prevMenu = index
-        this.subPrevMenu = subIndex
-      }else{
-        if(this.subPrevMenu !== subIndex){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-          this.menu[index].subMenu[subIndex].flag = true
-          this.subPrevMenu = subIndex
-        }else{
-          this.subPrevMenu = subIndex
-        }
-      }
-      ROUTER.push('/' + this.menu[this.prevMenu].subMenu[this.subPrevMenu].path)
-      $('.navbar-collapse').collapse('hide')
-    },
-    changeToggleSidebarIcon(){
-      if(this.menuFlag === false){
-        // from off
-        this.menuOff[this.prevMenu].flag = false
-        this.prevMenu = 0
-      }else{
-        // from on
-        this.menu[this.prevMenu].flag = false
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-        }
-        this.prevMenu = 0
-        this.subPrevMenu = 0
-      }
-      this.menuFlag = !this.menuFlag
-      this.toggleSidebar = (this.menuFlag === false) ? 'fa fa-toggle-off' : 'fa fa-toggle-on'
-      this.hide = (this.menuFlag === false) ? 'hidden' : ''
-    }
-  }
-}
-</script>

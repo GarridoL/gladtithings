@@ -151,6 +151,11 @@ class APIController extends Controller
     return true;
   }
 
+  public function retriveAccountDetailsByCode($accountCode){
+    $result =  app('Increment\Account\Http\AccountController')->getAccountIdByParamsWithColumns($accountCode, ['id', 'username', 'email', 'code', 'account_type']);
+    return $result ? $result : null;
+  }
+
   public function test()
   {
     return "Welcome to ".env('APP_NAME')." Controller!";
@@ -690,7 +695,7 @@ class APIController extends Controller
 
     if($result['sub_account'] != null){
       $admin = $result['sub_account']['account_id'];
-      $result['sub_account']['merchant'] = app('Increment\Imarket\Merchant\Http\MerchantController')->getByParams('account_id', $admin);
+      $result['sub_account']['merchant'] = app('Increment\Account\Merchant\Http\MerchantController')->getByParams('account_id', $admin);
     }
     return $result;
   }

@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <i class="fas fa-chevron-left mr-2" style="font-size: 22px; cursor: pointer;" @click="back()"></i>
-    <span style="font-size: 22px;"><b>Create Event</b></span>
+    <span style="font-size: 22px;"><b>{{status === 'create' ? 'Create Event' : 'Update Event'}}</b></span>
     <p style="margin-top: 10px;">Fill out the details below to create an event</p>
     <div style="margin-top: 30px;">
-      <p><b>Basic Info</b></p>
+      <p style="font-size: 18px;"><b>Basic Info</b></p>
       <p>Name your event and tell people why they should come. Add details to let attendees know what the event is all about.</p>
       <div class="default-image">
         <center>
@@ -13,57 +13,57 @@
         </center>
       </div>
       <div class="inputs">
-        <span>First name: <span style="color: red;">*</span></span>
+        <span><b>Event Name </b><span style="color: red;">*</span></span>
         <input type="text" placeholder="Be precise and descriptive">
       </div>
       <div class="inputs">
-        <span>Type: <span style="color: red;">*</span></span>
+        <span><b>Type </b><span style="color: red;">*</span></span>
         <select style="color: gray;">
           <option value="" disabled selected>Select type</option>
           <option value="test">Test</option>
         </select>
       </div>
       <div class="inputs">
-        <span>Category: <span style="color: red;">*</span></span>
+        <span><b>Category </b><span style="color: red;">*</span></span>
         <select style="color: gray;">
           <option value="" disabled selected>Select category</option>
           <option value="test">Test</option>
         </select>
       </div>
       <div class="inputs">
-        <span>Event name: <span style="color: red;">*</span></span>
+        <span><b>Event Description </b><span style="color: red;">*</span></span>
         <textarea class="boxsizingBorder" placeholder="Add short description about the event" rows="4"></textarea>
       </div>
     </div>
-    <div style="margin-top: 50px;">
-      <p><b>Basic Info</b></p>
+    <div style="margin-top: 30px;">
+      <p style="font-size: 18px"><b>Location</b></p>
       <p>Help people in the area discover your event and let attendees know where to show up.</p>
       <div class="inputs">
-        <span>Venue Location: <span style="color: red;">*</span></span>
+        <span><b>Venue Location </b><span style="color: red;">*</span></span>
         <input type="text" placeholder="Enter or search venue location">
       </div>
     </div>
     <div style="margin-top: 30px; margin-bottom: 100px;">
-      <p><b>Date and Time</b></p>
+      <p style="font-size: 18px;"><b>Date and Time</b></p>
       <p>Tell people when you event starts and ends so they can make plans to attend.</p>
       <div class="inputs">
-        <span>Event Starts: <span style="color: red;">*</span></span>
+        <span><b>Event Starts </b><span style="color: red;">*</span></span>
         <input type="date">
       </div>
       <div class="inputs">
-        <span>Start time: <span style="color: red;">*</span></span>
+        <span><b>Start time </b><span style="color: red;">*</span></span>
         <input type="time">
       </div>
       <div class="inputs">
-        <span>Event Ends: <span style="color: red;">*</span></span>
+        <span><b>Event Ends </b><span style="color: red;">*</span></span>
         <input type="date">
       </div>
       <div class="inputs">
-        <span>End time: <span style="color: red;">*</span></span>
+        <span><b>End time </b><span style="color: red;">*</span></span>
         <input type="time">
       </div>
       <div class="inputs">
-        <span>Time Zone: <span style="color: red;">*</span></span>
+        <span><b>Time Zone </b><span style="color: red;">*</span></span>
         <select style="color: gray;">
           <option value="" disabled selected>Select time zone</option>
           <option value="test">Test</option>
@@ -79,10 +79,13 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.status = this.$route.params.status
+  },
   data(){
     return {
-      user: AUTH.user
+      user: AUTH.user,
+      status: 'create'
     }
   },
   methods: {
@@ -116,8 +119,7 @@ input, textarea, select {
   width: 100%;
 }
 .inputs{
-  border-top: .5px solid rgb(204, 204, 204);
-  border-right: .5px solid rgb(204, 204, 204);
+  border: .5px solid rgb(204, 204, 204);
   width: 100%;
   margin-bottom: 10px;
   padding: 5px;

@@ -68,6 +68,10 @@ Route::get('/migrate', function () {
 
     //
 });
+//For testing email template
+Route::get('/demo', function () {
+    return new App\Mail\Receipts();
+});
 
 /* Authentication Router */
 $route = env('PACKAGE_ROUTE', '').'/authenticate';

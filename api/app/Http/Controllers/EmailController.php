@@ -14,7 +14,6 @@ use App\Mail\Receipt;
 use App\Mail\NewMessage;
 use App\Mail\Ledger;
 use App\Mail\Deposit;
-use App\Mail\ReceiptSynqt;
 use Illuminate\Http\Request;
 
 class EmailController extends APIController
@@ -73,6 +72,25 @@ class EmailController extends APIController
             return true;
         }
         return false;
+    }
+
+    public function transfer_fund_sender($accountId, $code, $details, $subject, $receiverInfo, $mode){
+      $user = $this->retrieveAccountDetails($accountId);
+      $receiver = $this->retrieveAccountDetails($receiverInfo);
+      $receiverInfo = substr($receiver['code'], 24);
+      $userInfo = substr($user['code'], 24);
+      // if($user != null && $receiver != null){
+      //     if($user['status'] != 'INVALID_EMAIL'){
+      //         Mail::to($user['email'])->send(new TransferSender($user, $code, $details, $subject, $receiverInfo, $mode, $this->response['timezone']));
+      //     }
+
+      //     if($receiver['status'] != 'INVALID_EMAIL'){
+      //         Mail::to($receiver['email'])->send(new TransferReceiver($receiver, $code, $details, $subject, $userInfo, $mode, $this->response['timezone']));
+      //     }
+          
+      //     return true;
+      // }
+      return false;
     }
 
     public function otpEmail($id, $otpCode, $subject, $text){
@@ -145,15 +163,6 @@ class EmailController extends APIController
             $this->response['data'] = true;
         }
         return $this->response();
-    }
-
-    public function receipSynqt($data, $accountId){
-        $user = $this->retrieveAccountDetails($accountId);
-        if($user != null){
-            Mail::to($user['email'])->send(new ReceiptSynqt($user, $data, $this->response['timezone']));
-            return true;
-        }
-        return false;
     }
 
 

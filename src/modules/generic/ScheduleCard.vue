@@ -1,9 +1,13 @@
 <template>
+  <div>
+    <div style="width: 100%;">
+    <input type="checkbox">&nbsp;&nbsp;{{title}}
+    </div>
   <div class="container">
     <div class="containers row" v-for="(item, index) in data" :key="index">
       <div class="column" style="width: 75%;">
-        <p><b>{{item.time}}</b></p>
-        <p>By: {{item.name}}</p>
+        <p><b>{{item.startTime + ' - ' + item.endTime}}</b></p>
+        <p>By {{item.name}}</p>
         <p>Language: {{item.language}}</p>
       </div>
       <div class="column" style="width: 25%;">
@@ -13,9 +17,10 @@
         </span>
       </div>
     </div>
-    <div class="container-add">
+    <div class="container-add" @click="addSched()">
       <i class="fas fa-plus-circle" style="font-size: 40px;"></i>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -25,7 +30,8 @@ import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 export default{
   props: [
-    'data'
+    'data',
+    'title'
   ],
   mounted(){},
   data(){
@@ -36,6 +42,10 @@ export default{
   methods: {
     redirect(route) {
       ROUTER.push(route)
+    },
+    addSched() {
+      this.$parent.addSchedModal()
+      this.$parent.selectedDay = this.title
     }
   }
 }

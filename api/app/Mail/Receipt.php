@@ -35,6 +35,6 @@ class Receipt extends Mailable
 
     public function build()
     {
-        return $this->subject('Receipt notification')->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))->view('email.receiptofficial');
+        return $this->subject('Transaction Receipt')->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))->view('email.receiptofficial');
     }
 }

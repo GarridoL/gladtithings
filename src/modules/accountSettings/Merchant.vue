@@ -1,62 +1,55 @@
 <template>
   <div class="merchant-holder" v-if="data !== null">
     <h3 class="header">Security</h3>
-    <span class="content">
-      <span class="error text-danger" v-if="errorMessage !== null">
+    <div class="content row" style="width: 100%;">
+      <div class="column" style="width: 60%; margin-right: 10%;">
+        <span class="error text-danger" v-if="errorMessage !== null">
         <b>Oops!</b> {{errorMessage}}
       </span>
       <span class="error text-success" v-if="successMessage !== null">
         {{successMessage}}
       </span>
-      <span class="inputs">
-        <div class="form-group">
-          <label for="address"><b>Business name </b><label class="text-danger">*</label></label>
-          <input type="text" class="form-control generic-input" placeholder="Business Name" v-model="data.name" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
+      <div class="form-group">
+        <label for="address"><b>Business name </b><label class="text-danger">*</label></label>
+        <input type="text" class="form-control generic-input" placeholder="Business Name" v-model="data.name" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
 
-        <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('email') > -1">
-          <label for="address"><b>Business email address</b><label class="text-danger">*</label></label>
-          <input type="text" class="form-control generic-input" placeholder="Business email address" v-model="data.email" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
+      <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('email') > -1">
+        <label for="address"><b>Business email address</b><label class="text-danger">*</label></label>
+        <input type="text" class="form-control generic-input" placeholder="Business email address" v-model="data.email" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
 
-        <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('code') > -1">
-          <label for="address"><b>ABN</b><label class="text-danger">*</label></label>
-          <input type="text" class="form-control generic-input" placeholder="Business code" v-model="data.business_code" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
+      <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('code') > -1">
+        <label for="address"><b>ABN</b><label class="text-danger">*</label></label>
+        <input type="text" class="form-control generic-input" placeholder="Business code" v-model="data.business_code" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
 
-        <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('address') > -1">
-          <label for="address"><b>Business address </b><label class="text-danger">*</label></label>
-          <input type="text" class="form-control generic-input" placeholder="Business Address" v-model="data.address" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
+      <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('address') > -1">
+        <label for="address"><b>Business address </b><label class="text-danger">*</label></label>
+        <input type="text" class="form-control generic-input" placeholder="Business Address" v-model="data.address" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
 
-        <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('prefix') > -1">
-          <label for="address"><b>Prefix</b></label>
-          <input type="text" class="form-control generic-input" placeholder="Invoice Prefix eq. IDF" v-model="data.prefix" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
+      <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('prefix') > -1">
+        <label for="address"><b>Prefix</b></label>
+        <input type="text" class="form-control generic-input" placeholder="Invoice Prefix eq. IDF" v-model="data.prefix" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
 
-        <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('website') > -1">
-          <label for="address"><b>Website</b></label>
-          <input type="text" class="form-control generic-input" placeholder="Company website url" v-model="data.website" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
-        </div>
-        
-        <button class="btn sort-button" style="margin-bottom: 25px;" @click="update()" v-if="parseInt(data.account_id) === parseInt(user.userID)">Update</button>
-      </span>
-      <span class="sidebar" v-if="createFlag === false">
-        <span class="sidebar-header" style="margin-top: 25px;">Business Logo</span>
-        <span class="image" v-if="data.logo !== null">
-          <img :src="config.BACKEND_URL + data.logo" height="auto" width="100%" >
+      <div class="form-group" style="margin-top: 25px;" v-if="allowed.indexOf('website') > -1">
+        <label for="address"><b>Website</b></label>
+        <input type="text" class="form-control generic-input" placeholder="Company website url" v-model="data.website" :disabled="parseInt(data.account_id) !== parseInt(user.userID)">
+      </div>
+      
+      <button class="btn sort-button" style="margin-bottom: 25px;" @click="update()" v-if="parseInt(data.account_id) === parseInt(user.userID)">Update</button>
+      </div>
+      <div class="column" style="width: 20%; text-align: center;">
+        <span class="image" v-if="data.logo !== null" >
+          <img :src="config.BACKEND_URL + data.logo" style="background-size: cover; border-radius: 100px;"  height="160px" width="160px" >
         </span>
-        <span class="image" v-else>
-          <i class="fa fa-image" ></i>
-        </span>
-        <span style="width: 100%; float: left; text-align: center;">
-          <label v-if="data.status === 'not_verified'" class="text-grey"><i>Not verified</i></label>
-          <label v-if="data.status === 'verified'" class="text-primary"><i>Verified</i></label>
-        </span>
-        <button class="btn sort-button" style="margin-top: 5px;" @click="showImages()" v-if="parseInt(data.account_id) === parseInt(user.userID)">Select from images
-        </button>
-      </span>
-    </span>
+        <div class="no-image" v-else>
+        </div>
+        <p style="cursor: pointer; margin-top: 10px;" @click="showImages()">Click to edit profile</p>
+      </div>
+    </div>
     <browse-images-modal :object="photoObject"></browse-images-modal>
   </div>
 </template>
@@ -206,9 +199,16 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.no-image{
+  background-color: $primary;
+  height: 160px;
+  width: 160px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
 .merchant-holder{
   width: 95%;
-  float: left;
   margin-left: 5%;
   margin-bottom: 200px;
 }
@@ -250,18 +250,11 @@ export default {
   height: 40px;
   line-height: 40px;
 }
-.inputs{
-  width: 65%;
-  float: left;
-  margin-right: 5%;
-  min-height: 50px;
-  overflow-y: hidden;
-}
 .sidebar{
   width: 30%;
-  float: left;
   min-height: 50px;
   overflow-y: hidden;
+  text-align: center;
 }
 .sidebar-header{
   height: 40px;
@@ -279,6 +272,7 @@ export default {
 .image i{
   font-size: 150px;
   line-height: 200px;
+  text-align: center;
 }
 .image img{
   border-radius: 5px;
@@ -305,7 +299,7 @@ export default {
     margin-left: 2%;
     margin-right: 2%;
   }
-  .sidebar, .inputs{
+  .sidebar{
     width: 100%;
     margin-right: 0%;
     margin-left: 0%;

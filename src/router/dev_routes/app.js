@@ -66,7 +66,7 @@ export default{
   }, {
     path: '/profile/:parameter?',
     name: 'profile',
-    component: resolve => require(['components/increment/settings/ProfileModule.vue'], resolve),
+    component: resolve => require(['modules/accountSettings/index.vue'], resolve),
     meta: {
       tokenRequired: true
     }
@@ -95,14 +95,20 @@ export default{
     }
   },
   {
-    path: '/events/create',
+    path: '/events/:status?',
     name: 'createEvents',
     component: resolve => require(['modules/events/Create.vue'], resolve),
     meta: {
       tokenRequired: true
     }
-  },
-  {
+  }, {
+    path: '/subscription_management',
+    name: 'subscriptionManagement',
+    component: resolve => require(['modules/subscriptionManagement/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/settings',
     name: 'settings',
     component: resolve => require(['modules/settings/index.vue'], resolve),

@@ -171,6 +171,7 @@ return [
 
 
         Increment\Account\AccountServiceProvider::class,
+        Increment\Account\Merchant\MerchantServiceProvider::class,
         Increment\Common\Comment\CommentServiceProvider::class,
         Increment\Common\Rating\RatingServiceProvider::class,
         Increment\Common\Image\ImageServiceProvider::class,
@@ -180,13 +181,10 @@ return [
         Increment\Common\Notification\NotificationServiceProvider::class,
         Increment\Common\Invitation\InvitationServiceProvider::class,
         Increment\Messenger\MessengerServiceProvider::class,
-        Increment\Imarket\Merchant\MerchantServiceProvider::class,
-        Increment\Imarket\Reservation\ReservationServiceProvider::class,
-        Increment\Imarket\Location\LocationServiceProvider::class,
-        Increment\Imarket\Product\ProductServiceProvider::class,
-        Increment\Imarket\Bundled\BundledServiceProvider::class,
-        Increment\Imarket\Installment\InstallmentServiceProvider::class,
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
+        Increment\Finance\FinanceProvider::class,
+        Increment\Finance\Stripe\StripeServiceProvider::class,
+        Increment\Finance\Paypal\PaypalServiceProvider::class,
         /*
          * Application Service Providers...
          */

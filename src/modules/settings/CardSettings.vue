@@ -1,7 +1,7 @@
 <template>
-<div class="containers row" @click="redirect(route)" v-if="version === 3">
+  <div class="containers row" @click="redirect(route)" v-if="version === 3">
     <div class="column first" style="width: 7%;">
-      <i class="fas fa-church" style="font-size: 30px; line-height: inherit;"></i>
+      <i :class="description === 'Direct Transfer' ? 'fas fa-church' : 'fas fa-credit-card'" style="font-size: 30px; line-height: inherit;"></i>
     </div>
     <div class="column second" style="width: 60%;">
       <p><b>{{title}}</b></p>
@@ -63,6 +63,7 @@ p {
 .amount{
   color: $primary;
   float: right;
+  margin-top: 5%;
 }
 .icon{
   float: right;

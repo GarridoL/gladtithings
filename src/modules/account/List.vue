@@ -17,9 +17,10 @@
         <tr>
           <td class="header"><b>Date</b></td>
           <td class="header"><b>Username</b></td>
-          <td class="header"><b>Email</b></td>
-          <td class="header"><b>Type</b></td>
+          <td class="header"><b>Email Address</b></td>
+          <td class="header"><b>Account Type</b></td>
           <td class="header"><b>Status</b></td>
+          <td class="header"><b>Actions</b></td>
         </tr>
       </thead>
       <tbody>
@@ -28,10 +29,10 @@
           <td class="header">
             <label class="action-link text-primary">{{item.username}}</label>
           </td>
-          <td class="header">{{item.email}}</td>
+          <td class="header email">{{item.email}}</td>
           <td class="header">
             <label v-if="editTypeIndex !== index">{{item.account_type}}</label>
-            <i class="fa fa-pencil text-primary" style="margin-left: 10px;" @click="setEditTypeIndex(index, item)" v-if="editTypeIndex !== index"></i>
+            <!-- <i class="fa fa-pencil text-primary" style="margin-left: 10px;" @click="setEditTypeIndex(index, item)" v-if="editTypeIndex !== index"></i> -->
             <span v-if="editTypeIndex === index">
               <select class="form-control" v-model="newAccountType" style="float: left; width: 70%;">
                 <option v-for="(typeItem, typeIndex) in ['USER', 'ADMIN', 'CHURCH']" :key="typeIndex">{{typeItem}}</option>
@@ -41,6 +42,15 @@
             </span>
           </td>
           <td class="header">{{item.status}}</td>
+          <td class="header" style="width: 15%;">
+            <span>
+              <i class="fas fa-edit" style="margin-left: 1px; color: #56C596"></i>
+              <i class="fas fa-eye icon-eye" style="margin-left: 1px; color: black;"></i>
+              <i class="fas fa-qrcode" style="margin-left: 1px; color: black;"></i>
+              <i class="fas fa-list-alt" style="margin-left: 1px; color: grey;"></i>
+              <i class="fas fa-trash-alt icon-trash" style="margin-left: 1px; color: red;"></i>
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -75,7 +85,7 @@
   margin-bottom: 10px;
 }
 .container{
-  width: 60%;
+  width: 62%;
   margin-bottom: 100px;
   margin-top: 25px;
 }
@@ -83,6 +93,7 @@ td i {
   padding-right: 0px !important;
   padding-left: 0px !important;
 }
+
 
 @media (max-width: 992px){
   .ledger-summary-container{

@@ -1,13 +1,18 @@
 @component('email.header')
 @endcomponent
 <span class="text">
-    <h3>Email Verification</h3>
-    Hello {{$user->username}}!
+    <br>
+    <label>Email Verification</label>
     <br>
     <br>
-    <label class="text-secondary">Welcome to {{env('APP_NAME')}}!</label>
+    <label>Hello, {{$user->username}}!</label>
+    <br>
+    <br>
+    <label>Welcome to {{env('APP_NAME')}}!</label>
+    <br>
     <br>
     We just need to verify that {{$user->email}} is your email address.
+    <br>
     <br>
     Click the button below to:
     <br>
