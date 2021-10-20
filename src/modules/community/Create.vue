@@ -60,13 +60,13 @@ button:focus{
 }
 .container{
   width: 50%;
-  background-color: white;
+  background-color: $white;
   padding: 30px;
 }
 .sort-button{
   border-radius: 25px;
   width: 150px;
-  color: white;
+  color: $white;
   border: 0px;
   height: 40px;
   background-color: $secondary;
@@ -101,7 +101,7 @@ input::-webkit-input-placeholder {
 .image-upload{
   text-align: center;
   padding-top: 20px;
-  border: 0.5px solid  rgb(204, 204, 204);
+  border: 0.5px solid $gray;
   height: 130px;
   width: 100%;
   border-radius: 15px;

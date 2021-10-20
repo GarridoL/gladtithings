@@ -259,7 +259,7 @@ button:focus{
   width: 150px;
   border: none;
   height: 40px;
-  background-color: white;
+  background-color: $white;
   margin-left: 15px;
   float: right;
 }
@@ -273,22 +273,23 @@ button:focus{
   padding: 0px;
   width: 70px;
   border: none;
-  background-color: white;
+  background-color: $white;
   font-size: 18px; 
   margin-top: 5px;
   float: right;
 }
 .plus p{
+  font-family: Poppins;
   font-weight: normal;
-  font-size: 12px;
-  vertical-align: 2px;
+  font-size: 10px;
+  vertical-align: 3px;
   
 }
 .container{
   width: 50%;
   margin-bottom: 50px;
   align-items: center;
-  background-color: white;
+  background-color: $white;
   padding: 20px;
 }
 .tabs-container .tabs{ 
@@ -301,7 +302,7 @@ button:focus{
   height: 50px;
   color: $secondary;
   border: 1px solid rgb(235, 235, 235);
-  background-color: white;
+  background-color: $white;
   margin-right: 10px;
   margin-bottom: 10px;
   float: left;
@@ -310,7 +311,7 @@ button:focus{
   border-radius: 25px;
   width: 200px;
   height: 50px;
-  color: white;
+  color: $white;
   border: 0px;
   background-color: $secondary;
   margin-bottom: 10px;
@@ -320,7 +321,7 @@ button:focus{
 .recommendation{
   padding: 0px;
   border: none;
-  background-color: white;
+  background-color: $white;
   font-size: 10px; 
   margin-top: 5px;
   float: right;
@@ -329,7 +330,7 @@ button:focus{
 .message {
   text-align: justify;
   width: 100%;
-  background-color: white;
+  background-color: $white;
   padding: 10px;
   border-radius: 10px;
   border: .5px solid rgb(235, 235, 235);
@@ -341,7 +342,7 @@ button:focus{
 .community {
   text-align: justify;
   width: 100%;
-  background-color: white;
+  background-color: $white;
   padding: 10px;
   border-radius: 10px;
   border: .5px solid rgb(235, 235, 235);
