@@ -279,9 +279,10 @@ button:focus{
   float: right;
 }
 .plus p{
+  font-family: Poppins;
   font-weight: normal;
-  font-size: 12px;
-  vertical-align: 2px;
+  font-size: 10px;
+  vertical-align: 3px;
   
 }
 .container{
