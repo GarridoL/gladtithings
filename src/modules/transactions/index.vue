@@ -9,11 +9,10 @@
         @changeStyle="manageGrid($event)"
         :grid="['list', 'th-large']">
       </basic-filter>
-      <button class="text-center sort-button" @click="redirect('events/create')">Export to CSV</button>
+      <button class="text-center sort-button" @click="exportCSV()">Export to CSV</button>
       <br><br>
     </div>
     <empty v-if="data.length === 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
-    <!-- <h3 style="margin-left: -10px;">Transactions</h3> -->
     <div v-for="(item, index) in data" :key="index" v-if="data.length > 0" class="cards-container">
     <Cards
       :title="item.receiver ? item.receiver.email : item.description"
@@ -27,9 +26,9 @@
   </div>
 </template>
 <script>
-import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import { ExportToCsv } from 'export-to-csv'
 import Cards from 'src/modules/settings/CardSettings.vue'
 import Empty from 'components/increment/generic/empty/Empty.vue'
 export default{
@@ -77,6 +76,56 @@ export default{
     Cards
   },
   methods: {
+    exportCSV() {
+      let data = this.data
+      let options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: false,
+        title: 'Transaction Report',
+        useTextFile: false,
+        useBom: true,
+        filename: 'Transaction Report as of_' + new Date(),
+        headers: ['DATE', 'AMOUNT', 'CURRENCY', 'DESCRIPTION', 'PROCESSED BY']
+      }
+      var exportData = []
+      let parameter = {
+        condition: [{
+          column: 'account_id',
+          value: this.user.userID,
+          clause: '='
+        }, {
+          column: 'account_id',
+          value: this.user.userID,
+          clause: 'or'
+        }],
+        sort: {created_at: 'desc'},
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledger/transaction_history', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0) {
+          response.data.map(el => {
+            var object = {
+              date: el.created_at_human,
+              amount: el.amount,
+              currency: el.currency,
+              description: el.description,
+              processedBy: el.owner.email
+            }
+            exportData.push(object)
+          })
+          if(exportData.length > 0){
+            var csvExporter = new ExportToCsv(options)
+            csvExporter.generateCsv(exportData)
+          }
+        }
+      })
+    },
     retrieve(sort, filter){
       if(sort !== null){
         this.sort = sort
