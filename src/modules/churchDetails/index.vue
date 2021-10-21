@@ -191,6 +191,7 @@ export default{
         this.item = item
       }
       this.modalErrorMessage = null
+      this.dateErrorMessage = null
       $('#addSched').modal('show')
     },
     addToSchedulePerDay(option) {
