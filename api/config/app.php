@@ -185,6 +185,7 @@ return [
         Increment\Finance\FinanceProvider::class,
         Increment\Finance\Stripe\StripeServiceProvider::class,
         Increment\Finance\Paypal\PaypalServiceProvider::class,
+        Increment\Common\Sms\SmsServiceProvider::class,
         /*
          * Application Service Providers...
          */
