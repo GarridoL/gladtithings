@@ -75,6 +75,7 @@
       <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
     </div>
     <div class="graph">
+      <GraphHeader />
       <BarGraph :data="graphSubscribe"/>
     </div>
     <div class="mt-4" style="margin-top: 90px">
@@ -82,6 +83,7 @@
       <p style="margin-top: 5px;">The following data shows status of donations.</p>
     </div>
     <div class="graph">
+      <GraphHeader />
       <BarGraph :data="graphDonations"/>
     </div>
     </div>
@@ -93,6 +95,7 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 import BarGraph from 'src/modules/generic/BarGraph.vue'
+import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
   mounted(){},
   data(){
@@ -180,7 +183,8 @@ export default{
     'basic-filter': require('modules/generic/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
-    BarGraph
+    BarGraph,
+    GraphHeader
   },
   methods: {
     redirect(route){
