@@ -49,7 +49,7 @@
 @import "~assets/style/colors.scss";
 .holder{
   margin-top: 25px;
-  min-height: 85vh;
+  min-height: 86.2vh;
 }
 
 .account {
