@@ -1,5 +1,5 @@
 import config from 'src/config.js'
-let APP_EMAIL = 'support@siml.ph'
+let APP_EMAIL = 'support@gladtithings.com'
 export default {
   sidebarMenu: [
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Dashboard', icon: 'fa fa-home', path: 'dashboard', flag: false, subMenu: null},
@@ -16,9 +16,9 @@ export default {
   APP_NAME: 'Glad Tithings',
   APP_NAME_HTML: 'Glad Tithings',
   APP_EMAIL: APP_EMAIL,
-  APP_SITE: 'https://wearesiml.com',
+  APP_SITE: 'https://gladtithings.com',
   COMPANY: 'Glad Tithings',
-  COMPANY_URL: 'http://wearesiml.ltd',
+  COMPANY_URL: 'http://gladtithings.com',
   COPYRIGHT: 'Glad Tithings ' + new Date().getFullYear(),
   USER_TYPE: [{
     title: 'USER'
