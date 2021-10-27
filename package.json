@@ -13,10 +13,6 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "@progress/kendo-charts-vue-wrapper": "^2021.2.617",
-    "@progress/kendo-datasource-vue-wrapper": "^2021.2.617",
-    "@progress/kendo-theme-default": "^4.41.0",
-    "@progress/kendo-ui": "^2021.2.616",
     "axios": "^0.21.1",
     "axios-fileupload": "0.0.1",
     "bootstrap": "^3.4.1",

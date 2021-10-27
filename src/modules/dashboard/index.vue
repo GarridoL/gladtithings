@@ -40,15 +40,6 @@
       </div>
     </div>
     <div class="graph">
-      <kendo-chart
-      :title-text="''"
-      :legend-position="'bottom'"
-      :tooltip-visible="true"
-      :tooltip-template="'$#: value #'"
-      :series="series"
-      :category-axis-categories="categories"
-      :value-axis="valueAxis">
-    </kendo-chart>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -77,12 +68,6 @@ import AUTH from 'src/services/auth'
 import Posts from 'src/modules/generic/Posts.vue'
 import Vue from 'vue'
 import VueQrcode from 'qrcode.vue'
-import '@progress/kendo-ui'
-import '@progress/kendo-theme-default/dist/all.css'
-import { Chart, ChartInstaller } from '@progress/kendo-charts-vue-wrapper'
-import { DataSource, DataSourceInstaller } from '@progress/kendo-datasource-vue-wrapper'
-Vue.use(ChartInstaller)
-Vue.use(DataSourceInstaller)
 export default{
   mounted(){
     this.retrieveBalance()
@@ -122,8 +107,6 @@ export default{
   },
   components: {
     Posts,
-    Chart,
-    DataSource,
     VueQrcode
   },
   methods: {
