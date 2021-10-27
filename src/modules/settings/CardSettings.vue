@@ -18,8 +18,8 @@
     </div>
     <div class="column" style="width: 50%;">
       <i class="fas fa-chevron-right icon" v-if="version === 1"></i>
-      <i class="fas fa-toggle-on icon" v-if="version === 2 && toggle === true"></i>
-      <i class="fas fa-toggle-off icon-off" v-if="version === 2 && toggle === false"></i>
+      <i class="fas fa-toggle-on icon" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === true"></i>
+      <i class="fas fa-toggle-off icon-off" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === false"></i>
     </div>
   </div>
 </template>
@@ -36,7 +36,8 @@ export default{
     'version',
     'toggle',
     'amount',
-    'dates'
+    'dates',
+    'payload'
   ],
   mounted(){},
   data(){
@@ -47,6 +48,9 @@ export default{
   methods: {
     redirect(route) {
       ROUTER.push(route)
+    },
+    clickToggle(value) {
+      this.$emit('click_toggle', value, this.payload)
     }
   }
 }
