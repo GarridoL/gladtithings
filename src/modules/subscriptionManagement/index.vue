@@ -70,7 +70,7 @@
       :limit="limit"
       v-if="data !== null"
     />
-    <div class="mt-4" style="margin-top: 90px">
+    <div class="mt-5 pt-5">
       <p style="color: black; margin: 0; font-size: 17px;"><b>Subscribers Graph</b></p>
       <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
     </div>
@@ -78,7 +78,7 @@
       <GraphHeader />
       <BarGraph :data="graphSubscribe"/>
     </div>
-    <div class="mt-4" style="margin-top: 90px">
+    <div class="mt-4">
       <p style="color: black; margin: 0; font-size: 17px;"><b>Donations Graph</b></p>
       <p style="margin-top: 5px;">The following data shows status of donations.</p>
     </div>
