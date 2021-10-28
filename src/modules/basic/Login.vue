@@ -181,6 +181,13 @@
     width: 96%;
     margin: 0 2% 0 2%;
   }
+  .tag-line{
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    padding: 60px;
+    margin-right: 0%;
+  }
 }
 </style>
 <script>
