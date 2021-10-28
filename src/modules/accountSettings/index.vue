@@ -18,7 +18,7 @@
         </div>
         <div class="input-container">
           <label><b>Email&nbsp;</b><span style="color: red;">*</span></label><br>
-          <input placeholder="Email" class="generic-input" v-model="email">
+          <input placeholder="Email" class="generic-input" v-model="email" disabled>
         </div>
         <h3 style="margin-left: 2%;">Security</h3>
         <div class="input-container">
@@ -238,8 +238,8 @@ export default{
       })
     },
     updateAccount(){
-      if(this.email === '' || this.email === null || this.password === null || this.password === '' || this.confirm_password === null || this.confirm_password === '') {
-        this.errorMessage1 = 'Email and Password are required.'
+      if(this.password === null || this.password === '' || this.confirm_password === null || this.confirm_password === '') {
+        this.errorMessage1 = 'Password is required.'
         this.successMessage = null
         this.successMessage1 = null
         return
@@ -254,7 +254,6 @@ export default{
       }
       let parameter = {
         id: this.user.userID,
-        email: this.email,
         code: this.user.code,
         username: this.username,
         password: this.password
