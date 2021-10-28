@@ -40,6 +40,8 @@
       </div>
     </div>
     <div class="graph">
+      <GraphHeader />
+      <BarGraph :data="data"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -66,7 +68,8 @@
 <script>
 import AUTH from 'src/services/auth'
 import Posts from 'src/modules/generic/Posts.vue'
-import Vue from 'vue'
+import BarGraph from 'src/modules/generic/BarGraph.vue'
+import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 import VueQrcode from 'qrcode.vue'
 export default{
   mounted(){
@@ -75,28 +78,18 @@ export default{
   data(){
     return {
       user: AUTH.user,
-      series: [{
-        type: 'line',
-        name: 'Name',
-        data: [6316.77, 6513.70, 6477.32, 6367.24, 6402.62, 5594.97, 3768.79, 4191.90, 3493.53, 3272.31]
-      }],
-      categories: [
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j'
-      ],
-      valueAxis: [{
-        labels: {
-          format: `${0}`
-        }
-      }],
+      data: {
+        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+        datasets: [
+          {
+            fill: false,
+            borderColor: '#f87979',
+            backgroundColor: '#56C596',
+            label: 'SUBSCRIBERS',
+            data: [0, 100, 200, 300, 400, 500]
+          }
+        ]
+      },
       ledger: {
         available_balance: null,
         balance: null,
@@ -107,7 +100,9 @@ export default{
   },
   components: {
     Posts,
-    VueQrcode
+    VueQrcode,
+    BarGraph,
+    GraphHeader
   },
   methods: {
     showQr(){
