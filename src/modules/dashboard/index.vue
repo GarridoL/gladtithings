@@ -3,7 +3,7 @@
     <div class="row" style="width: 100%;">
       <div class="column" style="width: 80%;">
         <h3>Welcome to your Dashboard!</h3>
-        <p style="margin-top: 5px;">Here are the latest update of activities as of today in BUsiness Name</p>
+        <p style="margin-top: 5px;">Here are the latest update of activities as of today in GladTithings</p>
       </div>
       <div class="column" style="width: 20%;">
         <div style="float: right; cursor: pointer;" @click="showQr()">
@@ -31,12 +31,6 @@
       <div class="column" style="width: 80%;">
         <p><b>Summary</b></p>
         <p style="margin-top: 5px;">Here are the summary over the last 30 days</p>
-      </div>
-      <div class="column" style="width: 20%;">
-        <div style="float: right;">
-          <span style="margin-right: 10px;">Last 30 days</span>
-          <span><i class="fas fa-chevron-down"></i></span>
-        </div>
       </div>
     </div>
     <div class="graph">
