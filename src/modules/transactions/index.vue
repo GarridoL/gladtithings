@@ -12,7 +12,7 @@
       <button class="text-center sort-button" @click="exportCSV()">Export to CSV</button>
       <br><br>
     </div>
-    <empty v-if="data.length === 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <empty v-if="data.length === 0" :title="'No transactions available!'" :action="'Keep growing.'"></empty>
     <div v-for="(item, index) in data" :key="index" v-if="data.length > 0" class="cards-container">
     <Cards
       :title="item.receiver ? item.receiver.email : item.description"
