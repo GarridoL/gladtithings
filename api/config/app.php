@@ -175,6 +175,7 @@ return [
         Increment\Common\Comment\CommentServiceProvider::class,
         Increment\Common\Rating\RatingServiceProvider::class,
         Increment\Common\Image\ImageServiceProvider::class,
+        Increment\Common\Page\PageServiceProvider::class,
         Increment\Common\Tutorial\TutorialServiceProvider::class,
         Increment\Common\System\SystemNotificationServiceProvider::class,
         Increment\Common\Ticket\TicketServiceProvider::class,
