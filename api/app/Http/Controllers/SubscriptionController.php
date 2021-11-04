@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Subscription;
+use Carbon\Carbon;
 
 class SubscriptionController extends APIController
 {
@@ -14,6 +15,7 @@ class SubscriptionController extends APIController
     public function create(Request $request){
         $data = $request->all();
         $data['code'] = $this->generateCode();
+        $data['start_date'] = Carbon::now();
         $this->insertDB($data);
         return $this->response();
     }
