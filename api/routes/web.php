@@ -123,3 +123,12 @@ Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'validate', $controller."retrieveByValidation");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
+
+//Subscription Controller
+$route = env('PACKAGE_ROUTE', '').'/subscriptions/';
+$controller = 'SubscriptionController@';
+Route::post($route.'create', $controller."create");
+Route::post($route.'retrieve', $controller."retrieve");
+Route::post($route.'retrieve_by_params', $controller."retrieveByParams");
+Route::post($route.'delete', $controller."delete");
+Route::post($route.'update', $controller."update");
