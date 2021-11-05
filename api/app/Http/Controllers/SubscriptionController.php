@@ -36,7 +36,7 @@ class SubscriptionController extends APIController
     
     public function retrieveByParams(Request $request){
         $data = $request->all();
-        $limit = isset($data['limit']) ? $data['limit'] : 0;
+        $limit = isset($data['limit']) ? $data['limit'] : null;
         $condition = array(
             array('subscriptions.account_id', '=', $data['account_id']),
             array('subscriptions.deleted_at', '=', null)
