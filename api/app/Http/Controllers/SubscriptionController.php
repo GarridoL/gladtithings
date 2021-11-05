@@ -41,7 +41,7 @@ class SubscriptionController extends APIController
         if(isset($data['merchant'])){
             array_push($condition, array('subscriptions.merchant', '=', $data['merchant']));
         }
-        $res = Subscription::where($condition)->get();
+        $res = Subscription::where($condition)->limit($limit)->get();
         if(sizeof($res) > 0){
             for ($i=0; $i <= sizeof($res)-1; $i++) { 
                 $item = $res[$i];
