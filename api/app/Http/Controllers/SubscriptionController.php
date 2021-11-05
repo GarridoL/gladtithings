@@ -48,6 +48,7 @@ class SubscriptionController extends APIController
         if(sizeof($res) > 0){
             for ($i=0; $i <= sizeof($res)-1; $i++) { 
                 $item = $res[$i];
+                $res[$i]['next_month'] = Carbon::createFromFormat('Y-m-d H:i:s', $item['start_date'])->addMonthsNoOverflow(1)->format('F d, Y H:i:s');
                 $res[$i]['merchant_details'] =  app('Increment\Account\Merchant\Http\MerchantController')->getByParams('id', $item['merchant']);
                 // $res[$i]['subsc'] = app('Increment\Account\Http\AccountController')->getByParamsWithColumns($item['account_id'], ['username', 'email']);
             }
