@@ -10,6 +10,9 @@ class SubscriptionController extends APIController
 {
     public function __construct(){
         $this->model = new Subscription();
+        $this->notRequired = array(
+            'end_date'
+        );
     }
 
     public function create(Request $request){
