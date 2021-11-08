@@ -20,11 +20,11 @@
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>PHP 123, 456.35</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
       </div>
       <div class="column third">
         <p class="title">Received Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>PHP 123, 456.35</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
       </div>
     </div>
     <div class="row" style="width: 100%; margin-top: 40px;">
@@ -35,7 +35,7 @@
     </div>
     <div class="graph">
       <GraphHeader />
-      <BarGraph :data="data"/>
+      <BarGraph :data="data" v-if="data.labels.length > 0"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -68,19 +68,20 @@ import VueQrcode from 'qrcode.vue'
 export default{
   mounted(){
     this.retrieveBalance()
+    this.retrieveGraphData()
   },
   data(){
     return {
       user: AUTH.user,
       data: {
-        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'],
+        labels: [],
         datasets: [
           {
             fill: false,
             borderColor: '#f87979',
             backgroundColor: '#56C596',
             label: 'TITHINGS',
-            data: [0, 100, 200, 300, 400, 500]
+            data: []
           }
         ]
       },
@@ -89,7 +90,9 @@ export default{
         balance: null,
         currency: null,
         current_balance: null
-      }
+      },
+      receive: 0,
+      sent: 0
     }
   },
   components: {
@@ -119,6 +122,21 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.ledger = response.data.ledger[0]
+        }
+      })
+    },
+    retrieveGraphData(){
+      let parameter = {
+        account_id: this.user.userID
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledger/retrieve_dashboard', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data) {
+          this.data.labels = response.data.dates
+          this.data.datasets[0].data = response.data.total_amounts
+          this.receive = response.data.received
+          this.sent = Math.abs(response.data.sends)
         }
       })
     }
