@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="graph">
-      <!-- <GraphHeader /> -->
+      <GraphHeader />
       <BarGraph :data="data" v-if="data.labels.length > 0"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
