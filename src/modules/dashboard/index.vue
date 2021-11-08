@@ -73,13 +73,13 @@ export default{
     return {
       user: AUTH.user,
       data: {
-        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'],
         datasets: [
           {
             fill: false,
             borderColor: '#f87979',
             backgroundColor: '#56C596',
-            label: 'SUBSCRIBERS',
+            label: 'TITHINGS',
             data: [0, 100, 200, 300, 400, 500]
           }
         ]
@@ -142,7 +142,7 @@ export default{
   background-color: white;
   width: 100%;
   margin-left: -13px;
-  padding: 10px 30px 0px 30px;
+  padding: 10px 30px 20px 30px;
 }
 p{
   margin: 0;
