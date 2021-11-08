@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    <div class="create-post row" style="margin-left: 0px; width: 100%;">
-      <span>
-        <img :src="require('src/assets/img/test.jpg')" width="50px" height="50px" style="border-radius: 25px; margin-right: 10px;">
-      </span>
-      <span style="width: 87%;">
-        <input type="text" placeholder="Do you have something good to share?">
-      </span>
+    <div class="create-post row">
+      <div class="image">
+      <img :src="require('src/assets/img/test.jpg')" width="100%" height="100%" style="border-radius: 25px; margin-right: 10px;">
+      </div>
+      <input type="text" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?">
+      <i class="fas fa-images add-image"></i>
     </div>
     <br>
     <div class="tabs" style="margin-bottom: 30px;">
@@ -15,160 +14,81 @@
     </div>
     <br>
     <br>
-    <div v-for="(item, index) in list" :key="index" v-if="defaults">
+    <div v-for="(item, index) in posts" :key="index" v-if="defaults">
       <Posts
         :data="item"
       />
     <br>
     </div>
-    <!-- tweets -->
     <div v-if="message" v-for="(item, index) in tweet" :key="index">
-      <div class="message">
-        <div class="row" style="width: 103%; margin-left: 0px;">
-          <div class="column" style="padding-right: 8px;">
-            <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px; ">
-          </div>
-          <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;"> 
-            <div >
-              <b style="font-size: 14px;">{{item.name}}</b>
-              <p style="font-size: 12px;">{{item.date}}</p>
-            </div>
-          </div>
-          <br>
-          <br>
-          <br>
-          <p style="margin-left: 15px; padding-right: 30px;">{{item.text}}</p>
-          </div>
-        </div>
-        <br>
+       <Twitter
+        :name="item.name"
+        :date="item.date"
+        :text="item.text"
+      />
     </div>
-        <!-- recommendation -->
     <div v-if="recommendation">
       <div class="tabTitle">
-        <b>Communities You Might Interested In</b>
-      </div>
-      <div v-for="(item, index) in commFollow" :key="index">
-        <div class="community">
-          <div class="row" style="width: 103%; margin-left: 0px;">
-            <div class="column" style="padding-right: 8px;">
-              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
-            </div>
-            <div  class="column" style=" margin-top: 4px; line-height: 15px;"> 
-              <div>
-                <b style="font-size: 14px;">{{item.name}}</b>
-                <p style="font-size: 12px;">{{item.date}}</p>
-              </div>
-            </div>
-          </div>
-          <div style="margin-left: 15px;margin-top: 10px;">
-            <i class="fas fa-users" style="margin-bottom: 10px; "></i>
-            <p style="display: inline; font-size: 11px; vertical-align: 1px;">&nbsp;&nbsp;Follow and Join</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- create community -->
-    <div v-if="community">
-      <div class="tabTitle" >
-        <p style="margin-bottom: 5px; font-weight: 700;">Communities You Manage</p>
-        <button class="fas fa-plus plus" @click="redirect('community/create')">&nbsp;&nbsp;<p>Create</p></button>
+        <p style="margin: 0px;"><b>Communities You Might Interested In</b></p>
       </div>
       <div v-for="(item, index) in comm" :key="index">
-        <div class="community">
-          <div class="row" style="width: 103%; margin-left: 0px;">
-            <div class="column" style="padding-right: 8px;">
-              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
-            </div>
-            <div class="column"  style=" margin-top: 4px; line-height: 15px;"> 
-              <div>
-                <b style="font-size: 14px;">{{item.name}}</b>
-                <p style="font-size: 12px;">{{item.date}}</p>
-              </div>
-            </div>
-          </div>
-          <div style="margin-left: 15px;margin-top: 10px;">
-            <i class="fas fa-bell bell" style="margin-bottom: 10px;"></i>
-            <p  style="font-weight: normal; display: inline; font-size: 10px; vertical-align: 1px;">&nbsp;&nbsp;Notifications</p>
-          </div>
-        </div>
+        <CommunityCard
+          :name="item.name"
+          :date="item.date"
+          :text="item.text"
+          :icon="'fas fa-users'"
+          :iconText="'Follow and Join'"
+        />
+      </div>
+    </div>
+    <div v-if="community">
+      <div class="tabTitle" >
+        <p style="margin: 0px;"><b>Communities You Manage</b></p>
+        <p class="plus-text" style="cursor: pointer;" @click="redirect('community/create')">Create</p>
+        <button class="fas fa-plus plus" @click="redirect('community/create')"></button>
+      </div>
+      <div v-for="(item, index) in comm" :key="index">
+        <CommunityCard
+          :name="item.name"
+          :date="item.date"
+          :text="item.text"
+          :icon="'fas fa-bell'"
+          :iconText="'Notification'"
+        />
       </div>
     </div>
     <br>
-    <!-- manage -->
     <div v-if="community">
       <div class="tabTitle">
-        <b>Communities You Followed & Joined</b>
+        <p style="margin: 0px;"><b>Communities You Followed & Joined</b></p>
         <button @click="recommendationClick()" class="recommendation"><p>View Recommendation</p></button>
       </div>
-      <div v-for="(item, index) in commFollow" :key="index">
-        <div class="community">
-          <div class="row" style="width: 103%; margin-left: 0px;">
-            <div class="column" style="padding-right: 8px;">
-              <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
-            </div>
-            <div  class="column" style="margin-top: 4px; line-height: 15px;"> 
-              <div>
-                <b style="font-size: 14px;">{{item.name}}</b>
-                <p style="font-size: 12px;">{{item.date}}</p>
-              </div>
-            </div>
-          </div>
-          <div style="margin-left: 15px;margin-top: 10px;">
-            <i class="fas fa-ban ban" style="margin-bottom: 10px; text-align: right;"></i>
-            <p style="font-weight: normal; display: inline; font-size: 10px; vertical-align: 1px;">&nbsp;&nbsp;Unfollow</p>
-          </div>
-        </div>
+      <div v-for="(item, index) in comm" :key="index">
+        <CommunityCard
+          :name="item.name"
+          :date="item.date"
+          :text="item.text"
+          :icon="'fas fa-ban'"
+          :iconText="'Unfollow'"
+        />
       </div>
     </div>
-    <br>
-    <br>
   </div>
 </template>
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
-import CONFIG from 'src/config.js'
 import Posts from 'src/modules/generic/Posts.vue'
+import Twitter from 'src/modules/community/TwitterCard'
+import CommunityCard from 'src/modules/community/CommunityCard'
 export default{
-  props: [
-    'data'
-  ],
-  mounted(){},
+  mounted(){
+    this.retrieve()
+  },
   data(){
     return {
       user: AUTH.user,
-      list: [
-        {
-          name: 'Lalaine Garrido',
-          date: 'July 8, 2021',
-          text: 'We would like to thank everyone who donated to our campaigns. Heres the documentation.',
-          replies: []
-        },
-        {
-          name: 'Sim Jake',
-          date: 'November 30, 2020',
-          text: 'We would like to thank everyone who donated to our campaigns. Heres the documentation.',
-          replies: [
-            {
-              name: 'Nishimura Riki',
-              date: 'July 8, 2021',
-              text: 'Amazing!'
-            }
-          ]
-        },
-        {
-          name: 'Jay',
-          date: 'August 17, 2021',
-          text: 'We would like to thank everyone who donated to our campaigns. Heres the documentation.',
-          replies: []
-        },
-        {
-          name: 'Jung One',
-          date: 'June 13, 2013',
-          text: 'We would like to thank everyone who donated to our campaigns. Heres the documentation.',
-          replies: []
-        }
-      ],
+      posts: [],
       tweet: [
         {
           name: 'Pope Francis',
@@ -190,20 +110,6 @@ export default{
         {
           name: 'Kennette Canales',
           date: 'Non Profit-20k Followers - 10k Joined'
-        },
-        {
-          name: 'Kennette Canales',
-          date: 'Non Profit-20k Followers - 10k Joined'
-        }
-      ],
-      commFollow: [
-        {
-          name: 'Kennette Canales',
-          date: 'Non Profit-20k Followers - 10k Joined'
-        },
-        {
-          name: 'Kennette Canales',
-          date: 'Non Profit-20k Followers - 10k Joined'
         }
       ],
       defaults: true,
@@ -211,32 +117,58 @@ export default{
       community: false,
       recommendation: false,
       firstClass: 'text-center sort-button1 mr-2',
-      secondClass: 'text-center sort-button1 mr-2'
+      secondClass: 'text-center sort-button1 mr-2',
+      input: null
     }
   },
   components: {
-    Posts
+    Posts,
+    Twitter,
+    CommunityCard
   },
   methods: {
+    createPost() {
+      console.log(this.input)
+    },
+    retrieve(){
+      let parameter = {
+        limit: 5,
+        offset: 0,
+        sort: {
+          created_at: 'desc'
+        }
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('comments/retrieve_comments_with_images', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0) {
+          this.posts = response.data
+        }
+      })
+    },
     messageClick(){
-      this.firstClass = this.firstClass + ' active'
-      let classes = this.secondClass.split(' ')
-      classes.splice(classes.length - 1, 1)
-      this.secondClass = classes.join(' ')
-      this.message = true
-      this.defaults = false
-      this.community = false
-      this.recommendation = false
+      if(!this.message) {
+        this.firstClass = this.firstClass + ' active'
+        let classes = this.secondClass.split(' ')
+        classes.splice(classes.length - 1, 1)
+        this.secondClass = classes.join(' ')
+        this.message = true
+        this.defaults = false
+        this.community = false
+        this.recommendation = false
+      }
     },
     communityClick(){
-      this.secondClass = this.secondClass + ' active'
-      let classes = this.firstClass.split(' ')
-      classes.splice(classes.length - 1, 1)
-      this.firstClass = classes.join(' ')
-      this.message = false
-      this.defaults = false
-      this.community = true
-      this.recommendation = false
+      if(!this.community) {
+        this.secondClass = this.secondClass + ' active'
+        let classes = this.firstClass.split(' ')
+        classes.splice(classes.length - 1, 1)
+        this.firstClass = classes.join(' ')
+        this.message = false
+        this.defaults = false
+        this.community = true
+        this.recommendation = false
+      }
     },
     recommendationClick(){
       this.recommendation = true
@@ -254,36 +186,21 @@ export default{
 button:focus{
   outline: none;
 }
-.sort-button{
-  margin-top: 15px;
-  width: 150px;
-  border: none;
-  height: 40px;
-  background-color: $white;
-  margin-left: 15px;
+.add-image{
+  font-size: 2em;
+  width: 33px;
+}
+.plus-text{
   float: right;
-}
-.bell{
-  font-size: 18px;
-}
-.ban{
-  font-size: 18px;
+  padding: 5px;
+  font-size: 13px;
 }
 .plus{
-  padding: 0px;
-  width: 70px;
-  border: none;
+  padding: 5px;
   background-color: $white;
+  border: none;
   font-size: 18px; 
-  margin-top: 5px;
   float: right;
-}
-.plus p{
-  font-family: Poppins;
-  font-weight: normal;
-  font-size: 10px;
-  vertical-align: 3px;
-  
 }
 .container{
   width: 50%;
@@ -291,10 +208,6 @@ button:focus{
   align-items: center;
   background-color: $white;
   padding: 20px;
-}
-.tabs-container .tabs{ 
-  margin-top: 20px;
-  padding: 10px;
 }
 .sort-button1{
   border-radius: 25px;
@@ -327,40 +240,16 @@ button:focus{
   float: right;
   line-height: 12px;
 }
-.message {
-  text-align: justify;
-  width: 100%;
-  background-color: $white;
-  padding: 10px;
-  border-radius: 10px;
-  border: .5px solid rgb(235, 235, 235);
-  cursor: pointer;
-}
-.message p{
-  padding-right: 15px;
-}
-.community {
-  text-align: justify;
-  width: 100%;
-  background-color: $white;
-  padding: 10px;
-  border-radius: 10px;
-  border: .5px solid rgb(235, 235, 235);
-  margin-top: 10px;
-  cursor: pointer;
-}
-.community p{
-  padding-right: 15px;
-}
 .tabTitle p{
   display: inline-block;
-  color: #000000;
-  font-weight: normal;
 }
 .create-post{
   padding: 10px;
   border-radius: 10px;
   border: .5px solid rgb(235, 235, 235);
+  margin-left: 0px;
+  width: 100%;
+  align-items: center;
 }
 input{
   border-radius: 20px;
@@ -368,8 +257,13 @@ input{
   border: .5px solid rgb(235, 235, 235);
   margin-top: 5px;
   outline: none;
-  width: 100%;
-  padding: 15px;
+  width: calc(100% - 110px);
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.image{
+  width: 50px;
+  height: 50px;
 }
 @media (max-width: 992px){
   .container{
