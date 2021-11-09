@@ -144,6 +144,13 @@ export default{
       tokenRequired: true
     }
   }, {
+    path: '/transaction/details/:id',
+    name: 'transactionDetails',
+    component: resolve => require(['modules/transactions/details.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/church_details',
     name: 'churchDetails',
     component: resolve => require(['modules/churchDetails/index.vue'], resolve),
