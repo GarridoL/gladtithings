@@ -20,6 +20,7 @@
       :version="3"
       :description="item.description"
       :amount="item.currency + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
+      :route="'transaction/details/' + item.id"
     />
     </div>
      <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
