@@ -134,7 +134,7 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.data.labels = response.data.dates
-          this.data.datasets[0].data = response.data.total_amounts
+          this.data.datasets[0].data = response.data.total_amount_received
           this.receive = response.data.received
           this.sent = Math.abs(response.data.sends)
         }
