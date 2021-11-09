@@ -42,9 +42,7 @@
                         <td class="header"><b>Username</b></td>
                         <td class="header"><b>Full Name</b></td>
                         <td class="header"><b>Address</b></td>
-                        <td class="header"><b>Total Events</b></td>
                         <td class="header"><b>Total Donations</b></td>
-                        <td class="header"><b>Actions</b></td>
                     </tr>
                     </thead>
                     <tbody>
@@ -52,14 +50,7 @@
                         <td class="header">{{item.username}}</td>
                         <td class="header">{{item.name}}</td>
                         <td class="header">{{item.address}}</td>
-                        <td class="header">{{item.total_event}}</td>
                         <td class="header">{{item.total_donations}}</td>
-                        <td class="header">
-                        <span>
-                            <i class="fas fa-eye icon-eye" @click="redirect('')"></i>
-                            <i class="fas fa-trash-alt icon-trash"></i>
-                        </span>
-                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -218,6 +209,7 @@ export default{
 }
 .table{
   background-color: white;
+  
 }
 .table-container{
   height: 50vh;
