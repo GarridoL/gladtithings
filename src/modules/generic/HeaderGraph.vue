@@ -72,8 +72,8 @@ $(document).ready(function(){
   text-align: center;
   width: 80px;
   height: 30px;
-  top: -35px;
-  left: -20px;
+  top: -40px;
+  left: -30px;
   background-color: black;
   color: white;
   border-radius: 5px;
@@ -87,6 +87,16 @@ $(document).ready(function(){
   transition: opacity 0.5s;
 }
 
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
 .hover:hover .tooltip {
   opacity: 1;
 }
