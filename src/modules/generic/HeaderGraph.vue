@@ -1,40 +1,37 @@
 <template>
   <div>
     <table class="table table-bordered">
-          <thead>
+          <thead style="text-align: left; margin-top: 3%">
             <tr class="header123">
               <td class="header"><b>Yearly</b></td>
               <td class="header"><b>This Year</b></td>
               <td class="header"><b>Last Month</b></td>
               <td class="header"><b>This Month</b></td>
               <td class="header"><b>Last 7 Days</b></td>
-              <td class="header2">
-        <div class="row no-gutters">
-          <b>Custom:</b>
-          <div class="col-sm
-           datetime-picker-ui">
-            <date-picker
-              class="datetime-picker"
-              v-model="custom"
-              range
-              :value-type="'YYYY-MM-DD'"
-              :format="'MMM D, YYYY'"
-              :input-class="'form-control'"
-              >
-              </date-picker> 
-          </div>
-            <div  class="col-sm-3 file-export">
-              <i class="fas fa-file-export">&nbsp;<b>Export</b></i>
-            </div>
-            <div  class="col-sm-3 print">
-              <i class="fas fa-print">&nbsp;<b>Print</b></i>
-            </div>  
-        </div>
-          </td>
+              <td>
+                <b style="margin-left:5px">Custom:</b>
+                <date-picker
+                  class="datetime-picker"
+                  v-model="custom"
+                  range
+                  :value-type="'YYYY-MM-DD'"
+                  :format="'MMM D, YYYY'"
+                  :input-class="'form-control'"
+                  >
+                  </date-picker> 
+                  <div class="fas fa-file-export hover">
+                    <div class="tooltip">Export
+                    </div>
+                  </div>
+                  <div class="fas fa-print hover">
+                    <div class="tooltip">Print
+                    </div>
+                  </div>
+              </td>
             </tr>
           </thead>
     </table>
-  </div>
+  </div> 
 </template>
 <script>
 import DatePicker from 'vue2-datepicker'
@@ -49,45 +46,65 @@ export default {
     DatePicker
   }
 }
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 <style scoped lang="scss">
-@import "~assets/style/colors.scss";
-.datetime-picker-ui{
-  width: 60% !important;
-}
+@import '~assets/style/colors.scss';
+
 .datetime-picker{
-	width: 100%;
-	margin-left: 5%;
+  width: 35% !important;
+  margin-left: 2%;
 }
 .header{
 	text-align: center;
 }
-.header2{
-  width: 60%;
+.fa-file-export, .fa-print{
+  color: $primary;
+  font-size: 100%;
+  margin-right: 3%;;
 }
-.no-gutters{
-  justify-content: center;
+
+.hover {
+  position: relative;
+  top: 0px;
+  left: 5%;
+  font-size: 18px;
+}
+
+.tooltip {
+  font-size: 12px;
   text-align: center;
-  align-content: center;
-  align-items: center;
-}
-.file-export {
-	width: 10%;
-  color: $white;
-  background-color: $secondary;
-  margin-left: 3%;
-  padding: 3%;
+  width: 80px;
+  height: 20px;
+  top: -30px;
+  left: -35px;
+  background-color: black;
+  color: white;
   border-radius: 5px;
-  font-size: 10px;
+  opacity: 0;
+  z-index: 1;
+  position: absolute;
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
-.print {
-	width: 10%;
-  background-color: $primary;
-  margin-left: 2%;
-  padding: 3%;
-  border-radius: 5px;
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
 }
-.fa-print{
-  color: $white;
+.hover:hover .tooltip {
+  opacity: 1;
 }
+
 </style>
