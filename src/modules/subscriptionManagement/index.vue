@@ -88,53 +88,40 @@ import Pager from 'src/modules/generic/Pager.vue'
 import BarGraph from 'src/modules/generic/BarGraph.vue'
 import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+  },
   data(){
     return {
       user: AUTH.user,
-      data: [
-        {
-          username: 'kennette',
-          name: 'Kennette Canales',
-          address: 'Talamban, Cebu City, Philippines',
-          total_event: 15,
-          total_donations: '$123,456,789'
-        },
-        {
-          username: 'kennette',
-          name: 'Kennette Canales',
-          address: 'Talamban, Cebu City, Philippines',
-          total_event: 15,
-          total_donations: '$123,456,789'
-        }
-      ],
+      data: [],
       auth: AUTH,
       config: CONFIG,
       category: [{
         title: 'Sort by',
         sorting: [{
           title: 'Username Ascending',
-          payload: 'created_at',
+          payload: 'T1.username',
           payload_value: 'asc'
         }, {
           title: 'Username Descending',
-          payload: 'created_at',
+          payload: 'T1.username',
           payload_value: 'desc'
         }, {
           title: 'Full Name Ascending',
-          payload: 'event_name',
+          payload: 'name',
           payload_value: 'asc'
         }, {
           title: 'Full Name Descending',
-          payload: 'event_name',
+          payload: 'name',
           payload_value: 'desc'
         }, {
           title: 'Address Ascending',
-          payload: 'event_name',
+          payload: 'T2.address',
           payload_value: 'asc'
         }, {
           title: 'Address Descending',
-          payload: 'event_name',
+          payload: 'T2.address',
           payload_value: 'desc'
         }]
       }],
@@ -180,6 +167,37 @@ export default{
   methods: {
     redirect(route){
       ROUTER.push(route)
+    },
+    retrieve(sort, filter){
+      if(sort !== null){
+        this.sort = sort
+      }
+      if(filter !== null){
+        this.filter = filter
+      }
+      if(sort === null && this.sort !== null){
+        sort = this.sort
+      }
+      if(filter === null && this.filter !== null){
+        filter = this.filter
+      }
+      let parameter = {
+        condition: [{
+          value: '%' + this.filter.value + '%',
+          column: this.filter.column,
+          clause: 'like'
+        }],
+        merchant: this.user.userID,
+        sort: sort,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+      }
+      this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
+        console.log('[subscriptions]', response)
+        if(response.data.length > 0){
+          this.data = response.data
+        }
+      })
     }
   }
 }
