@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Subscription;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends APIController
 {
@@ -54,6 +55,33 @@ class SubscriptionController extends APIController
             }
             $this->response['data'] = $res;
         }
+        return $this->response();
+    }
+
+    public function retrieveSubscriptionByMerchant(Request $request){
+        $data = $request->all();
+        $con = $data['condition'];
+        $whereArray = array(
+            array('subscriptions.merchant', '=', $data['merchant'])
+        );
+        if($con[0]['column'] == 'name'){
+            array_push($whereArray, array(function($query){
+                $query->where('first_name', $con[0]['clause'], $con[0]['value'])
+                    ->orWhere('last_name', $con[0]['clause'], $con[0]['value']);
+            }));
+        }else{
+            array_push($whereArray, array($con[0]['column'], $con[0]['clause'], $con[0]['value']));
+        }
+        $result = Subscription::leftJoin('accounts as T1', 'T1.id', '=', 'subscriptions.account_id')
+            ->leftJoin('account_informations as T2', 'T2.account_id', '=', 'T1.id')
+            ->where($whereArray)
+            ->limit($data['limit'])
+            ->offset($data['offset'])
+            ->groupBy('subscriptions.account_id')
+            ->orderBy('subscriptions.'.array_keys($data['sort'])[0], array_values($data['sort'])[0])
+            ->get(['T1.username', 'T1.email', 'T2.address', 'T2.first_name', 'T2.last_name', DB::raw('SUM(subscriptions.amount) as total_amount')]);
+        
+        $this->response['data'] = $result;
         return $this->response();
     }
 }
