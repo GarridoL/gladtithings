@@ -78,7 +78,7 @@ class SubscriptionController extends APIController
             ->limit($data['limit'])
             ->offset($data['offset'])
             ->groupBy('subscriptions.account_id')
-            ->orderBy('subscriptions.'.array_keys($data['sort'])[0], array_values($data['sort'])[0])
+            ->orderBy($con[0]['column'] == 'name' ? 'T2.'.array_keys($data['sort'])[0] : array_keys($data['sort'])[0], array_values($data['sort'])[0])
             ->get(['T1.username', 'T1.email', 'T2.address', 'T2.first_name', 'T2.last_name', DB::raw('SUM(subscriptions.amount) as total_amount')]);
         
         $this->response['data'] = $result;
