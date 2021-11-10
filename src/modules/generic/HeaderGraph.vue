@@ -8,8 +8,8 @@
               <td class="header"><b>Last Month</b></td>
               <td class="header"><b>This Month</b></td>
               <td class="header"><b>Last 7 Days</b></td>
-              <td>
-                <b style="margin-left:5px">Custom:</b>
+              <td class="header">
+                <b>Custom:</b>
                 <date-picker
                   class="datetime-picker"
                   v-model="custom"
@@ -60,10 +60,12 @@ $(document).ready(function(){
 .header{
 	text-align: center;
 }
+.fa-file-export {
+  margin-right: 2px;
+}
+
 .fa-file-export, .fa-print{
   color: $primary;
-  font-size: 100%;
-  margin-right: 3%;;
 }
 
 .hover {
@@ -106,5 +108,4 @@ $(document).ready(function(){
 .hover:hover .tooltip {
   opacity: 1;
 }
-
 </style>
