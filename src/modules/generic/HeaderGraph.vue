@@ -8,24 +8,26 @@
               <td class="header"><b>Last Month</b></td>
               <td class="header"><b>This Month</b></td>
               <td class="header"><b>Last 7 Days</b></td>
-          <b style="margin-left:5px">Custom:</b>
-            <date-picker
-              class="datetime-picker"
-              v-model="custom"
-              range
-              :value-type="'YYYY-MM-DD'"
-              :format="'MMM D, YYYY'"
-              :input-class="'form-control'"
-              >
-              </date-picker> 
-              <div class="fas fa-file-export hover">
-                <div class="tooltip">Export
-                </div>
-              </div>
-              <div class="fas fa-print hover">
-                <div class="tooltip">Print
-                </div>
-              </div>
+              <td>
+                <b style="margin-left:5px">Custom:</b>
+                <date-picker
+                  class="datetime-picker"
+                  v-model="custom"
+                  range
+                  :value-type="'YYYY-MM-DD'"
+                  :format="'MMM D, YYYY'"
+                  :input-class="'form-control'"
+                  >
+                  </date-picker> 
+                  <div class="fas fa-file-export hover">
+                    <div class="tooltip">Export
+                    </div>
+                  </div>
+                  <div class="fas fa-print hover">
+                    <div class="tooltip">Print
+                    </div>
+                  </div>
+              </td>
             </tr>
           </thead>
     </table>
@@ -61,23 +63,23 @@ $(document).ready(function(){
 .fa-file-export, .fa-print{
   color: $primary;
   font-size: 100%;
-  margin-right: 3%;
+  margin-right: 3%;;
 }
 
 .hover {
   position: relative;
   top: 0px;
   left: 5%;
-  font-size: 25px;
+  font-size: 18px;
 }
 
 .tooltip {
-  font-size: 18px;
+  font-size: 12px;
   text-align: center;
   width: 80px;
-  height: 30px;
-  top: -40px;
-  left: -30px;
+  height: 20px;
+  top: -30px;
+  left: -35px;
   background-color: black;
   color: white;
   border-radius: 5px;
