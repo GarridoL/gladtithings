@@ -40,7 +40,11 @@
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 export default {
-  data() {},
+  data() {
+    return {
+      custom: null
+    }
+  },
   components: {
     DatePicker
   }
