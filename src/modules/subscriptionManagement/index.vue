@@ -89,7 +89,7 @@ import BarGraph from 'src/modules/generic/BarGraph.vue'
 import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
   mounted(){
-    this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
   },
   data(){
     return {
