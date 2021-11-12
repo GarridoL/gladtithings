@@ -46,34 +46,37 @@ export default{
       ROUTER.push('/transactions')
     },
     retrieve(){
-      let parameter = {
-        condition: [{
-          column: 'id',
-          value: this.$route.params.id,
-          clause: '='
-        }, {
-          column: 'account_id',
-          value: this.user.userID,
-          clause: '='
-        }],
-        sort: {created_at: 'asc'},
-        limit: 1,
-        offset: 0
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/transaction_history', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        console.log(response)
-        if(response.data.length > 0) {
-          try{
-            response.data[0]['other_details'] = JSON.parse(response.data[0].details)
-          } catch(e) {
-            console.log(e)
-          }
-          this.data = response.data[0]
-          console.log(this.data)
+      console.log(this.$route.params)
+      if(this.$route.params){
+        let parameter = {
+          condition: [{
+            column: 'id',
+            value: this.$route.params.id,
+            clause: '='
+          }, {
+            column: 'account_id',
+            value: this.user.userID,
+            clause: '='
+          }],
+          sort: {created_at: 'asc'},
+          limit: 1,
+          offset: 0
         }
-      })
+        $('#loading').css({display: 'block'})
+        this.APIRequest('ledger/transaction_history', parameter).then(response => {
+          $('#loading').css({display: 'none'})
+          console.log(response)
+          if(response.data.length > 0) {
+            try{
+              response.data[0]['other_details'] = JSON.parse(response.data[0].details)
+            } catch(e) {
+              console.log(e)
+            }
+            this.data = response.data[0]
+            console.log(this.data)
+          }
+        })
+      }
     }
   }
 }
