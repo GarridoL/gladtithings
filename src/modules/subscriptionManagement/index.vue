@@ -35,38 +35,39 @@
                 :grid="['list', 'th-large']">
             </basic-filter>
         </div>
-            <div class="table-container">
-                <table class="table table-bordered table-responsive" v-if="data !== null">
-                    <thead>
-                    <tr>
-                        <td class="header"><b>Username</b></td>
-                        <td class="header"><b>Full Name</b></td>
-                        <td class="header"><b>Address</b></td>
-                        <td class="header"><b>Total Donations</b></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(item, index) in data" :key="index">
-                        <td class="header">{{item.username}}</td>
-                        <td class="header">{{item.name}}</td>
-                        <td class="header">{{item.address}}</td>
-                        <td class="header">{{item.total_donations}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="table-container">
+          <table class="table table-bordered table-responsive" v-if="data.length > 0">
+            <thead>
+              <tr>
+                  <td class="header"><b>Username</b></td>
+                  <td class="header"><b>Full Name</b></td>
+                  <td class="header"><b>Address</b></td>
+                  <td class="header"><b>Total Donations</b></td>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in data" :key="index">
+                <td class="header">{{item.username}}</td>
+                <td class="header">{{item.first_name}} {{item.last_name}}</td>
+                <td class="header">{{item.address}}</td>
+                <td class="header">{{item.total_amount}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <empty v-if="data.length === 0" :title="'No Subscriptions available!'" :action="'Keep growing.'"></empty>
         </div>
       <Pager
       :pages="numPages"
       :active="activePage"
       :limit="limit"
-      v-if="data !== null"
+      v-if="data.length > 0"
     />
     <div class="mt-5 pt-5">
       <p style="color: black; margin: 0; font-size: 17px;"><b>Subscribers Graph</b></p>
       <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
     </div>
     <div class="graph">
-      <GraphHeader />
+      <GraphHeader @select="graph"/>
       <BarGraph :data="graphSubscribe"/>
     </div>
     <div class="mt-4">
@@ -90,6 +91,7 @@ import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
   mounted(){
     this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
+    this.graph()
   },
   data(){
     return {
@@ -187,7 +189,7 @@ export default{
           column: this.filter.column,
           clause: 'like'
         }],
-        merchant: this.user.userID,
+        merchant: this.user.merchant.id,
         sort: sort,
         limit: this.limit,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
@@ -196,7 +198,19 @@ export default{
         console.log('[subscriptions]', response)
         if(response.data.length > 0){
           this.data = response.data
+        }else{
+          this.data = []
         }
+      })
+    },
+    graph(e){
+      console.log('[eeee]', e)
+      let parameter = {
+        account_id: this.user.userID,
+        date: e === undefined ? 'yearly' : e
+      }
+      this.APIRequest('ledger/retrieve_graph', parameter).then(response => {
+        console.log('[response]', response)
       })
     }
   }
