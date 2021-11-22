@@ -19,6 +19,13 @@ class EventController extends APIController
       $con = $data['condition'];
       $result = Event::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->limit($data['limit'])
       ->offset($data['offset'])->orderBy(array_keys($data['sort'])[0], array_values($data['sort'])[0])->get();
+      if(sizeof($result) > 0) {
+        $i = 0;
+        foreach($result as $key) {
+          $key['images'] = app('Increment\Common\Payload\Http\PayloadController')->retrievePayloads('payload', 'event_id', 'payload_value', $key['id']);
+          $i++;
+        }
+      }
       $this->response['data'] = $result;
       return $this->response();
     }
