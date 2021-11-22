@@ -73,7 +73,7 @@
           <option :value="item" v-for="(item, index) in timeZones" :key="index">{{item}}</option>
         </select>
       </div>
-      <button class="text-center sort-button" @click="create()">Publish</button>
+      <button class="text-center sort-button" @click="status === 'create' ? create() : update()">{{status === 'create' ? 'Publish' : 'Update'}}</button>
     </div>
   </div>
 </template>
@@ -85,6 +85,9 @@ import CONFIG from 'src/config.js'
 export default{
   mounted(){
     this.status = this.$route.params.status
+    if(this.status === 'update') {
+      this.retrieve(this.$route.params.id)
+    }
   },
   data(){
     return {
@@ -150,12 +153,45 @@ export default{
       timeZones: [
         'KST', 'PST'
       ],
-      base64: null
+      base64: null,
+      id: null,
+      details: null
     }
   },
   methods: {
     back() {
       ROUTER.push('/events')
+    },
+    retrieve(id){
+      let parameter = {
+        condition: [{
+          value: id,
+          column: 'id',
+          clause: '='
+        }],
+        sort: {created_at: 'asc'},
+        limit: 1,
+        offset: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('events/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.name = response.data[0].name
+          this.description = response.data[0].description
+          this.type = response.data[0].type
+          this.category = response.data[0].category
+          this.location = response.data[0].location
+          this.startDate = response.data[0].start_date.split(' ')[0]
+          this.startDateTime = response.data[0].start_date.split(' ')[1]
+          this.endDate = response.data[0].end_date.split(' ')[0]
+          this.endDateTime = response.data[0].end_date.split(' ')[1]
+          this.timeZone = response.data[0].time_zone
+          this.base64 = response.data[0].image.length > 0 ? this.config.BACKEND_URL + response.data[0].image[0].category : null
+          this.id = response.data[0].id
+          this.details = response.data[0]
+        }
+      })
     },
     setUpFileUpload(event){
       let files = event.target.files || event.dataTransfer.files
@@ -244,6 +280,46 @@ export default{
             this.back()
           }
         }
+      })
+    },
+    update() {
+      if(this.validate([this.name, this.description, this.type, this.category, this.location, this.startDate, this.startDateTime, this.endDate, this.endDateTime, this.timeZone])) {
+        this.errorMessage = 'All fields are required.'
+        return
+      } else {
+        this.errorMessage = null
+      }
+      let parameter = {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+        type: this.type,
+        category: this.category,
+        location: this.location,
+        start_date: this.startDate + ' ' + this.startDateTime,
+        end_date: this.endDate + ' ' + this.endDateTime,
+        time_zone: this.timeZone
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('events/update', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0){
+          if(this.base64) {
+            this.upload(this.id)
+            this.removePreviousImage()
+          } else {
+            this.back()
+          }
+        }
+      })
+    },
+    removePreviousImage() {
+      let parameter = {
+        id: this.details.image[0].id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('payloads/delete', parameter).then(response => {
+        $('#loading').css({display: 'none'})
       })
     }
   }

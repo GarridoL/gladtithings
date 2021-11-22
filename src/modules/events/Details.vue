@@ -7,7 +7,8 @@
       <div class="column image-container" style="width: 68%;">
         <div class="row">
           <div class="column image">
-            <img :src="require('src/assets/img/test.jpg')" width="85%" height="100%">
+            <img :src="config.BACKEND_URL + details.image[0].category" width="85%" height="100%" v-if="details && details.image.length > 0">
+            <i class="far fa-image" style="font-size: 80px; color: gray;" v-else></i>
           </div>
           <div class="column" style="width: 65%;">
             <p style="margin: 0;"><b>{{details.name}}</b></p>
@@ -18,7 +19,7 @@
           </div>
         </div>
       </div>
-      <div class="column" style="width: 30%;">
+      <div class="column" style="width: 29%;">
         <div class="black">
           <p class="title">Total Amount of Donations</p>
           <p style="color: white; margin: 0;"><b>$ 123, 456.35</b></p>
@@ -216,8 +217,7 @@ button:focus{
 .top-container{
   margin-left: 0px;
   width: 100%;
-  height: 200px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 .container{
   width: 60%;
