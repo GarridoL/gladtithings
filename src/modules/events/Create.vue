@@ -8,9 +8,12 @@
       <p style="font-size: 18px;"><b>Basic Info</b></p>
       <p>Name your event and tell people why they should come. Add details to let attendees know what the event is all about.</p>
       <div class="default-image">
+        <input type="file" ref="file" id="EventImage" :accept="'image/*'" @change="setUpFileUpload($event)" style="display: none">
         <center>
-        <i class="far fa-image" style="font-size: 80px; color: gray;"></i>
-        <p style="font-size: 12px;">Click to add featured image</p>
+        <i class="fas fa-times-circle remove-event-photo" @click="base64 = null" v-if="base64 !== null"></i>
+        <i class="far fa-image" style="font-size: 80px; color: gray;" v-if="base64 === null" @click="$refs.file.click()"></i>
+        <p style="font-size: 12px;" v-if="base64 === null" @click="$refs.file.click()">Click to add featured image</p>
+        <img :src="base64" width="100px" height="110px" v-if="base64 !== null" @click="$refs.file.click()"/>
         </center>
       </div>
       <div class="inputs">
@@ -77,8 +80,8 @@
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
+import axios from 'axios'
 import CONFIG from 'src/config.js'
-import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.status = this.$route.params.status
@@ -98,6 +101,7 @@ export default{
       endDateTime: null,
       timeZone: null,
       errorMessage: null,
+      config: CONFIG,
       types: [
         'Appearance or Signing',
         'Attraction',
@@ -145,12 +149,62 @@ export default{
       ],
       timeZones: [
         'KST', 'PST'
-      ]
+      ],
+      base64: null
     }
   },
   methods: {
     back() {
       ROUTER.push('/events')
+    },
+    setUpFileUpload(event){
+      let files = event.target.files || event.dataTransfer.files
+      if(!files.length){
+        return false
+      }else{
+        this.file = files[0]
+        let filename = this.file.name.toLowerCase()
+        if(filename.substring(filename.lastIndexOf('.')) === '.png' || filename.substring(filename.lastIndexOf('.')) === '.jpg' || filename.substring(filename.lastIndexOf('.')) === '.jpeg' || filename.substring(filename.lastIndexOf('.')) === '.gif' || filename.substring(filename.lastIndexOf('.')) === '.tif' || filename.substring(filename.lastIndexOf('.')) === '.bmp'){
+          this.createFile(files[0])
+        }else{
+          this.errorMessage = 'Upload images only!'
+          this.file = null
+        }
+      }
+    },
+    createFile(file){
+      let fileReader = new FileReader()
+      fileReader.readAsDataURL(file)
+      fileReader.addEventListener('load', () => {
+        this.base64 = fileReader.result
+      }, false)
+    },
+    upload(eventId){
+      console.log('upload function')
+      let formData = new FormData()
+      formData.append('file', this.file)
+      formData.append('file_url', this.file.name.replace(' ', '_'))
+      formData.append('account_id', this.user.userID)
+      formData.append('category', 'event-profile')
+      $('#loading').css({display: 'block'})
+      axios.post(this.config.BACKEND_URL + '/images/upload?token=' + AUTH.tokenData.token, formData).then(response => {
+        $('#loading').css({display: 'none'})
+        let parameter = {
+          account_id: this.user.userID,
+          payload: 'event_id',
+          category: response.data.data,
+          payload_value: eventId
+        }
+        if(response.data) {
+          $('#loading').css({display: 'block'})
+          this.APIRequest('payloads/create', parameter).then(response => {
+            $('#loading').css({display: 'none'})
+            if(response.data) {
+              this.back()
+            }
+          })
+        }
+      })
     },
     validate(array) {
       let result = false
@@ -183,8 +237,12 @@ export default{
       $('#loading').css({display: 'block'})
       this.APIRequest('events/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          this.back()
+        if(response.data > 0){
+          if(this.base64) {
+            this.upload(response.data)
+          } else {
+            this.back()
+          }
         }
       })
     }
@@ -231,6 +289,12 @@ input, textarea, select {
   padding: 15px;
   cursor: pointer;
   margin-bottom: 10px;
+}
+.remove-event-photo{
+  float: right;
+  color: red;
+  margin-top: -10px;
+  margin-right: -12px;
 }
 @media (max-width: 992px){
   .container{
