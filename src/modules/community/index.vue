@@ -4,7 +4,8 @@
       <div class="image">
         <img :src="require('src/assets/img/test.jpg')" width="100%" height="100%" style="border-radius: 25px; margin-right: 10px;">
       </div>
-        <input type="text" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?">
+        <textarea wrap="off" cols="50" rows="5" class="input-post" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?"></textarea>
+        <i class="fas fa-paper-plane send-post" @click="createPost()"></i>
         <i class="fas fa-images add-image" @click="showModalCreate()"></i>
     </div>
     <br>
@@ -73,7 +74,7 @@
         />
       </div>
     </div>
-    <CreatePost/>
+    <CreatePost ref="createPost"/>
   </div>
 </template>
 <script>
@@ -134,7 +135,25 @@ export default{
       $('#createPost').modal('show')
     },
     createPost() {
-      console.log(this.input)
+      if(this.input === null || this.input === '') {
+        return
+      }
+      let parameter = {
+        account_id: this.user.userID,
+        payload: 'account_id',
+        payload_value: this.user.userID,
+        text: this.input || ' ',
+        to: this.user.id,
+        from: this.user.id,
+        route: 'statusStack'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('comments/create', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.$refs.createPost.upload(response.data)
+        }
+      })
     },
     retrieve(){
       let parameter = {
@@ -189,12 +208,33 @@ export default{
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.input-post{
+  outline: none;
+  overflow:hidden;
+  border-radius: 20px;
+  height: 40px;
+  border: .5px solid rgb(235, 235, 235);
+  margin-top: 5px;
+  padding-top: 10px;
+  padding-left: 5px;
+  outline: none;
+  width: calc(100% - 140px);
+  margin-right: 10px;
+  margin-left: 10px;
+}
 button:focus{
   outline: none;
 }
 .add-image{
   font-size: 2em;
   width: 33px;
+  cursor: pointer;
+}
+.send-post{
+  font-size: 1.8em;
+  width: 33px;
+  color: $primary;
+  cursor: pointer;
 }
 .plus-text{
   float: right;
