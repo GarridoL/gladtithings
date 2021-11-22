@@ -22,7 +22,7 @@ class EventController extends APIController
       if(sizeof($result) > 0) {
         $i = 0;
         foreach($result as $key) {
-          $key['images'] = app('Increment\Common\Payload\Http\PayloadController')->retrievePayloads('payload', 'event_id', 'payload_value', $key['id']);
+          $key['image'] = app('Increment\Common\Payload\Http\PayloadController')->retrievePayloads('payload', 'event_id', 'payload_value', $key['id']);
           $i++;
         }
       }
