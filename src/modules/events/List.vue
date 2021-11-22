@@ -55,6 +55,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
+import moment from 'moment'
 export default{
   mounted(){
     this.retrieve({created_at: 'asc'}, {column: 'created_at', value: ''})
@@ -129,6 +130,9 @@ export default{
       this.APIRequest('events/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
+          response.data.map(item => {
+            item.start_date = moment(new Date(item.start_date)).format('LLL')
+          })
           this.data = response.data
         }else{
           this.data = null
