@@ -3,11 +3,11 @@
     <table class="table table-bordered">
           <thead style="text-align: left; margin-top: 3%">
             <tr class="header123">
-              <td class="header"><b>Yearly</b></td>
-              <td class="header"><b>This Year</b></td>
-              <td class="header"><b>Last Month</b></td>
-              <td class="header"><b>This Month</b></td>
-              <td class="header"><b>Last 7 Days</b></td>
+              <td class="header" @click="show('yearly')"><b>Yearly</b></td>
+              <td class="header" @click="show('current_year')"><b>This Year</b></td>
+              <td class="header" @click="show('yearly')"><b>Last Month</b></td>
+              <td class="header" @click="show('last_month')"><b>This Month</b></td>
+              <td class="header" @click="show('current_month')"><b>Last 7 Days</b></td>
               <td class="header">
                 <b>Custom:</b>
                 <date-picker
@@ -44,6 +44,11 @@ export default {
   },
   components: {
     DatePicker
+  },
+  methods: {
+    show(e){
+      this.$emit('select', e)
+    }
   }
 }
 $(document).ready(function(){
