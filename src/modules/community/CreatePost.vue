@@ -63,20 +63,18 @@ export default{
         }
       }
     },
-    getBase64(file) {
+    createFile(file){
       let fileReader = new FileReader()
       fileReader.readAsDataURL(file)
       fileReader.addEventListener('load', () => {
         this.base64 = fileReader.result
+        let image = {
+          file_base64: this.base64,
+          file_url: file.name
+        }
+        console.log(image)
+        this.pictures.push(image)
       }, false)
-    },
-    createFile(file){
-      this.getBase64(file)
-      let image = {
-        file_base64: this.base64,
-        file_url: file.name
-      }
-      this.pictures.push(image)
     },
     upload(commentId){
       let parameter = {
