@@ -3,22 +3,23 @@
     <i class="fas fa-chevron-left mr-2" style="font-size: 22px; cursor: pointer;" @click="redirect('/events')"></i>
     <span style="font-size: 22px;"><b>Event Details</b></span>
     <p style="margin-top: 10px;">Here are the lates update of this event as of today.</p>
-    <div class="top-container row">
+    <div class="top-container row" v-if="details">
       <div class="column image-container" style="width: 68%;">
         <div class="row">
           <div class="column image">
-            <img :src="require('src/assets/img/test.jpg')" width="85%" height="100%">
+            <img :src="config.BACKEND_URL + details.image[0].category" width="85%" height="100%" v-if="details && details.image.length > 0">
+            <i class="far fa-image" style="font-size: 80px; color: gray;" v-else></i>
           </div>
           <div class="column" style="width: 65%;">
-            <p style="margin: 0;"><b>Event Name</b></p>
-            <span class="mr-4 gray"><i class="fas fa-calendar-alt mr-1 gray"></i>January 20, 2021 | 5:00 PM</span>
-            <span class="gray"><i class="fas fa-calendar-alt mr-1 gray"></i>January 20, 2021 | 5:00 PM</span>
-            <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>Cebu City, Cebu, Philippines</p>
-            <p class="long-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            <p style="margin: 0;"><b>{{details.name}}</b></p>
+            <span class="mr-4 gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.start_date}}</span>
+            <span class="gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.end_date}}</span>
+            <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>{{details.location}}</p>
+            <p class="long-text">{{details.description}}</p>
           </div>
         </div>
       </div>
-      <div class="column" style="width: 30%;">
+      <div class="column" style="width: 29%;">
         <div class="black">
           <p class="title">Total Amount of Donations</p>
           <p style="color: white; margin: 0;"><b>$ 123, 456.35</b></p>
@@ -78,7 +79,9 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.retrieve(this.$route.params.id)
+  },
   data(){
     return {
       user: AUTH.user,
@@ -124,7 +127,8 @@ export default{
       sort: null,
       limit: 5,
       numPages: null,
-      activePage: 1
+      activePage: 1,
+      details: null
     }
   },
   components: {
@@ -136,6 +140,25 @@ export default{
   methods: {
     redirect(route){
       ROUTER.push(route)
+    },
+    retrieve(id){
+      let parameter = {
+        condition: [{
+          value: id,
+          column: 'id',
+          clause: '='
+        }],
+        sort: {created_at: 'asc'},
+        limit: 1,
+        offset: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('events/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.details = response.data[0]
+        }
+      })
     }
   }
 }
@@ -194,8 +217,7 @@ button:focus{
 .top-container{
   margin-left: 0px;
   width: 100%;
-  height: 200px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 .container{
   width: 60%;
