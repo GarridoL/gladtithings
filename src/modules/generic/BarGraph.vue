@@ -1,11 +1,11 @@
 <script>
 import AUTH from 'src/services/auth'
-import { Bar } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 export default {
-  extends: Bar,
+  extends: Line,
   props: ['data'],
   components: {
-    Bar
+    Line
   },
   mounted() {
     this.renderChart(this.data, {

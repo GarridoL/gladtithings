@@ -136,9 +136,9 @@ export default{
         labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
         datasets: [
           {
-            fill: false,
+            fill: true,
             borderColor: '#f87979',
-            backgroundColor: '#56C596',
+            backgroundColor: 'rgba(255, 10, 13, 0.1)',
             label: 'SUBSCRIBERS',
             data: [0, 100, 200, 300, 400, 500]
           }
