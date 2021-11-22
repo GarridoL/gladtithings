@@ -133,3 +133,11 @@ Route::post($route.'retrieve_by_params', $controller."retrieveByParams");
 Route::post($route.'retrieve_by_merchant', $controller."retrieveSubscriptionByMerchant");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
+
+//Events Controller
+$route = env('PACKAGE_ROUTE', '').'/events/';
+$controller = 'EventController@';
+Route::post($route.'create', $controller."create");
+Route::post($route.'retrieve', $controller."retrieve");
+Route::post($route.'delete', $controller."delete");
+Route::post($route.'update', $controller."update");
