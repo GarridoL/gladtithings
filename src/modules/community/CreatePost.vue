@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body">
           <span class="image-container" v-for="(item, index) in pictures" :key="index" v-if="pictures.length > 0" @click="activeIndex !== null ? activeIndex = null : activeIndex = index">
-            <img :class="activeIndex === index ? 'image-with-opacity' : 'image'" :src="item.result"/>
+            <img :class="activeIndex === index ? 'image-with-opacity' : 'image'" :src="item.file_base64"/>
               <i class="fas fa-trash-alt delete-image" v-if="activeIndex === index" @click="removeImage(index)"></i>
           </span>
           <div class="upload-icon">
@@ -37,7 +37,8 @@ export default{
       errorMessage: null,
       config: CONFIG,
       pictures: [],
-      activeIndex: null
+      activeIndex: null,
+      base64: null
     }
   },
   methods: {
@@ -62,32 +63,36 @@ export default{
         }
       }
     },
-    createFile(file){
+    getBase64(file) {
       let fileReader = new FileReader()
       fileReader.readAsDataURL(file)
-      this.pictures.push(fileReader)
-      console.log(fileReader, file)
+      fileReader.addEventListener('load', () => {
+        this.base64 = fileReader.result
+      }, false)
+    },
+    createFile(file){
+      this.getBase64(file)
+      let image = {
+        file_base64: this.base64,
+        file_url: file.name
+      }
+      this.pictures.push(image)
+    },
+    upload(commentId){
+      let parameter = {
+        images: this.pictures,
+        account_id: this.user.userID,
+        payload: 'comment_id',
+        payload_value: commentId
+      }
+      $('#loading').css({'display': 'block'})
+      axios.post(this.config.BACKEND_URL + '/images/upload_image64_array?token=' + AUTH.tokenData.token, parameter).then(response => {
+        $('#loading').css({'display': 'none'})
+        console.log(response, 'response')
+        this.$parent.retrieve()
+      })
+
     }
-    // upload(){
-    //   if(parseInt(this.file.size / 1024) > 1024){
-    //     this.errorMessage = 'Allowed size is up to 1 MB only'
-    //     this.file = null
-    //     return
-    //   }
-    //   let formData = new FormData()
-    //   formData.append('file', this.file)
-    //   formData.append('file_url', this.file.name.replace(' ', '_'))
-    //   formData.append('account_id', this.user.userID)
-    //   formData.append('category', 'profile')
-    //   $('#loading').css({'display': 'block'})
-    //   console.log('imageRoute', formData)
-    //   axios.post(this.config.BACKEND_URL + '/images/upload?token=' + AUTH.tokenData.token, formData).then(response => {
-    //     $('#loading').css({'display': 'none'})
-    //     if(response.data.data !== null){
-    //       this.retrieve()
-    //     }
-    //   })
-    // }
   }
 }
 </script>
