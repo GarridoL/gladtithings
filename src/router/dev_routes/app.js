@@ -95,7 +95,7 @@ export default{
     }
   },
   {
-    path: '/events/:status?',
+    path: '/events/:status/:id?',
     name: 'createEvents',
     component: resolve => require(['modules/events/Create.vue'], resolve),
     meta: {
