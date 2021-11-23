@@ -121,6 +121,10 @@ export default{
           value: '%' + filter.value + '%',
           column: filter.column,
           clause: 'like'
+        }, {
+          value: this.user.userID,
+          column: 'account_id',
+          clause: '='
         }],
         sort: sort,
         limit: this.limit,
