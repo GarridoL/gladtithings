@@ -17,8 +17,7 @@ class EventController extends APIController
     public function retrieve(Request $request){
       $data = $request->all();
       $con = $data['condition'];
-      $result = Event::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->limit($data['limit'])
-      ->offset($data['offset'])->orderBy(array_keys($data['sort'])[0], array_values($data['sort'])[0])->get();
+      $result = $this->retrieveDB($data);
       if(sizeof($result) > 0) {
         $i = 0;
         foreach($result as $key) {
