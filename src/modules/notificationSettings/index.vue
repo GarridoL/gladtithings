@@ -35,14 +35,14 @@ export default{
         {
           title: 'Email OTP',
           description: 'OTP will be sent to your email address',
-          toggle: true,
+          toggle: false,
           route: '',
           payload: 'email_otp'
         },
         {
           title: 'SMS OTP',
           description: 'OTP will be sent to you via SMS using your registered mobile number',
-          toggle: true,
+          toggle: false,
           route: '',
           payload: 'sms_otp'
         },
@@ -72,6 +72,23 @@ export default{
         this.retrieve()
       })
     },
+    create() {
+      let parameter = {
+        email_login: 0,
+        email_otp: 0,
+        sms_otp: 0,
+        sms_login: 0,
+        code: 0,
+        account_id: this.user.userID,
+        email_pin: 0,
+        devices: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('notification_settings/create', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        this.retrieve()
+      })
+    },
     retrieve() {
       let parameter = {
         condition: [
@@ -92,6 +109,8 @@ export default{
           this.list[2].toggle = data.sms_otp > 0
           this.list[3].toggle = data.sms_login > 0
           this.id = data.id
+        } else {
+          this.create()
         }
       })
     }
