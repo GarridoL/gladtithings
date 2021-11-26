@@ -4,25 +4,28 @@
       <i class="fas fa-chevron-left icon-back" @click="back()"></i>
       <span style="font-size: 20px;"><b>Transaction Details</b></span>
     </div>
-    <div class="row">
-      <p class="title">Here are the further details about this transactions.</p>
+
+    <div v-if="data">
+      <p :class="data && data.amount > 0 ? 'amount' : 'less-amount'">{{data.amount}}</p>
+      <p class="title"><b>{{data.currency}}</b></p>
+      <p class="title">{{data.created_at_human}}</p>
+      <p class="title" style="font-style: italic;"><b>"{{data.description}}"</b></p>
     </div>
+
     <div class="row" v-if="data">
       <div class="column data-col">
-        <p class="title"><b>Date</b></p>
-        <p>{{data.created_at_human}}</p>
-        <p class="title"><b>Trasaction Type</b></p>
-        <p>{{data.description}}</p>
-        <p class="title"><b>{{data.other_details ? data.other_details.type === 'receive' ? 'Sender' : 'Receiver' : 'Sender'}}</b></p>
-        <p>{{data.other_details ? data.other_details.account.id : 'Own transaction'}}</p>
+        <p class="title with-border"><b>More Details</b></p>
+        <p class="title">Trasaction #:</p>
+        <p class="title">Trasaction Type:</p>
+        <p class="title with-border" v-if="data.other_details && data.other_details.account"><b>{{data.other_details ? data.other_details.type === 'receive' ? 'From' : 'To' : 'From'}}</b></p>
+        <p class="title" v-if="data.other_details && data.other_details.account">Account Code:</p>
       </div>
       <div class="column data-col">
-        <p class="title"><b>Amount</b></p>
-        <p>{{data.currency}} {{data.amount}}</p>
-        <p class="title"><b>Trasaction Reference</b></p>
-        <p>{{data.code.substring(4)}}</p>
-        <p class="title"><b>Sender Address</b></p>
-        <p>address</p>
+        <p class="title with-border"><b>&nbsp;</b></p>
+        <p class="title" v-if="data && data.code">****{{data.code.substring(data.code.length - 4, data.code.length)}}</p>
+        <p class="title">{{data.description.toUpperCase()}}</p>
+        <p class="title with-border" v-if="data.other_details && data.other_details.account"><b>&nbsp;</b></p>
+        <p class="title" v-if="data.other_details && data.other_details.account">****{{data.other_details.account.code.substring(data.other_details.account.code.length - 4, data.other_details.account.code.length)}}</p>
       </div>
     </div>
   </div>
@@ -88,6 +91,15 @@ export default{
   margin-top: 30px;
   margin-bottom: 50px;
   align-items: center;
+  text-align: center;
+}
+.amount{
+  font-size: 40px;
+  color: $primary;
+}
+.less-amount{
+  font-size: 40px;
+  color: $danger;
 }
 .data-col{
   width: 50%;
@@ -97,6 +109,10 @@ export default{
 }
 p{
   margin: 0;
+}
+.with-border {
+  border-bottom: rgb(230, 230, 230) 1px solid;
+  padding-bottom: 10px;
 }
 .icon-back{
   font-size: 20px;

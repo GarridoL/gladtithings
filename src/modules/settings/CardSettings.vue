@@ -8,7 +8,7 @@
       <p>{{dates}}</p>
     </div>
     <div class="column third" style="width: 32%;">
-      <p class="amount"><b>{{amount}}</b></p>
+      <p class="amount" :style="styles"><b>{{amount}}</b></p>
     </div>
   </div>
   <div class="containers row" @click="redirect(route)" v-else>
@@ -37,7 +37,8 @@ export default{
     'toggle',
     'amount',
     'dates',
-    'payload'
+    'payload',
+    'styles'
   ],
   mounted(){},
   data(){
