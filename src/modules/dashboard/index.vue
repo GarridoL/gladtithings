@@ -127,7 +127,8 @@ export default{
     },
     retrieveGraphData(){
       let parameter = {
-        account_id: this.user.userID
+        account_id: this.user.userID,
+        date: 'current_month'
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('ledger/retrieve_dashboard', parameter).then(response => {
