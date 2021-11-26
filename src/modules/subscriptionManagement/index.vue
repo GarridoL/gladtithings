@@ -91,7 +91,8 @@ import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
   mounted(){
     this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
-    this.graph()
+    this.donationGraph()
+    this.subscriptionGraph()
   },
   data(){
     return {
@@ -138,7 +139,7 @@ export default{
           {
             fill: true,
             borderColor: '#f87979',
-            backgroundColor: 'rgba(255, 10, 13, 0.1)',
+            backgroundColor: '#56C596',
             label: 'SUBSCRIBERS',
             data: [0, 100, 200, 300, 400, 500]
           }
@@ -203,13 +204,23 @@ export default{
         }
       })
     },
-    graph(e){
+    donationGraph(e){
       console.log('[eeee]', e)
       let parameter = {
         account_id: this.user.userID,
         date: e === undefined ? 'yearly' : e
       }
       this.APIRequest('ledger/retrieve_graph', parameter).then(response => {
+        console.log('[response]', response)
+      })
+    },
+    subscriptionGraph(e){
+      console.log('[eeee]', e)
+      let parameter = {
+        merchant_id: this.user.merchant.id,
+        date: e === undefined ? 'yearly' : e
+      }
+      this.APIRequest('subscriptions/retrieve_graph', parameter).then(response => {
         console.log('[response]', response)
       })
     }
