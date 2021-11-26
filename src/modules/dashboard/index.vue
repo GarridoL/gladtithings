@@ -20,11 +20,11 @@
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ ledger && ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
       </div>
       <div class="column third">
         <p class="title">Received Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
+        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger && ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
       </div>
     </div>
     <div class="row" style="width: 100%; margin-top: 40px;">
