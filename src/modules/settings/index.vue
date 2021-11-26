@@ -24,27 +24,27 @@ export default{
       list: [
         {
           title: 'Account Settings',
-          description: 'Receives email address every time theres a login of the account',
+          description: 'Edit account settings',
           route: '/account_settings'
         },
         {
           title: 'Church Details',
-          description: 'OTP will be sent to your email address',
+          description: 'Edit church details and schedules',
           route: '/church_details'
         },
         {
           title: 'Subscriptions',
-          description: 'OTP will be sent to your email address',
+          description: 'Enable or disable subscription to your church',
           route: '/subscriptions'
         },
         {
           title: 'Notification Settings',
-          description: 'OTP will be sent to you via SMS using your registered mobile number',
+          description: 'Edit your notification settings',
           route: '/notification_settings'
         },
         {
           title: 'Payment Methods',
-          description: 'Receives events and many more to your registered email address',
+          description: 'Add or edit payment methods',
           route: '/payment_methods'
         }
       ]

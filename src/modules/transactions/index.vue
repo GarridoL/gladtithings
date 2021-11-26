@@ -19,8 +19,9 @@
       :dates="item.created_at_human"
       :version="3"
       :description="item.description"
-      :amount="item.currency + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
+      :amount="item.currency.toUpperCase() + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
       :route="'transaction/details/' + item.id"
+      :styles="item.amount > 0 ? 'color: #56C596;' : 'color: red;'"
     />
     </div>
      <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
