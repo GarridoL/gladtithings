@@ -91,7 +91,6 @@ class SubscriptionController extends APIController
         $fTransaction = Subscription::where('merchant', '=', $data['merchant_id'])->first();
         $resDates = [];
         $resData = [];
-        $fTransaction['created_at'] = $fTransaction['created_at']->toDateTimeString();
         $dates = [];
         if($data['date'] === 'yearly'){
             if($fTransaction !== null &&  $fTransaction['created_at'] !== null){

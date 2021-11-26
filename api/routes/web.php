@@ -142,3 +142,14 @@ Route::post($route.'create', $controller."create");
 Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
+
+
+//Payment Methods Controller
+$route = env('PACKAGE_ROUTE', '').'/payment_methods/';
+$controller = 'PaymentMethodController@';
+Route::post($route.'create', $controller."create");
+Route::post($route.'create_method', $controller."CreateMethod");
+Route::post($route.'retrieve', $controller."retrieve");
+Route::post($route.'retrieve_methods', $controller."RetrieveMethods");
+Route::post($route.'delete', $controller."delete");
+Route::post($route.'update', $controller."update");
