@@ -20,29 +20,8 @@
       </div>
     </div>
     <div class="row add-card">
-      <p><b>Card Number: </b><span style="color: red;">*</span></p>
-      <div class="card-number">
-        <p>4242-4242-4242-4242</p>
-      </div>
-        <div class="column" style="width: 25%;">
-          <p><b>Expiry: </b><span style="color: red;">*</span></p>
-        </div>
-        <div class="column" style="width: 25%;">
-         <p><b>CVC: </b><span style="color: red;">*</span></p>
-        </div>
-        <div class="column" style="width: 50%;">
-        </div>
-      <div class="column" style="width: 48%;">
-        <div class="card-number">
-          <p>08/22</p>
-        </div>
-      </div>
-      <div class="column" style="width: 48%; margin-left: 4%;">
-        <div class="card-number">
-          <p>1111</p>
-        </div>
-      </div>
-      <button class="text-center authorize-button">Authorize</button>
+       <stripe-cc ref="stripe" />
+      <button class="text-center authorize-button" @click="authorize()">Authorize</button>
     </div>
   </div>
 </template>
@@ -69,7 +48,14 @@ export default{
     }
   },
   components: {
-    Cards
+    Cards,
+    'stripe-cc': require('modules/paymentMethods/Stripe.vue')
+  },
+  methods: {
+    authorize(){
+      console.log('refs', this.$refs.stripe)
+      this.$refs.stripe.createCustomer()
+    }
   }
 }
 </script>
