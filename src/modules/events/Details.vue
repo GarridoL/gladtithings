@@ -22,11 +22,11 @@
       <div class="column" style="width: 29%;">
         <div class="black">
           <p class="title">Total Amount of Donations</p>
-          <p style="color: white; margin: 0;"><b>$ 123, 456.35</b></p>
+          <p style="color: white; margin: 0;"><b>{{donations * -1}}</b></p>
         </div>
         <div class="red">
           <p class="title">Total Number of Sponsors</p>
-          <p style="color: white; margin: 0;"><b>123,456</b></p>
+          <p style="color: white; margin: 0;"><b>{{sponsors}}</b></p>
         </div>
       </div>
     </div>
@@ -44,23 +44,19 @@
     </div>
     <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <div class="table-container" v-else>
-      <table class="table table-bordered table-responsive" v-if="data !== null">
+      <table class="table table-bordered table-responsive" v-if="data.length > 0">
         <thead>
           <tr>
             <td class="header"><b>Date</b></td>
             <td class="header"><b>Sponsor Name</b></td>
-            <td class="header"><b>Address</b></td>
-            <td class="header"><b>Payment Method</b></td>
             <td class="header"><b>Donations</b></td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in data" :key="index">
-            <td class="header">{{item.date}}</td>
-            <td class="header">{{item.name}}</td>
-            <td class="header">{{item.address}}</td>
-            <td class="header">{{item.payment_method}}</td>
-            <td class="header">{{item.donation}}</td>
+            <td class="header">{{item.created_at}}</td>
+            <td class="header">{{item.account.username}}</td>
+            <td class="header">{{item.amount * -1}}</td>
           </tr>
         </tbody>
       </table>
@@ -85,22 +81,7 @@ export default{
   data(){
     return {
       user: AUTH.user,
-      data: [
-        {
-          date: '2021-06-22 03:42:56',
-          name: 'Recollection',
-          address: 'January 5, 2021 | 1:00 PM',
-          payment_method: 'Credit Card',
-          donation: '$123,456,789'
-        },
-        {
-          date: '2021-06-22 03:42:56',
-          name: 'Recollection',
-          address: 'January 5, 2021 | 1:00 PM',
-          payment_method: 'Credit Card',
-          donation: '$123,456,789'
-        }
-      ],
+      data: [],
       auth: AUTH,
       config: CONFIG,
       category: [{
@@ -128,7 +109,9 @@ export default{
       limit: 5,
       numPages: null,
       activePage: 1,
-      details: null
+      details: null,
+      sponsors: 0,
+      donations: 0
     }
   },
   components: {
@@ -157,6 +140,28 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.details = response.data[0]
+          this.retrieveEventSponsors(this.details.id)
+        }
+      })
+    },
+    retrieveEventSponsors(id){
+      let parameter = {
+        condition: [{
+          value: id,
+          column: 'details',
+          clause: '='
+        }],
+        sort: {created_at: 'asc'},
+        limit: this.limit,
+        offset: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledger/retrieve_with_condition', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.data = response.data
+          this.sponsors = response.sponsors
+          this.donations = response.donations
         }
       })
     }
