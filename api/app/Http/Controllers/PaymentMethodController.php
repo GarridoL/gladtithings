@@ -64,7 +64,7 @@ class PaymentMethodController extends APIController
     public function RetrieveMethods(Request $request){
         $data = $request->all();
 
-        $result = PaymentMethod::where('account_id', '=', $data['account_id'])->where('deleted_at', '=', null)->get();
+        $result = PaymentMethod::where('account_id', '=', $data['account_id'])->where('deleted_at', '=', null)->offset($data['offset'])->limit($data['limit'])->get();
         if(sizeof($result) > 0){
             for ($i=0; $i <= sizeof($result)-1; $i++) { 
                 $item = $result[$i];
