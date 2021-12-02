@@ -25,4 +25,13 @@ class RecentlyVisitedChurchesController extends APIController
     $this->response['data'] = $result;
     return $this->response();
   }
+
+  public function create(Request $request) {
+    $data = $request->all();
+    $result = $this->retrieveDB($data['condition']);
+    if(sizeof($result) > 0) {
+    } else {
+      $this->insertDB($data['insert']);
+    }
+  }
 }
