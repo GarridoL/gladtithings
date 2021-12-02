@@ -23,5 +23,6 @@ class RecentlyVisitedChurchesController extends APIController
       $this->response['data'] = [];
     }
     $this->response['data'] = $result;
+    return $this->response();
   }
 }
