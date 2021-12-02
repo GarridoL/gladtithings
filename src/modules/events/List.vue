@@ -180,7 +180,6 @@ button:focus{
   background-color: white;
 }
 .table-container{
-  height: 50vh;
   background-color: white;
   margin-bottom: 10px;
   margin-top: 50px;
