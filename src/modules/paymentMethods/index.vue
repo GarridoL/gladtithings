@@ -6,20 +6,20 @@
         <p><b>Payment Methods</b></p>
       </div>
       <div class="column" style="width: 50%;">
-        <p class="add"><b>Add</b></p>
+        <p class="add" @click="addPayment = true"><b>Add</b></p>
       </div>
     </div>
     <div class="row card-container" v-for="(item, index) in list" :key="index">
       <div class="column" style="width: 50%;">
-        <p style="margin-bottom: 10px;"><b>{{item.title}}</b></p>
-        <i class="fab fa-cc-paypal" style>&nbsp;&nbsp;</i>{{item.method}}<br>
+        <p style="margin-bottom: 10px;"><b>{{item.name}}</b></p>
+        <i class="fab fa-cc-paypal" style>&nbsp;&nbsp;</i>{{item.payload}}<br>
         <button class="remove-button">Remove</button>
       </div>
       <div class="column" style="width: 50%; float: right;">
-        <p style="color: gray; float: right;">Authorized</p>
+        <p style="color: gray; float: right;">{{item.status}}</p>
       </div>
     </div>
-    <div class="row add-card">
+    <div class="row add-card" v-if="addPayment">
        <stripe-cc ref="stripe" />
       <button class="text-center authorize-button" @click="authorize()">Authorize</button>
     </div>
@@ -31,10 +31,13 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Cards from 'src/modules/settings/CardSettings.vue'
 export default{
-  mounted(){},
+  mounted(){
+    this.retrieve()
+  },
   data(){
     return {
       user: AUTH.user,
+      addPayment: false,
       list: [
         {
           title: 'Nickname',
@@ -55,12 +58,26 @@ export default{
     authorize(){
       console.log('refs', this.$refs.stripe)
       this.$refs.stripe.createCustomer()
+    },
+    retrieve(){
+      let parameter = {
+        account_id: this.user.userID
+      }
+      this.APIRequest('payment_methods/retrieve_methods', parameter, response => {
+        this.list = response.data
+      })
+    },
+    addNew(){
+
     }
   }
 }
 </script>
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
+.add{
+  cursor: pointer;
+}
 button:focus{
   outline: none;
 }

@@ -128,7 +128,7 @@ export default {
       number: false,
       expiry: false,
       cvc: false,
-      stripeSK: (CONFIG.IS_DEV === true) ? CONFIG.stripe.dev_pk : CONFIG.stripe.live_pk,
+      stripeSK: CONFIG.stripe.dev_pk,
       options: {
         style: {base: {
           fontSize: '16px'
@@ -209,7 +209,9 @@ export default {
             code: this.user.code,
             account_id: this.user.userID,
             email: this.user.email,
-            name: this.user.information.first_name + ' ' + this.user.information.last_name
+            name: this.user.information.first_name + ' ' + this.user.information.last_name,
+            status: 'authorize',
+            method: 'visa'
           }
           this.APIRequest('payment_methods/create_method', parameter).then(response => {
             $('#loading').css({'display': 'none'})

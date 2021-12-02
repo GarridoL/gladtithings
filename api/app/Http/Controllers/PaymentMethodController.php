@@ -25,7 +25,6 @@ class PaymentMethodController extends APIController
 
     public function CreateMethod(Request $request){
         $data = $request->all();
-
         if($this->stripe == null){
             $this->response['data'] = null;
             $this->response['error'] = 'Invalid Stripe Credentials';
@@ -42,7 +41,7 @@ class PaymentMethodController extends APIController
                 'customer' => $this->customer,
                 'source'   => $data['source']
                 )),
-                'status'      => 'active'
+                'status'      => $data['status']
             );
             $result = $this->insertDB($params);
             $this->response['data'] = $result;
@@ -68,7 +67,8 @@ class PaymentMethodController extends APIController
         if(sizeof($result) > 0){
             for ($i=0; $i <= sizeof($result)-1; $i++) { 
                 $item = $result[$i];
-                $result[$i] = json_encode($item['payload_value']);
+                $result[$i]['payload_value'] = json_encode($item['payload_value']);
+                $result[$i]['name'] = $this->retrieveNameOnly($item['account_id']);
             }
         }
         $this->response['data'] = $result;
