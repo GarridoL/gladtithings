@@ -31,6 +31,7 @@ class RecentlyVisitedChurchesController extends APIController
     $result = $this->retrieveDB($data['parameter']);
     if(sizeof($result) > 0) {
     } else {
+      $this->model = new RecentlyVisitedChurch();
       $this->insertDB($data['insert']);
     }
     return $this->response();
