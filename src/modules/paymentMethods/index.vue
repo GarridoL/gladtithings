@@ -65,10 +65,8 @@ export default{
       }
       this.APIRequest('payment_methods/retrieve_methods', parameter, response => {
         this.list = response.data
+        this.addPayment = false
       })
-    },
-    addNew(){
-
     }
   }
 }

@@ -215,9 +215,9 @@ export default {
           }
           this.APIRequest('payment_methods/create_method', parameter).then(response => {
             $('#loading').css({'display': 'none'})
-            if(response.data){
-              // this.$parent.retrieve()
-            }
+            // if(response.data){
+            this.$parent.retrieve()
+            // }
           })
         }
       })
