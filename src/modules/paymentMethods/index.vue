@@ -6,10 +6,10 @@
         <p><b>Payment Methods</b></p>
       </div>
       <div class="column" style="width: 50%;">
-        <p class="add" @click="addPayment = true"><b>Add</b></p>
+        <p class="add" :style="addPayment ? 'color: red' : 'color: #56C596'" @click="addPayment = !addPayment"><b>{{!addPayment ? 'Add' : 'Close'}}</b></p>
       </div>
     </div>
-    <div class="row card-container" v-for="(item, index) in list" :key="index">
+    <div class="row card-container" v-for="(item, index) in list" :key="index" v-if="!addPayment">
       <div class="column" style="width: 50%;">
         <p style="margin-bottom: 10px;"><b>{{item.name}}</b></p>
         <i class="fab fa-cc-paypal" style>&nbsp;&nbsp;</i>{{item.payload}}<br>
@@ -19,6 +19,12 @@
         <p style="color: gray; float: right;">{{item.status}}</p>
       </div>
     </div>
+    <Pager
+      :pages="numPages"
+      :active="activePage"
+      :limit="limit"
+      v-if="list.length > 0 && !addPayment"
+    />
     <div class="row add-card" v-if="addPayment">
        <stripe-cc ref="stripe" />
       <button class="text-center authorize-button" @click="authorize()">Authorize</button>
@@ -29,6 +35,7 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+import Pager from 'src/modules/generic/Pager.vue'
 import Cards from 'src/modules/settings/CardSettings.vue'
 export default{
   mounted(){
@@ -38,21 +45,16 @@ export default{
     return {
       user: AUTH.user,
       addPayment: false,
-      list: [
-        {
-          title: 'Nickname',
-          method: 'Paypal'
-        },
-        {
-          title: 'Lalaine',
-          method: 'Paypal'
-        }
-      ]
+      list: [],
+      limit: 5,
+      numPages: 1,
+      activePage: 1
     }
   },
   components: {
     Cards,
-    'stripe-cc': require('modules/paymentMethods/Stripe.vue')
+    'stripe-cc': require('modules/paymentMethods/Stripe.vue'),
+    Pager
   },
   methods: {
     authorize(){
@@ -61,11 +63,20 @@ export default{
     },
     retrieve(){
       let parameter = {
-        account_id: this.user.userID
+        account_id: this.user.userID,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
+      $('#loading').css({display: 'block'})
       this.APIRequest('payment_methods/retrieve_methods', parameter, response => {
-        this.list = response.data
-        this.addPayment = false
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0) {
+          this.list = response.data
+          this.addPayment = false
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+        } else {
+          this.numPages = null
+        }
       })
     }
   }
@@ -111,7 +122,7 @@ p{
   margin: 0
 }
 .add-card{
-  margin-top: 50px;
+  margin-top: 10px;
   width: 100%;
 }
 .container{
@@ -125,6 +136,7 @@ p{
 }
 .card-container{
   width: 100%;
+  margin-bottom: 10px;
   margin-top: 10px;
   padding: 15px;
   background-color: white;

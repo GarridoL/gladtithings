@@ -54,13 +54,13 @@
         </tr>
       </tbody>
     </table>
-    </div>
     <Pager
       :pages="numPages"
       :active="activePage"
       :limit="limit"
       v-if="data !== null"
     />
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
@@ -80,7 +80,6 @@
   margin-left: 15%;
 }
 .table-container{
-  height: 50vh;
   background-color: white;
   margin-bottom: 10px;
 }
@@ -218,15 +217,19 @@ export default{
           column: filter.column,
           clause: 'like'
         }],
-        sort: sort
+        sort: sort,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
+          this.numPages = null
         }
       })
     },
