@@ -17,7 +17,7 @@ class RecentlyVisitedChurchesController extends APIController
     $result = $this->retrieveDB($data);
     if(sizeof($result) > 0) {
       foreach($result as $key) {
-        $key['merchant'] = pp('Increment\Account\Merchant\Http\MerchantController')->getByParams('id', $key['merchant_id']);
+        $key['merchant'] = app('Increment\Account\Merchant\Http\MerchantController')->getByParams('id', $key['merchant_id']);
       }
     } else {
       $this->response['data'] = [];
