@@ -143,6 +143,14 @@ Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
 
+//Recently Visited Churches Controller
+$route = env('PACKAGE_ROUTE', '').'/recently_visited_churches/';
+$controller = 'RecentlyVisitedChurchesController@';
+Route::post($route.'create', $controller."create");
+Route::post($route.'retrieve', $controller."retrieve");
+Route::post($route.'delete', $controller."delete");
+Route::post($route.'update', $controller."update");
+
 
 //Payment Methods Controller
 $route = env('PACKAGE_ROUTE', '').'/payment_methods/';
