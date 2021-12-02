@@ -33,5 +33,6 @@ class RecentlyVisitedChurchesController extends APIController
     } else {
       $this->insertDB($data['insert']);
     }
+    return $this->response();
   }
 }
