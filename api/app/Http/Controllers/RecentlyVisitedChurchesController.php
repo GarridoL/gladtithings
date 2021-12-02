@@ -29,6 +29,7 @@ class RecentlyVisitedChurchesController extends APIController
   public function create(Request $request) {
     $data = $request->all();
     $result = $this->retrieveDB($data['condition']);
+    dd($result);
     if(sizeof($result) > 0) {
     } else {
       $this->insertDB($data['insert']);
