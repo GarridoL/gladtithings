@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\RecentlyVisitedChurch;
 
 class RecentlyVisitedChurchesController extends APIController
 {
+
+  function __construct(){
+    $this->model = new RecentlyVisitedChurch();
+  }
+
   public function retrieve(Request $request) {
     $data = $request->all();
     $result = $this->retrieveDB($data);
