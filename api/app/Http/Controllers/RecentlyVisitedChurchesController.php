@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\RecentlyVisitedChurch;
+use Carbon\Carbon;
 
 class RecentlyVisitedChurchesController extends APIController
 {
@@ -30,6 +31,9 @@ class RecentlyVisitedChurchesController extends APIController
     $data = $request->all();
     $result = $this->retrieveDB($data['parameter']);
     if(sizeof($result) > 0) {
+      RecentlyVisitedChurch::where('id', '=', $result[0]['id'])->update(array(
+        'created_at' => Carbon::now()
+      ));
     } else {
       $this->model = new RecentlyVisitedChurch();
       $this->insertDB($data['insert']);
