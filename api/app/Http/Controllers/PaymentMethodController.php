@@ -45,8 +45,9 @@ class PaymentMethodController extends APIController
             );
             $result = $this->insertDB($params);
             $this->response['data'] = $result;
+        }else{
+            $this->response['data'] = [];
         }
-        $this->response['data'] = [];
         return $this->response();
     }
 
