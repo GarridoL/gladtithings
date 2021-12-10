@@ -49,7 +49,8 @@
             "packages/increment/common/sms/src/",
             "packages/increment/finance/src/",
             "packages/increment/finance/stripe/src/",
-            "packages/increment/finance/paypal/src/"
+            "packages/increment/finance/paypal/src/",
+            "packages/increment/common/cache/"
         ],
         "psr-4": {
             "App\\": "app/",
@@ -69,7 +70,8 @@
             "Increment\\Common\\MyCircle\\":"packages/increment/common/mycircle/src/",
             "Increment\\Finance\\":"packages/increment/finance/src/",
             "Increment\\Finance\\Stripe\\":"packages/increment/finance/stripe/src/",
-            "Increment\\Finance\\Paypal\\":"packages/increment/finance/paypal/src/"
+            "Increment\\Finance\\Paypal\\":"packages/increment/finance/paypal/src/",
+            "Increment\\Common\\Cache\\":"packages/increment/common/cache/src/"
         }
     },
     "autoload-dev": {
