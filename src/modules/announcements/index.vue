@@ -30,11 +30,6 @@
           :version="4"
         />
       </div>
-      <Pager
-          :pages="numPages"
-          :active="activePage"
-          :limit="limit"
-        />
     </div>
   </div>
 </template>
@@ -42,7 +37,6 @@
 import ROUTER from 'src/router'
 import Cards from 'src/modules/settings/CardSettings.vue'
 import AUTH from 'src/services/auth'
-import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.retrieve()
@@ -56,14 +50,11 @@ export default{
       add: false,
       title: null,
       description: null,
-      errorMessage: null,
-      numPages: null,
-      activePage: 1
+      errorMessage: null
     }
   },
   components: {
-    Cards,
-    Pager
+    Cards
   },
   methods: {
     back() {
@@ -104,18 +95,13 @@ export default{
           value: this.user.merchant.id,
           clause: '='
         }],
-        sort: {created_at: 'desc'},
-        limit: this.limit,
-        offset: this.offset
+        sort: {created_at: 'desc'}
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('announcements/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0) {
           this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
-        } else {
-          this.numPages = null
         }
       })
     }
