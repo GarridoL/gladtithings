@@ -161,3 +161,11 @@ Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'retrieve_methods', $controller."RetrieveMethods");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
+
+//Announcements Controller
+$route = env('PACKAGE_ROUTE', '').'/announcements/';
+$controller = 'AnnouncementController@';
+Route::post($route.'create', $controller."create");
+Route::post($route.'retrieve', $controller."retrieve");
+Route::post($route.'delete', $controller."delete");
+Route::post($route.'update', $controller."update");
