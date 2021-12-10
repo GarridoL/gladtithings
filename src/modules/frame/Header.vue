@@ -24,7 +24,7 @@
                 <p style="font-size: 17px; margin-top: 12px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
               </div>
             </div>
-            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else>&nbsp;&nbsp;{{user.username}}</i>
+            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else><span style="font-family: Poppins; font-size: 20px;">&nbsp;&nbsp;{{user.username}}</span></i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span class="dropdown-item-profile">
                 <span class="account-picture text-center">
