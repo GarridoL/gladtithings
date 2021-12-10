@@ -18,6 +18,7 @@
     </div>
     <div class="column" style="width: 50%;">
       <i class="fas fa-chevron-right icon" v-if="version === 1"></i>
+      <p class="delete-button" v-if="version === 4" @click="deleteAnnouncement(route)">Delete</p>
       <i class="fas fa-toggle-on icon" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === true"></i>
       <i class="fas fa-toggle-off icon-off" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === false"></i>
     </div>
@@ -48,10 +49,22 @@ export default{
   },
   methods: {
     redirect(route) {
-      ROUTER.push(route)
+      if(this.version !== 4) {
+        ROUTER.push(route)
+      }
     },
     clickToggle(value) {
       this.$emit('click_toggle', value, this.payload)
+    },
+    deleteAnnouncement(id) {
+      let parameter = {
+        id: id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('announcements/delete', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        this.$parent.retrieve()
+      })
     }
   }
 }
@@ -81,6 +94,10 @@ p {
   font-size: 20px;
   color: $danger;
   margin-top: 7px;
+}
+.delete-button{
+  float: right;
+  color: $danger;
 }
 .containers{
   width: 100%;
