@@ -46,6 +46,11 @@ export default{
           title: 'Payment Methods',
           description: 'Add or edit payment methods',
           route: '/payment_methods'
+        },
+        {
+          title: 'Announcements',
+          description: 'Let people know your happenings.',
+          route: '/announcements'
         }
       ]
     }

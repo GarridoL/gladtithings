@@ -170,7 +170,7 @@ button:focus{
   margin:2px;
 }
 .icon-trash{
-  color: red;
+  color: $danger;
   margin: 2px;
 }
 .header {
