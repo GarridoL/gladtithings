@@ -8,7 +8,10 @@ export default {
     Bar
   },
   mounted() {
-    this.renderChart(this.data, {
+    this.renderChart({
+      labels: this.data.labels,
+      datasets: this.data.datasets
+    }, {
       maintainAspectRatio: false
     })
   },

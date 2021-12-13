@@ -2,9 +2,9 @@
     <div class="container">
       <div class="row" style="width: 100%;">
         <div class="column" style="width: 80%;">
-        <h3>Subscriptions Management</h3>
-        <p style="margin-top: 5px;">Here are the latest update of subscriptions as of the moment.</p>
-      </div>
+          <h3>Subscriptions Management</h3>
+          <p style="margin-top: 5px;">Here are the latest update of subscriptions as of the moment.</p>
+        </div>
       </div>
       <!-- <div class="row" style="width: 100%; margin-top: 40px;">
         <div class="column first">
@@ -26,7 +26,7 @@
       </div>
         <br>
         <div class="mt-4">
-            <basic-filter 
+            <basic-filter
                 v-bind:category="category" 
                 :activeCategoryIndex="0"
                 :activeSortingIndex="0"
@@ -67,16 +67,16 @@
       <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
     </div>
     <div class="graph">
-      <GraphHeader @select="graph"/>
-      <BarGraph :data="graphSubscribe"/>
+      <GraphHeader @temp="headSub" :data="graphSub"/>
+      <BarGraph v-if="graphSubscribe.labels.length > 0" :data="graphSub"/>
     </div>
     <div class="mt-4">
       <p style="color: black; margin: 0; font-size: 17px;"><b>Donations Graph</b></p>
       <p style="margin-top: 5px;">The following data shows status of donations.</p>
     </div>
     <div class="graph">
-      <GraphHeader />
-      <BarGraph :data="graphDonations"/>
+      <GraphHeader @temp="headDonate" :data="graphDon"/>
+      <BarGraph v-if="graphDonations.labels.length > 0" :data="graphDon"/>
     </div>
     </div>
 </template>
@@ -91,8 +91,8 @@ import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 export default{
   mounted(){
     this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
-    this.donationGraph()
-    this.subscriptionGraph()
+    this.donationGraph(this.donateSelected)
+    this.subscriptionGraph(this.subSelected)
   },
   data(){
     return {
@@ -133,30 +133,40 @@ export default{
       limit: 5,
       numPages: null,
       activePage: 1,
+      donateSelected: null,
+      subSelected: null,
       graphSubscribe: {
-        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+        labels: [],
         datasets: [
           {
             fill: true,
             borderColor: '#f87979',
             backgroundColor: '#56C596',
             label: 'SUBSCRIBERS',
-            data: [0, 100, 200, 300, 400, 500]
+            data: []
           }
         ]
       },
       graphDonations: {
-        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+        labels: [],
         datasets: [
           {
             fill: false,
             borderColor: '#f87979',
             backgroundColor: '#56C596',
             label: 'AMOUNT OF DONATIONS',
-            data: [0, 10000, 20000, 30000, 40000, 50000]
+            data: []
           }
         ]
       }
+    }
+  },
+  computed: {
+    graphDon(){
+      return this.graphDonations
+    },
+    graphSub(){
+      return this.graphSubscribe
     }
   },
   components: {
@@ -204,24 +214,47 @@ export default{
         }
       })
     },
+    headDonate(e){
+      console.log('[donate]', e)
+      this.donateSelected = e
+      this.donationGraph(this.donateSelected)
+    },
     donationGraph(e){
-      console.log('[eeee]', e)
+      this.donateSelected = e
       let parameter = {
         account_id: this.user.userID,
-        date: e === undefined ? 'yearly' : e
+        date: this.donateSelected === null ? 'yearly' : this.donateSelected
       }
+      $('#loading').css({display: 'block'})
       this.APIRequest('ledger/retrieve_graph', parameter).then(response => {
-        console.log('[response]', response)
+        $('#loading').css({display: 'none'})
+        if(response.data.dates.length > 0){
+          this.graphDonations.labels = response.data.dates
+          this.graphDonations.datasets[0].data = response.data.result
+          console.log('[DONATION]', this.graphDonations)
+        }
       })
     },
+    headSub(e){
+      console.log('[subscribe]', e)
+      this.subSelected = e
+      this.subscriptionGraph(this.subSelected)
+    },
     subscriptionGraph(e){
-      console.log('[eeee]', e)
+      console.log('[this....]', this.subSelected)
+      this.subSelected = e
       let parameter = {
         merchant_id: this.user.merchant.id,
-        date: e === undefined ? 'yearly' : e
+        date: this.subSelected === null ? 'yearly' : this.subSelected
       }
+      $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_graph', parameter).then(response => {
-        console.log('[response]', response)
+        $('#loading').css({display: 'none'})
+        if(response.data.dates.length > 0){
+          this.graphSubscribe.labels = response.data.dates
+          this.graphSubscribe.datasets[0].data = response.data.result
+          console.log('[GRAPH]', this.graphSubscribe)
+        }
       })
     }
   }
