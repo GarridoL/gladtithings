@@ -17,16 +17,16 @@
                   :value-type="'YYYY-MM-DD'"
                   :format="'MMM D, YYYY'"
                   :input-class="'form-control'"
-                  >
-                  </date-picker> 
-                  <div class="fas fa-file-export hover">
-                    <div class="tooltip">Export
-                    </div>
+                >
+                </date-picker> 
+                <div class="fas fa-file-export hover" @click="exportD(data)">
+                  <div class="tooltip">Export
                   </div>
-                  <div class="fas fa-print hover" @click="print(data)">
-                    <div class="tooltip">Print
-                    </div>
+                </div>
+                <div class="fas fa-print hover" @click="print(data)">
+                  <div class="tooltip">Print
                   </div>
+                </div>
               </td>
             </tr>
           </thead>
@@ -39,6 +39,7 @@ import PDFTemplate from 'pdfmake'
 import TemplatePdf from './PdfTemplate.js'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import { ExportToCsv } from 'export-to-csv'
 export default {
   name: 'GraphHeader',
   props: ['data'],
@@ -57,8 +58,40 @@ export default {
     DatePicker
   },
   methods: {
+    exportD(){
+      let options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: 'Summary',
+        useTextFile: false,
+        useBom: true,
+        // useKeysAsHeaders: true,
+        filename: this.data !== undefined ? this.data.datasets[0].label : 'No Summary',
+        headers: ['Date', 'Amount']
+      }
+      var exportData = []
+      if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
+        for (let index = 0; index < this.data.labels.length; index++) {
+          const items = this.data.labels[index]
+          for (let index = 0; index < this.data.datasets[0].data.length; index++) {
+            const item = this.data.datasets[0].data[index]
+            let obj = {
+              date: items,
+              amount: Math.abs(item)
+            }
+            exportData.push(obj)
+          }
+        }
+      }
+      if(exportData.length > 0){
+        var csvExporter = new ExportToCsv(options)
+        csvExporter.generateCsv(exportData)
+      }
+    },
     print(data){
-      console.log('[data>>>>>>>>>]', data)
       // this.PdfTemplate.getImage(this.image)
       // this.PdfTemplate.getData(this.dataRes)
       // this.PdfTemplate.getDel(this.addonsDel)
@@ -85,10 +118,9 @@ $(document).ready(function(){
 </script>
 <style scoped lang="scss">
 @import '~assets/style/colors.scss';
-
 .datetime-picker{
-  width: 49% !important;
-  margin-left: 2%;
+  width: 50% !important;
+  // margin-left: 2%;
 }
 .header{
 	text-align: center;

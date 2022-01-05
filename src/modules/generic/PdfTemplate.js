@@ -35,6 +35,23 @@ export default {
           style: 'subheader',
           alignment: 'center',
           margin: [0, 0, 0, 7]
+        },
+        {
+          style: 'tableExample',
+          table: {
+            width: 70,
+            headerRows: 2,
+            widths: ['*', '*', '*'],
+            body: [
+              [{text: 'Header 1', style: 'tableHeader'}, {text: ' ', style: 'tableHeader'}, {text: 'Header 2', style: 'tableHeader'}],
+              ['Sample value 1', ' ', 'Sample value 2'],
+              ['Sample value 1', ' ', 'Sample value 2'],
+              ['Sample value 1', ' ', 'Sample value 2'],
+              ['Sample value 1', ' ', 'Sample value 2'],
+              ['Sample value 1', ' ', 'Sample value 2']
+            ]
+          },
+          layout: 'lightHorizontalLines'
         }
       ]
     }
