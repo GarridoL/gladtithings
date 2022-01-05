@@ -206,7 +206,6 @@ export default{
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
-        console.log('[subscriptions]', response)
         if(response.data.length > 0){
           this.data = response.data
         }else{
@@ -215,7 +214,6 @@ export default{
       })
     },
     headDonate(e){
-      console.log('[donate]', e)
       this.donateSelected = e
       this.donationGraph(this.donateSelected)
     },
@@ -231,17 +229,14 @@ export default{
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
           this.graphDonations.datasets[0].data = response.data.result
-          console.log('[DONATION]', this.graphDonations)
         }
       })
     },
     headSub(e){
-      console.log('[subscribe]', e)
       this.subSelected = e
       this.subscriptionGraph(this.subSelected)
     },
     subscriptionGraph(e){
-      console.log('[this....]', this.subSelected)
       this.subSelected = e
       let parameter = {
         merchant_id: this.user.merchant.id,
@@ -253,7 +248,6 @@ export default{
         if(response.data.dates.length > 0){
           this.graphSubscribe.labels = response.data.dates
           this.graphSubscribe.datasets[0].data = response.data.result
-          console.log('[GRAPH]', this.graphSubscribe)
         }
       })
     }
