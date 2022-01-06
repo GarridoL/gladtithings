@@ -92,10 +92,8 @@ export default {
       }
     },
     print(data){
-      // this.PdfTemplate.getImage(this.image)
-      // this.PdfTemplate.getData(this.dataRes)
-      // this.PdfTemplate.getDel(this.addonsDel)
       this.PdfTemplate.getItem(data)
+      this.PdfTemplate.getDate(this.tempStyle === null ? 'yearly' : this.tempStyle)
       this.PdfTemplate.template()
     },
     activate(id){
