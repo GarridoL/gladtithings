@@ -27,7 +27,7 @@
         <br>
         <div class="mt-4">
             <basic-filter
-                v-bind:category="category" 
+                v-bind:category="category"
                 :activeCategoryIndex="0"
                 :activeSortingIndex="0"
                 @changeSortEvent="retrieve($event.sort, $event.filter)"
@@ -261,7 +261,7 @@ export default{
   margin-top: 3%;
   background-color: white;
   width: 100%;
-  height: 500px;
+  // height: 550px;
   border-radius: 7px;
   padding: 30px 30px 30px 30px;
   margin-bottom: 50px;
