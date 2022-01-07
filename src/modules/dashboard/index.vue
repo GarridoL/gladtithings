@@ -147,7 +147,7 @@ export default{
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
 .container{
-  width: 50%;
+  width: 60%;
   margin-bottom: 50px;
   align-items: center;
   padding: 20px;
