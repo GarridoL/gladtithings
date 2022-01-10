@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="afterLoad">
     <h3>Church Details</h3>
     <div class="row top">
       <div class="column" style="width: 60%; margin-right: 10%;">
@@ -12,8 +12,10 @@
         <br>
         <label><b>Name&nbsp;</b><span style="color: red;">*</span></label><br>
         <input placeholder="Name" class="generic-input" v-model="name">
+        <!-- <label><b>Address&nbsp;</b><span style="color: red;">*</span></label><br>
+        <input placeholder="Address" class="generic-input" v-model="address"> -->
         <label><b>Address&nbsp;</b><span style="color: red;">*</span></label><br>
-        <input placeholder="Address" class="generic-input" v-model="address">
+        <location-merchant @onFinish="getResult($event)" :property="property"></location-merchant><br>
       </div>
       <div class="column" style="width: 20%; text-align: center;">
         <div class="no-image" v-if="logo === null" >
@@ -135,16 +137,43 @@ export default{
         url: null
       },
       dateErrorMessage: null,
-      status: 'create'
+      status: 'create',
+      property: {
+        value: null,
+        style: {
+          height: '40px !important',
+          'border-radius': '50px'
+        },
+        GOOGLE_API_KEY: CONFIG.GOOGLE.API_KEY,
+        results: {
+          style: {
+          }
+        },
+        placeholder: null
+      },
+      afterLoad: false
     }
   },
   components: {
     Cards,
     Input,
     'featured-images-modal': require('modules/churchDetails/FeaturedPhotos.vue'),
-    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
+    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
+    'location-merchant': require('components/increment/settings/MerchantLocation.vue')
   },
   methods: {
+    getResult($event) {
+      if($event !== null) {
+        let address = {
+          name: $event.formatted_address,
+          latitude: $event.latitude,
+          longitude: $event.longitude
+        }
+        this.address = JSON.stringify(address)
+      } else {
+        // this.data.address = null
+      }
+    },
     checkTime(startTime, endTime) {
       let a = null
       let b = null
@@ -244,10 +273,20 @@ export default{
       $('#loading').css({display: 'block'})
       this.APIRequest('account_merchants/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        this.afterLoad = true
         if(response.data.length > 0){
           this.status = 'udpate'
           this.name = response.data[0].name
-          this.address = response.data[0].address
+          try{
+            this.address = JSON.parse(response.data[0].address).name
+            let val = {
+              ...this.property.value,
+              name: this.address
+            }
+            this.property['value'] = JSON.stringify(val)
+          } catch (e) {
+            console.log(e)
+          }
           this.church = response.data[0]
           this.logo = response.data[0].logo
           if(response.data[0].schedule) {
