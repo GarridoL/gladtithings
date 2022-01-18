@@ -22,10 +22,10 @@
     <div style="padding: 10px;">
       <p>{{data.text}}</p>
       <PostImage :images="data.images"/>
-      <i class="fas fa-praying-hands praying-hands"></i>
-      <span style=" margin-right: 50px; vertical-align: 2px;">Amen</span>
-      <i class="fas fa-heart love"></i>
-      <span style=" margin-right: 50px; vertical-align: 3px;">Love</span>
+      <i class="fas fa-praying-hands praying-hands" @click="react('amen')"></i>
+      <span style=" margin-right: 50px; vertical-align: 2px;" @click="react('amen')">Amen</span>
+      <i class="fas fa-heart love" @click="react('love')"></i>
+      <span style=" margin-right: 50px; vertical-align: 3px;" @click="react('love')">Love</span>
       <i class="fas fa-share share"></i>
       <span style=" margin-right: 50px; vertical-align: 3px;">Share</span>
     </div>
@@ -81,6 +81,19 @@ export default{
         this.menuFlag = true
         this.notifFlag = false
       }
+    },
+    react(react) {
+      let parameter = {
+        reaction: react,
+        comment_id: this.data.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('reactions/create', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        console.log(response)
+        if(response.data > 0) {
+        }
+      })
     }
   }
 }
