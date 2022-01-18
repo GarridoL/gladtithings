@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Subscription;
+use Increment\Finance\Models\Ledger;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
@@ -165,5 +166,262 @@ class SubscriptionController extends APIController
           'result' => $resData
         );
         return $this->response();
-      }
+    }
+
+    public function retrieveDashboard(Request $request){
+        $data = $request->all();
+        $currDate = Carbon::now();
+        $last30days = Carbon::now()->subDays(30)->toDateTimeString();
+        $dates = [];
+        $amount = [];
+        //getting total sends for last 30 days
+        $tempSends = Ledger::where('account_id', '=', $data['account_id'])
+          ->where('amount', '<', 0)
+          ->whereBetween('created_at', [$last30days, $currDate->toDateTimeString()])
+          ->get([DB::raw('SUM(amount) as total_sends')]);
+        
+        //getting total received for last 30 days
+        $tempReceived = Ledger::where('account_id', '=', $data['account_id'])
+          ->where('amount', '>', 0)
+          ->whereBetween('created_at', [$last30days, $currDate->toDateTimeString()])
+          ->get([DB::raw('SUM(amount) as total_received')]);
+    
+    
+         //initializing the where conditions
+         $whereArray= array(
+          array('account_id', '=', $data['account_id']),
+          array('amount', '>', 0),
+          array(function($query){
+            $query->where('details', 'like', '%'.'"payment_payload":"direct_transfer"'.'%')
+              ->orWhere('details', '=', 'subscription');
+          })
+        );
+        
+        //get the first transaction for yearly getting of data
+        $fTransaction = Ledger::where($whereArray)->first();
+    
+        //declaring variable where dateslist and data will insert
+        $resDates = [];
+        $resData = [];
+    
+        //getting the list of dates per given date type
+        if($data['date'] === 'yearly'){
+          if($fTransaction !== null &&  $fTransaction['created_at'] !== null){
+            $fTransaction['created_at'] = $fTransaction['created_at']->toDateTimeString();
+            $tempYearly = CarbonPeriod::create($fTransaction['created_at'], $currDate->toDateTimeString());
+            foreach ($tempYearly as $year) {
+              array_push($dates, $year->toDateString());
+            }
+          }
+        }else if($data['date'] === 'current_year'){
+          $dates = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        }else if($data['date'] === 'custom'){
+          $startDate = new Carbon($data['date1']);
+          $endDate = new  Carbon($data['date2']);
+          $days = CarbonPeriod::create($startDate->toDateTimeString(), $endDate->toDateTimeString());
+          foreach ($days as $key) {
+              if($key !== null){
+                  array_push($dates, $key->toDateString());
+              }
+          }
+        }else{
+          $month = $data['date'] === 'last_month' ? $currDate->subDays(30)->month : $currDate->month;
+          $carbon = new Carbon(new Carbon(date('Y-m-d', strtotime('now', strtotime($currDate->year.'-' . $month . '-01'))), $this->response['timezone']));
+          $i=0;
+          while (intval($carbon->month) == intval($month)){
+            $dates[$carbon->weekOfMonth][$i] = $carbon->toDateString();
+            $carbon->addDay();
+            $i++;
+          }
+        }
+    
+        //getting the data per given date type
+        if($data['date'] === 'yearly'){
+          $temp = Ledger::select(DB::raw('sum(amount) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
+            ->where($whereArray)
+            ->groupby('year')
+            ->get();
+          if(sizeof($temp) > 0){
+            for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
+              $item = $temp[$i];
+              array_push($resDates, $item['year']);
+              array_push($resData, $item['amount']);
+            }
+          }
+        }else if($data['date'] === 'current_year'){
+          foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)
+              ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
+            
+            array_push($resDates, $key);
+            array_push($resData, $temp);
+          }
+        }else if($data['date'] === 'last_month'){
+          foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+            array_push($resDates, array_search($key, $dates));
+            array_push($resData, $temp);
+          }
+        }else if($data['date'] === 'current_month'){
+          foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+            array_push($resDates, array_search($key, $dates));
+            array_push($resData, $temp);
+          }
+        }else if($date['custom'] === 'custom'){
+          foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
+            array_push($resDates, $key);
+            array_push($resData, $temp);
+          }
+        }
+    
+        $fin = array(
+          'dates' => $resDates,
+          'total_amount_received' => $resData,
+          'sends' => sizeof($tempSends) > 0 ? $tempSends[0]['total_sends'] : 0,
+          'received' => sizeof($tempReceived) > 0 ? $tempReceived[0]['total_received'] : 0,
+        );
+        $this->response['data'] = $fin;
+        return $this->response();
+    }
+    public function retrieveSubscriptionsGraph(Request $request){
+        $data = $request->all();
+        $currDate = Carbon::now();
+        $fTransaction = Ledger::where('description', '=', 'subscription')->where('account_id', '=', $data['account_id'])->first();
+        $resDates = [];
+        $resData = [];
+        $whereArray= array(
+            array('account_id', '=', $data['account_id']),
+            array('description', '=', 'subscription'),
+            // array('amount', '<', 0)
+        );
+
+        $dates = [];
+        if($data['date'] === 'yearly'){
+            if($fTransaction !== null &&  $fTransaction['created_at'] !== null){
+            $fTransaction['created_at'] = $fTransaction['created_at']->toDateTimeString();
+            $tempYearly = CarbonPeriod::create($fTransaction['created_at'], $currDate->toDateTimeString());
+            foreach ($tempYearly as $year) {
+                array_push($dates, $year->toDateString());
+            }
+            }
+        }else if($data['date'] === 'current_year'){
+            $dates = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        }else if($data['date'] === 'custom'){
+            $startDate = new Carbon($data['date1']);
+            $endDate = new  Carbon($data['date2']);
+            $days = CarbonPeriod::create($startDate->toDateTimeString(), $endDate->toDateTimeString());
+            foreach ($days as $key) {
+            if($key !== null){
+                array_push($dates, $key->toDateString());
+            }
+            }
+        }else{
+            $month = $data['date'] === 'last_month' ? $currDate->subDays(30)->month : $currDate->month;
+            $carbon = new Carbon(new Carbon(date('Y-m-d', strtotime('now', strtotime($currDate->year.'-' . $month . '-01'))), $this->response['timezone']));
+            $i=0;
+            while (intval($carbon->month) == intval($month)){
+            $dates[$carbon->weekOfMonth][$i] = $carbon->toDateString();
+            $carbon->addDay();
+            $i++;
+            }
+        }
+        if($data['date'] === 'yearly'){
+            $temp = Ledger::select(DB::raw('sum(amount) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
+            ->where($whereArray)
+            ->groupby('year')
+            ->get();
+            if(sizeof($temp) > 0){
+            for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
+                $item = $temp[$i];
+                array_push($resDates, $item['year']);
+                array_push($resData, ($item['amount'] * -1));
+            }
+            }
+        }else if($data['date'] === 'current_year'){
+            foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)
+                ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
+            
+            array_push($resDates, $key);
+            array_push($resData, ($temp * -1));
+            // array_push($res, array(
+            //   'month' => $key,
+            //   'total_amount' => $temp
+            // ));
+            }
+        }else if($data['date'] === 'last_month'){
+            foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+            array_push($resDates, array_search($key, $dates));
+            array_push($resData, ($temp * -1));
+            // array_push($res, array(
+            //   'week' => array_search($key, $dates),
+            //   'total_amount' => $temp
+            // ));
+            }
+        }else if($data['date'] === 'current_month'){
+            foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+            array_push($resDates, array_search($key, $dates));
+            array_push($resData, ($temp * -1));
+            }
+        }else if($data['date'] === 'custom'){
+            foreach ($dates as $key) {
+            $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
+            array_push($resDates, $key);
+            array_push($resData, ($temp * -1));
+            }
+        }
+
+        $this->response['data'] = array(
+            'dates' => $resDates,
+            'result' => $resData
+        );
+        return $this->response();
+    }
+
+    public function dashboard(Request $request){
+        $data = $request->all();
+        $result = array();
+        $account = app($this->accountClass)->getAccountIdByParamsWithColumns($data['account_code'], ['id', 'code']);
+        if ($account == null) {
+        $this->response['error'] = 'Invalid Access';
+        $this->response['data'] = null;
+        return $this->response();
+        }
+        $currencies = $this->getAllCurrencies($data['account_id'], $data['account_code']);
+        foreach ($currencies as $key) {
+        $sum = $this->getSum($account['id'], $account['code'], $key);
+        $hold = $this->getPendingAmount($account['id'], $key);
+        $currency = array(
+            'currency'  => $key,
+            'available_balance'   => floatval($sum - $hold),
+            'current_balance'     => $sum,
+            'balance'             => floatval($sum - $hold),
+        );
+        $result[] = $currency;
+        }
+
+        $history = Ledger::select('code', 'account_code', 'amount', 'description', 'currency', 'details', 'created_at')
+        ->where('account_id', '=', $account['id'])
+        ->where('account_code', '=', $account['code'])
+        ->offset(0)
+        ->limit(3)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        $i = 0;
+
+        foreach ($history as $key) {
+        $history[$i]['created_at_human'] = Carbon::createFromFormat('Y-m-d H:i:s', $history[$i]['created_at'])->copy()->tz($this->response['timezone'])->format('F j, Y h:i A');
+        $i++;
+        }
+
+        $this->response['data'] = array(
+        'ledger' => $result,
+        'history' => $history
+        );
+        return $this->response();
+    }
 }
