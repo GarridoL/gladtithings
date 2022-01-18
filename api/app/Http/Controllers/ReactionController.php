@@ -16,7 +16,7 @@ class ReactionController extends APIController
     $i = 0;
     if(sizeof($result) > 0) {
       foreach($result as $key) {
-        array_push($final_result, $result['account_id']);
+        array_push($final_result, $result[$i]['account_id']);
         $i++;
       }
       return $final_result;
