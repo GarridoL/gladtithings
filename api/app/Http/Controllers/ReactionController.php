@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reaction;
+use Illuminate\Http\Request;
 
 class ReactionController extends APIController
 {
