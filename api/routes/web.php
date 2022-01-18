@@ -131,7 +131,10 @@ Route::post($route.'create', $controller."create");
 Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'retrieve_by_params', $controller."retrieveByParams");
 Route::post($route.'retrieve_by_merchant', $controller."retrieveSubscriptionByMerchant");
-Route::post($route.'retrieve_graph', $controller."retrieveSubscribersGraph");
+Route::post($route.'retrieve_subcribers_graph', $controller."retrieveSubscribersGraph");
+Route::post($route.'retrieve_dashboard', $controller."retrieveDashboard");
+Route::post($route.'retrieve_subcription_graph', $controller."retrieveSubscriptionsGraph");
+Route::post($route.'dashboard', $controller."dashboard");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
 
