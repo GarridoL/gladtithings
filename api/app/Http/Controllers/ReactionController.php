@@ -25,7 +25,7 @@ class ReactionController extends APIController
     }
   }
 
-  public function delete(Request $request){
+  public function removeReaction(Request $request){
     $data = $request->all();
     $result = Reaction::where('comment_id', '=', $data['comment_id'])->where('account_id', '=', $data['account_id'])->select('id')->get();
     $final_result = Reaction::where('id', '=', $result[0]['id'])->delete();
