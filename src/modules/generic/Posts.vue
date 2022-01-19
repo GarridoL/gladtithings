@@ -22,7 +22,7 @@
     <div style="padding: 10px;">
       <p>{{data.text}}</p>
       <PostImage :images="data.images"/>
-      <i :class="data.amen.includes(user.userID) ? 'fas fa-praying-hands praying-hands-true' : 'fa-praying-hands praying-hands'" @click="react('amen')"></i>
+      <i :class="data.amen.includes(user.userID) ? 'fas fa-praying-hands praying-hands-true' : 'fas fa-praying-hands praying-hands'" @click="react('amen')"></i>
       <span style=" margin-right: 50px; vertical-align: 2px;" @click="react('amen')">{{data.amen.length}}</span>
       <i :class="data.love.includes(user.userID) ? 'fas fa-heart love-true' : 'fas fa-heart love'" @click="react('love')"></i>
       <span style=" margin-right: 50px; vertical-align: 3px;" @click="react('love')">{{data.love.length}}</span>
@@ -98,22 +98,34 @@ export default{
         $('#loading').css({display: 'block'})
         this.APIRequest('reactions/create', parameter).then(response => {
           $('#loading').css({display: 'none'})
-          console.log(response)
           if(response.data > 0) {
+            if(react === 'amen') {
+              this.data.amen.push(this.user.userID)
+            } else {
+              this.data.love.push(this.user.userID)
+            }
           }
         })
       } else {
-        this.removeReaction()
+        this.removeReaction(react)
       }
     },
-    removeReaction() {
+    removeReaction(react) {
       let parameter = {
         account_id: this.user.userID,
-        comment_id: this.data.id
+        comment_id: this.data.id,
+        reaction: react
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('reactions/remove_reaction', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        if(react === 'amen') {
+          let i = this.data.amen.indexOf(this.user.userID)
+          this.data.amen.splice(i, 1)
+        } else {
+          let i = this.data.love.indexOf(this.user.userID)
+          this.data.love.splice(i, 1)
+        }
       })
     }
   }

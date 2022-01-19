@@ -123,7 +123,7 @@ export default{
         account_id: this.user.userID
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/dashboard', parameter).then(response => {
+      this.APIRequest('subscriptions/dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.ledger = response.data.ledger[0]
@@ -136,8 +136,7 @@ export default{
         date: this.selected === null ? 'current_month' : this.selected
       }
       $('#loading').css({display: 'block'})
-      console.log('[parameter]', parameter)
-      this.APIRequest('ledger/retrieve_dashboard', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.data.labels = response.data.dates
