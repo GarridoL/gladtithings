@@ -391,10 +391,10 @@ class SubscriptionController extends APIController
         $this->response['data'] = null;
         return $this->response();
         }
-        $currencies = $this->getAllCurrencies($data['account_id'], $data['account_code']);
+        $currencies = app('Increment\Finance\Http\LedgerController')->getAllCurrencies($data['account_id'], $data['account_code']);
         foreach ($currencies as $key) {
-        $sum = $this->getSum($account['id'], $account['code'], $key);
-        $hold = $this->getPendingAmount($account['id'], $key);
+        $sum = app('Increment\Finance\Http\LedgerController')->getSum($account['id'], $account['code'], $key);
+        $hold = app('Increment\Finance\Http\LedgerController')->getPendingAmount($account['id'], $key);
         $currency = array(
             'currency'  => $key,
             'available_balance'   => floatval($sum - $hold),
