@@ -385,7 +385,7 @@ class SubscriptionController extends APIController
     public function dashboard(Request $request){
         $data = $request->all();
         $result = array();
-        $account = app($this->accountClass)->getAccountIdByParamsWithColumns($data['account_code'], ['id', 'code']);
+        $account = app('Increment\Account\Http\AccountController')->getAccountIdByParamsWithColumns($data['account_code'], ['id', 'code']);
         if ($account == null) {
         $this->response['error'] = 'Invalid Access';
         $this->response['data'] = null;
