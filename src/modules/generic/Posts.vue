@@ -119,6 +119,13 @@ export default{
       $('#loading').css({display: 'block'})
       this.APIRequest('reactions/remove_reaction', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        if(react === 'amen') {
+          let i = this.data.amen.indexOf(this.user.userID)
+          this.data.amen.splice(i, 1)
+        } else {
+          let i = this.data.love.indexOf(this.user.userID)
+          this.data.love.splice(i, 1)
+        }
       })
     }
   }
