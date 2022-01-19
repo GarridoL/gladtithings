@@ -224,7 +224,8 @@ export default{
         date: this.donateSelected === null ? 'yearly' : this.donateSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/retrieve_graph', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
+        console.log('[donation]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
@@ -243,7 +244,8 @@ export default{
         date: this.subSelected === null ? 'yearly' : this.subSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('subscriptions/retrieve_graph', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_subscribers_graph', parameter).then(response => {
+        console.log('[subscription]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphSubscribe.labels = response.data.dates

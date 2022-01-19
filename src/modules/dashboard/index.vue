@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="graph">
-      <GraphHeader />
+      <GraphHeader @temp="headSub" :data="data"/>
       <BarGraph :data="data" v-if="data.labels.length > 0"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -72,6 +72,7 @@ export default{
   },
   data(){
     return {
+      selected: null,
       user: AUTH.user,
       data: {
         labels: [],
@@ -102,6 +103,10 @@ export default{
     GraphHeader
   },
   methods: {
+    headSub(e){
+      this.selected = e
+      this.retrieveGraphData()
+    },
     showQr(){
       $('#qrcode').modal('show')
     },
@@ -128,7 +133,7 @@ export default{
     retrieveGraphData(){
       let parameter = {
         account_id: this.user.userID,
-        date: 'current_month'
+        date: this.selected === null ? 'current_month' : this.selected
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_dashboard', parameter).then(response => {
