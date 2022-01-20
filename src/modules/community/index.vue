@@ -2,7 +2,7 @@
   <div class="container">
     <div class="create-post row">
       <div class="image">
-        <img :src="config.BACKEND_URL + user.profile.url" width="100%" height="100%" class="image-post">
+        <img :src="user.profile && user.profile.url ? config.BACKEND_URL + user.profile.url : require('src/assets/img/test.jpg')" width="100%" height="100%" class="image-post">
       </div>
         <textarea wrap="off" cols="50" rows="5" class="input-post" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?"></textarea>
         <i class="fas fa-paper-plane send-post" @click="createPost()"></i>
