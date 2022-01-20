@@ -35,7 +35,7 @@
               <span>
                 <i class="fas fa-eye icon-eye" @click="redirect('events/details/' + item.id)"></i>
                 <i class="fas fa-edit icon-edit" @click="redirect('events/update/' + item.id)"></i>
-                <i class="fas fa-trash-alt icon-trash"></i>
+                <i class="fas fa-trash-alt icon-trash" @click="showRemove(item)"></i>
               </span>
             </td>
           </tr>
@@ -48,6 +48,12 @@
       :limit="limit"
       v-if="data !== null"
     />
+    <Confirmation
+    ref="confirm"
+    :title="'Confirmation'"
+    :message="'Are you sure you want to delete this event?'"
+    @onConfirm="remove($event)"
+    />
   </div>
 </template>
 <script>
@@ -56,6 +62,7 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 import moment from 'moment'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   mounted(){
     this.retrieve({created_at: 'asc'}, {column: 'created_at', value: ''})
@@ -97,6 +104,7 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('modules/generic/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
+    Confirmation,
     Pager
   },
   methods: {
@@ -140,6 +148,21 @@ export default{
           this.data = response.data
         }else{
           this.data = null
+        }
+      })
+    },
+    showRemove(item) {
+      this.$refs.confirm.show(item.id)
+    },
+    remove(event){
+      let parameter = {
+        id: event.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('payment_methods/delete', parameter, response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.retrieve()
         }
       })
     }

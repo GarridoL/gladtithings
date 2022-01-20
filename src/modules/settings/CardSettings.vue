@@ -25,7 +25,7 @@
     <Confirmation
     ref="confirm"
     :title="'Confirmation'"
-    :message="'Are you sure you want to delete this coupon?'"
+    :message="'Are you sure you want to delete this announcement?'"
     @onConfirm="remove($event)"
     />
   </div>

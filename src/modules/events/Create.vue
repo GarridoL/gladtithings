@@ -52,7 +52,7 @@
       <p>Tell people when you event starts and ends so they can make plans to attend.</p>
       <div class="inputs">
         <span><b>Event Starts </b><span style="color: red;">*</span></span>
-        <input type="date" v-model="startDate">
+        <input type="date" v-model="startDate" @change="startDate > endDate ? endDate = null : startDate = startDate">
       </div>
       <div class="inputs">
         <span><b>Start time </b><span style="color: red;">*</span></span>
@@ -60,7 +60,7 @@
       </div>
       <div class="inputs">
         <span><b>Event Ends </b><span style="color: red;">*</span></span>
-        <input type="date" v-model="endDate" @change="startDate = null" :min="new Date(startDate).toISOString().split('T')[0]">
+        <input type="date" v-model="endDate" :min="new Date(startDate).toISOString().split('T')[0]">
       </div>
       <div class="inputs">
         <span><b>End time </b><span style="color: red;">*</span></span>
