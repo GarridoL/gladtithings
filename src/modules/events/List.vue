@@ -85,11 +85,11 @@ export default{
           payload_value: 'desc'
         }, {
           title: 'Event Name Ascending',
-          payload: 'event_name',
+          payload: 'name',
           payload_value: 'asc'
         }, {
           title: 'Event Name Descending',
-          payload: 'event_name',
+          payload: 'name',
           payload_value: 'desc'
         }]
       }],
