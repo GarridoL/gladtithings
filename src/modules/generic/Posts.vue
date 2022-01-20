@@ -52,7 +52,7 @@
       </div>
     </div>
     <div style="width: 100%; margin-left: 0px; margin: 10px;">
-      <input type="text" class="inputs" placeholder="Type here">
+      <input type="text" class="inputs" placeholder="Type here" v-on:keyup.enter="reply()" v-model="replyHere">
     </div>
   </div>
 </template>
@@ -67,7 +67,8 @@ export default{
     return {
       user: AUTH.user,
       dropdown: 'dropdown-menu',
-      config: CONFIG
+      config: CONFIG,
+      replyHere: null
     }
   },
   components: {
@@ -125,6 +126,21 @@ export default{
         } else {
           let i = this.data.love.indexOf(this.user.userID)
           this.data.love.splice(i, 1)
+        }
+      })
+    },
+    reply() {
+      let parameter = {
+        text: this.replyHere,
+        comment_id: this.data.id,
+        account_id: this.user.userID
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('comment_replies/create', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data) {
+          this.replyHere = null
+          this.$parent.retrieve()
         }
       })
     }
