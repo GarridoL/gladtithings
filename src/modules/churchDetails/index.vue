@@ -185,9 +185,10 @@ export default{
       }
       if((a && a.getTime()) === (b && b.getTime())) {
         this.dateErrorMessage = 'Start time and End time should not be equal.'
+      } else if((a && a.getTime()) > (b && b.getTime())) {
+        this.dateErrorMessage = 'Start time should be less than the end time.'
       } else {
         this.dateErrorMessage = null
-        console.log(a, b)
       }
     },
     updateSchedule(){
