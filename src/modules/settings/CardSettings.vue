@@ -22,6 +22,12 @@
       <i class="fas fa-toggle-on icon" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === true"></i>
       <i class="fas fa-toggle-off icon-off" @click="clickToggle(!toggle)" v-if="version === 2 && toggle === false"></i>
     </div>
+    <Confirmation
+    ref="confirm"
+    :title="'Confirmation'"
+    :message="'Are you sure you want to delete this coupon?'"
+    @onConfirm="remove($event)"
+    />
   </div>
 </template>
 <script>
@@ -29,6 +35,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   props: [
     'title',
@@ -47,6 +54,9 @@ export default{
       user: AUTH.user
     }
   },
+  components: {
+    Confirmation
+  },
   methods: {
     redirect(route) {
       if(this.version !== 4) {
@@ -57,6 +67,9 @@ export default{
       this.$emit('click_toggle', value, this.payload)
     },
     deleteAnnouncement(id) {
+      this.$refs.confirm.show(id)
+    },
+    remove(id) {
       let parameter = {
         id: id
       }

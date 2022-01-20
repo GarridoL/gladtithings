@@ -7,7 +7,7 @@
     <p>Create announcements to let people know your events</p>
     <div class="row" style="float: right;">
       <button class="text-center sort-button" v-if="!add" @click="add = true">Add Announcement</button>
-      <button class="text-center cancel-button" v-if="add" @click="add = false; errorMessage = null">Cancel</button>
+      <button class="text-center cancel-button" v-if="add" @click="add = false; errorMessage = null; title = null; description = null">Cancel</button>
       <button class="text-center sort-button" v-if="add" @click="create()">Save Announcement</button>
     </div>
     <div v-if="add" class="add-announcemnent">
@@ -58,7 +58,7 @@ export default{
   },
   methods: {
     back() {
-      ROUTER.push('/transactions')
+      ROUTER.push('/settings')
     },
     create(){
       if(this.user.merchant === null) {
@@ -102,6 +102,8 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data.length > 0) {
           this.data = response.data
+        } else {
+          this.data = []
         }
       })
     }
