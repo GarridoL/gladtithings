@@ -13,7 +13,7 @@
       <div class="column" style="width: 50%;">
         <p style="margin-bottom: 10px;"><b>{{item.name}}</b></p>
         <i class="fab fa-cc-paypal" style>&nbsp;&nbsp;</i>{{item.payload}}<br>
-        <button class="remove-button">Remove</button>
+        <button class="remove-button" @click="showRemove(item)">Remove</button>
       </div>
       <div class="column" style="width: 50%; float: right;">
         <p style="color: gray; float: right;">{{item.status}}</p>
@@ -29,6 +29,12 @@
        <stripe-cc ref="stripe" />
       <button class="text-center authorize-button" @click="authorize()">Authorize</button>
     </div>
+    <Confirmation
+    ref="confirm"
+    :title="'Confirmation'"
+    :message="'Are you sure you want to delete this coupon?'"
+    @onConfirm="remove($event)"
+    />
   </div>
 </template>
 <script>
@@ -37,6 +43,7 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 import Cards from 'src/modules/settings/CardSettings.vue'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   mounted(){
     this.retrieve()
@@ -54,7 +61,8 @@ export default{
   components: {
     Cards,
     'stripe-cc': require('modules/paymentMethods/Stripe.vue'),
-    Pager
+    Pager,
+    Confirmation
   },
   methods: {
     authorize(){
@@ -76,6 +84,21 @@ export default{
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         } else {
           this.numPages = null
+        }
+      })
+    },
+    showRemove(item) {
+      this.$refs.confirm.show(item.id)
+    },
+    remove(event){
+      let parameter = {
+        id: event.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('payment_methods/delete', parameter, response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.retrieve()
         }
       })
     }
