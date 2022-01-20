@@ -37,7 +37,7 @@
         v-bind:category="category" 
         :activeCategoryIndex="0"
         :activeSortingIndex="0"
-        @changeSortEvent="retrieve($event.sort, $event.filter)"
+        @changeSortEvent="retrieveEvent($event.sort, $event.filter)"
         @changeStyle="manageGrid($event)"
         :grid="['list', 'th-large']">
       </basic-filter>
@@ -95,12 +95,12 @@ export default{
           payload: 'created_at',
           payload_value: 'desc'
         }, {
-          title: 'Event Name Ascending',
-          payload: 'event_name',
+          title: 'Amount Ascending',
+          payload: 'amount',
           payload_value: 'asc'
         }, {
-          title: 'Event Name Descending',
-          payload: 'event_name',
+          title: 'Amount Descending',
+          payload: 'amount',
           payload_value: 'desc'
         }]
       }],
@@ -141,6 +141,29 @@ export default{
         if(response.data.length > 0){
           this.details = response.data[0]
           this.retrieveEventSponsors(this.details.id)
+        }
+      })
+    },
+    retrieveEvent(sort, filter){
+      let parameter = {
+        condition: [{
+          value: '%' + filter.value + '%',
+          column: filter.column,
+          clause: 'like'
+        }, {
+          value: this.details.id,
+          column: 'details',
+          clause: '='
+        }],
+        sort: sort,
+        limit: this.limit,
+        offset: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('ledger/retrieve_with_condition', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.data = response.data
         }
       })
     },

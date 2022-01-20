@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="graph">
-      <GraphHeader />
+      <GraphHeader @temp="headSub" :data="data"/>
       <BarGraph :data="data" v-if="data.labels.length > 0"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -72,6 +72,7 @@ export default{
   },
   data(){
     return {
+      selected: null,
       user: AUTH.user,
       data: {
         labels: [],
@@ -102,6 +103,10 @@ export default{
     GraphHeader
   },
   methods: {
+    headSub(e){
+      this.selected = e
+      this.retrieveGraphData()
+    },
     showQr(){
       $('#qrcode').modal('show')
     },
@@ -118,7 +123,7 @@ export default{
         account_id: this.user.userID
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/dashboard', parameter).then(response => {
+      this.APIRequest('subscriptions/dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.ledger = response.data.ledger[0]
@@ -128,10 +133,10 @@ export default{
     retrieveGraphData(){
       let parameter = {
         account_id: this.user.userID,
-        date: 'current_month'
+        date: this.selected === null ? 'current_month' : this.selected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/retrieve_dashboard', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_dashboard', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.data.labels = response.data.dates
@@ -147,7 +152,7 @@ export default{
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
 .container{
-  width: 50%;
+  width: 60%;
   margin-bottom: 50px;
   align-items: center;
   padding: 20px;

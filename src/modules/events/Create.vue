@@ -60,7 +60,7 @@
       </div>
       <div class="inputs">
         <span><b>Event Ends </b><span style="color: red;">*</span></span>
-        <input type="date" v-model="endDate">
+        <input type="date" v-model="endDate" @change="startDate = null" :min="new Date(startDate).toISOString().split('T')[0]">
       </div>
       <div class="inputs">
         <span><b>End time </b><span style="color: red;">*</span></span>
@@ -151,7 +151,7 @@ export default{
         'Travel & Outdoor'
       ],
       timeZones: [
-        'KST', 'PST'
+        'KST', 'PHT'
       ],
       base64: null,
       id: null,
@@ -307,6 +307,7 @@ export default{
           if(this.base64) {
             this.upload(this.id)
             this.removePreviousImage()
+            this.back()
           } else {
             this.back()
           }

@@ -170,7 +170,7 @@ button:focus{
   margin:2px;
 }
 .icon-trash{
-  color: red;
+  color: $danger;
   margin: 2px;
 }
 .header {
@@ -180,7 +180,6 @@ button:focus{
   background-color: white;
 }
 .table-container{
-  height: 50vh;
   background-color: white;
   margin-bottom: 10px;
   margin-top: 50px;

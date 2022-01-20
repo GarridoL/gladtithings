@@ -62,7 +62,7 @@ class APIController extends Controller
     'http://localhost:8001'
   );
   
-  protected $currency = array('PHP');
+  protected $currency = ['USD'];
 
   protected $notRequired = array();
   protected $responseType = 'json'; 

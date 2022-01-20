@@ -179,5 +179,12 @@ export default{
     meta: {
       tokenRequired: true
     }
+  }, {
+    path: '/announcements',
+    name: 'announcements',
+    component: resolve => require(['modules/announcements/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }]
 }

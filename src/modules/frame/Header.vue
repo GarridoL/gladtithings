@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="system-header">
-      <a class="navbar-brand" v-on:click="redirect('dashboard')">
-        <img :src="require('src/assets/img/white_logo.png')" class="logo-brand" style="margin-bottom: 5px; width:auto; height:45px; background-size: auto;">
+      <!-- <a class="navbar-brand" v-on:click="redirect('dashboard')"> -->
+        <img @click="redirect('dashboard')" :src="require('src/assets/img/white_logo.png')" class="logo-brand">
         <!-- <label class="navbar-brand hide-on-mobile text-white" v-html="common.APP_NAME_HTML"></label> -->
-      </a>
+      <!-- </a> -->
     </div>
     <nav class="header-navbar">
       <span class="navbar-menu-toggler-md" v-bind:class="{'active-menu': menuFlag === true}" data-toggle="collapse" data-target="#idfactory" aria-controls="idfactory" aria-expanded="false" aria-label="Toggle navigation" v-on:click="makeActive('menu')">
@@ -24,7 +24,7 @@
                 <p style="font-size: 17px; margin-top: 12px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
               </div>
             </div>
-            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else>&nbsp;&nbsp;{{user.username}}</i>
+            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else><span style="font-family: Poppins; font-size: 20px;">&nbsp;&nbsp;{{user.username}}</span></i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span class="dropdown-item-profile">
                 <span class="account-picture text-center">
@@ -600,8 +600,10 @@ body{
   width: 100% !important;
 }
 .logo-brand{
-  width: 25px;
-  height: 25px;
+  width: 100px;
+  height: 100%;
+  cursor: pointer;
+  background-size: auto;
 }
 .left-menu-icons .account-type{
   padding: 10px 10px 10px 10px;
@@ -791,8 +793,8 @@ body{
       width: 20%;
     }
     .logo-brand{
-      width: 30px;
-      height: 30px;
+      width: 50px;
+      height: 50px;
     }
     .left-menu-icons{
       width: 20% !important;
@@ -806,8 +808,8 @@ body{
   }
   @media (max-width: 300px){
     .logo-brand{
-      width: 30px;
-      height: 30px;
+      width: 50px;
+      height: 50px;
     }
   }
 </style>

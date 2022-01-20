@@ -3,11 +3,11 @@
     <table class="table table-bordered">
           <thead style="text-align: left; margin-top: 3%">
             <tr class="header123">
-              <td class="header" @click="show('yearly')"><b>Yearly</b></td>
-              <td class="header" @click="show('current_year')"><b>This Year</b></td>
-              <td class="header" @click="show('yearly')"><b>Last Month</b></td>
-              <td class="header" @click="show('last_month')"><b>This Month</b></td>
-              <td class="header" @click="show('current_month')"><b>Last 7 Days</b></td>
+              <td class="header" id="yearly" @click="activate('yearly')"><b>Yearly</b></td>
+              <td class="header" id="current_year" @click="activate('current_year')"><b>This Year</b></td>
+              <td class="header" id="last_month" @click="activate('last_month')"><b>Last Month</b></td>
+              <td class="header" id="current_month" @click="activate('current_month')"><b>This Month</b></td>
+              <td class="header" id="last_days" @click="activate('last_days')"><b>Last 7 Days</b></td>
               <td class="header">
                 <b>Custom:</b>
                 <date-picker
@@ -17,16 +17,16 @@
                   :value-type="'YYYY-MM-DD'"
                   :format="'MMM D, YYYY'"
                   :input-class="'form-control'"
-                  >
-                  </date-picker> 
-                  <div class="fas fa-file-export hover">
-                    <div class="tooltip">Export
-                    </div>
+                >
+                </date-picker> 
+                <div class="fas fa-file-export hover" @click="exportD(data)">
+                  <div class="tooltip">Export
                   </div>
-                  <div class="fas fa-print hover">
-                    <div class="tooltip">Print
-                    </div>
+                </div>
+                <div class="fas fa-print hover" @click="print(data)">
+                  <div class="tooltip">Print
                   </div>
+                </div>
               </td>
             </tr>
           </thead>
@@ -34,20 +34,88 @@
   </div> 
 </template>
 <script>
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+import PDFTemplate from 'pdfmake'
+import TemplatePdf from './PdfTemplate.js'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import { ExportToCsv } from 'export-to-csv'
 export default {
+  name: 'GraphHeader',
+  props: ['data'],
+  mounted(){
+    const {vfs} = pdfFonts.pdfMake
+    PDFTemplate.vfs = vfs
+  },
   data() {
     return {
-      custom: null
+      PdfTemplate: TemplatePdf,
+      custom: null,
+      tempStyle: null
     }
   },
   components: {
     DatePicker
   },
   methods: {
-    show(e){
-      this.$emit('select', e)
+    exportD(){
+      let options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: 'Summary',
+        useTextFile: false,
+        useBom: true,
+        // useKeysAsHeaders: true,
+        filename: this.data !== undefined ? this.data.datasets[0].label : 'No Summary',
+        headers: ['Date', 'Amount']
+      }
+      var exportData = []
+      if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
+        this.dataSet(this.data.datasets[0].data)
+        for (let indexs = 0; indexs < this.data.labels.length; indexs++) {
+          const items = this.data.labels[indexs]
+          // for (let index = 0; index < this.data.datasets[0].data.length; index++) {
+          //   const item = this.data.datasets[0].data[index]
+          let obj = {
+            date: items,
+            amount: null
+          }
+          exportData.push(obj)
+          // }
+        }
+        for (let index = 0; index < this.data.datasets[0].data.length; index++) {
+          const item = this.data.datasets[0].data[index]
+          let obj = {
+            date: null,
+            amount: Math.abs(item)
+          }
+          exportData.push(obj)
+        }
+      }
+      if(exportData.length > 0){
+        var csvExporter = new ExportToCsv(options)
+        csvExporter.generateCsv(exportData)
+      }
+    },
+    print(data){
+      this.PdfTemplate.getItem(data)
+      this.PdfTemplate.getDate(this.tempStyle === null ? 'yearly' : this.tempStyle)
+      this.PdfTemplate.template()
+    },
+    activate(id){
+      if(this.tempStyle === null){
+        this.tempStyle = id
+        document.getElementById(`${id}`).style.backgroundColor = 'white'
+      }else{
+        document.getElementById(`${this.tempStyle}`).style.backgroundColor = '#F6F6F6'
+        document.getElementById(`${id}`).style.backgroundColor = 'white'
+        // let tempStyle = document.querySelector(`#${tempStyle}`)
+        this.tempStyle = id
+        this.$emit('temp', this.tempStyle)
+      }
     }
   }
 }
@@ -57,16 +125,18 @@ $(document).ready(function(){
 </script>
 <style scoped lang="scss">
 @import '~assets/style/colors.scss';
-
 .datetime-picker{
-  width: 35% !important;
-  margin-left: 2%;
+  width: 50% !important;
+  // margin-left: 2%;
 }
 .header{
 	text-align: center;
+  vertical-align: middle;
+  background-color: #F6F6F6;
 }
 .fa-file-export {
   margin-right: 2px;
+  margin-left: 2%;
 }
 
 .fa-file-export, .fa-print{
