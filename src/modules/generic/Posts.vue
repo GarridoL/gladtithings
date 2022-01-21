@@ -2,7 +2,7 @@
   <div class="containers">
     <div class="row" style="width: 103%; margin-left: 0px;">
       <div class="column" style="margin-right: 10px;">
-        <img :src="config.BACKEND_URL + data.account.profile.url" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
+        <img :src="data.account.profile && data.account.profile.url ? config.BACKEND_URL + data.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
       <div class="column" style=" width: 84%; margin-top: 4px; line-height: 15px;"> 
         <b>{{data.account.information.first_name ? data.account.information.first_name + ' ' + data.account.information.last_name : data.account.username}}</b>
@@ -32,7 +32,7 @@
     <div style="width: 100%; margin-left: 0px; margin: 10px;" v-if="data.comment_replies && data.comment_replies.length > 0">
       <div class="row" style="margin-left: 15px;" v-for="(item, index) in data.comment_replies" :key="index">
         <div class="column" style="margin-right: 10px;">
-          <img :src="require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
+          <img :src="item.account.profile && item.account.profile.url ? config.BACKEND_URL + item.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
         </div>
         <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
           <b>{{item.account.information.first_name ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}}</b>
@@ -135,12 +135,25 @@ export default{
         comment_id: this.data.id,
         account_id: this.user.userID
       }
+      let newReply = {
+        account: {
+          information: this.user.information,
+          profile: this.user.profile,
+          ...this.user
+        },
+        ...parameter
+      }
       $('#loading').css({display: 'block'})
       this.APIRequest('comment_replies/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
           this.replyHere = null
-          this.$parent.retrieve()
+          if(this.data.comment_replies === null) {
+            this.data.comment_replies = []
+            this.data.comment_replies[0] = newReply
+          } else {
+            this.data.comment_replies.push(newReply)
+          }
         }
       })
     }

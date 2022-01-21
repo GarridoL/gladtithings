@@ -16,7 +16,7 @@
         <button class="remove-button" @click="showRemove(item)">Remove</button>
       </div>
       <div class="column" style="width: 50%; float: right;">
-        <p style="color: gray; float: right;">{{item.status}}</p>
+        <p style="color: gray; float: right;">{{item.status.charAt(0).toUpperCase() + item.status.slice(1).toLowerCase()}}</p>
       </div>
     </div>
     <Pager

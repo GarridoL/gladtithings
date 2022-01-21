@@ -210,7 +210,7 @@ export default {
             account_id: this.user.userID,
             email: this.user.email,
             name: this.user.information.first_name + ' ' + this.user.information.last_name,
-            status: 'authorize',
+            status: 'authorized',
             method: 'visa'
           }
           this.APIRequest('payment_methods/create_method', parameter).then(response => {
