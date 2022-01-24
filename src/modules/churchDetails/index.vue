@@ -78,9 +78,9 @@
                 <input placeholder="End Time" class="generic-input" type="time" v-model="schedEndTime" v-else @change="checkTime(schedStartTime, schedEndTime)">
               </div>
             </div>
-            <label><b>Name&nbsp;</b><span style="color: red;">*</span></label><br>
-            <input placeholder="Name" class="generic-input" v-model="item.name" v-if="item">
-            <input placeholder="Name" class="generic-input" v-model="schedName" v-else>
+            <label><b>Presider&nbsp;</b><span style="color: red;">*</span></label><br>
+            <input placeholder="Presider" class="generic-input" v-model="item.name" v-if="item">
+            <input placeholder="Presider" class="generic-input" v-model="schedName" v-else>
             <label><b>Language&nbsp;</b><span style="color: red;">*</span></label><br>
             <input placeholder="Language" class="generic-input" v-model="item.language" v-if="item">
             <input placeholder="Language" class="generic-input" v-model="schedLanguage" v-else>
