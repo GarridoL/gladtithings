@@ -4,6 +4,10 @@
     <span style="font-size: 22px;"><b>{{status === 'create' ? 'Create Event' : 'Update Event'}}</b></span>
     <p style="margin-top: 10px;">Fill out the details below to create an event</p>
     <p style="margin-top: 10px; color: red;">{{errorMessage}}</p>
+    <div class="alert alert-success alert-fixed" role="alert" v-if="updateSuccess">
+      Updated Successfully!
+      <i class="fas fa-times-circle remove-alert" @click="updateSuccess = false"></i>
+    </div>
     <div style="margin-top: 30px;">
       <p style="font-size: 18px;"><b>Basic Info</b></p>
       <p>Name your event and tell people why they should come. Add details to let attendees know what the event is all about.</p>
@@ -155,7 +159,8 @@ export default{
       ],
       base64: null,
       id: null,
-      details: null
+      details: null,
+      updateSuccess: false
     }
   },
   methods: {
@@ -236,7 +241,11 @@ export default{
           this.APIRequest('payloads/create', parameter).then(response => {
             $('#loading').css({display: 'none'})
             if(response.data) {
-              this.back()
+              if(this.status === 'update') {
+                this.updateSuccess = true
+              } else {
+                this.back()
+              }
             }
           })
         }
@@ -304,12 +313,10 @@ export default{
       this.APIRequest('events/update', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data > 0){
+          this.updateSuccess = true
           if(this.base64) {
             this.upload(this.id)
             this.removePreviousImage()
-            this.back()
-          } else {
-            this.back()
           }
         }
       })
@@ -321,6 +328,7 @@ export default{
       $('#loading').css({display: 'block'})
       this.APIRequest('payloads/delete', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        this.updateSuccess = true
       })
     }
   }
@@ -330,6 +338,14 @@ export default{
 @import "~assets/style/colors.scss";
 button:focus{
   outline: none;
+}
+.alert-fixed {
+  position:fixed; 
+  top: 50px; 
+  right: 0px; 
+  width: 82%;
+  z-index:9999; 
+  border-radius:0px
 }
 .sort-button{
   margin-top: 50px;
@@ -373,9 +389,24 @@ input, textarea, select {
   margin-top: -10px;
   margin-right: -12px;
 }
+.remove-alert{
+  float: right;
+  color: $danger;
+  margin-top: 5px;
+  margin-right: 12px;
+  font-size: 20px;
+}
 @media (max-width: 992px){
   .container{
     width: 60%;
+  }
+  .alert-fixed {
+    position:fixed; 
+    top: 50px; 
+    right: 0px; 
+    width: 100%;
+    z-index:9999; 
+    border-radius:0px
   }
 }
 </style>

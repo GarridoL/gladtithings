@@ -5,7 +5,7 @@
         <img :src="data.account.profile && data.account.profile.url ? config.BACKEND_URL + data.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
       <div class="column" style=" width: 84%; margin-top: 4px; line-height: 15px;"> 
-        <b>{{data.account.information.first_name ? data.account.information.first_name + ' ' + data.account.information.last_name : data.account.username}}</b>
+        <b>{{data.account.username}}</b>
         <p style="font-size: 12px;">{{data.created_at_human}}</p>
       </div>
       <div class="column" style="padding-right: 8px;">
