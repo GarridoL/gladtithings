@@ -84,6 +84,7 @@ export default{
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         } else {
           this.numPages = null
+          this.list = []
         }
       })
     },
