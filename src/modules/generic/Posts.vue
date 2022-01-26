@@ -13,7 +13,7 @@
       <div class="dropdown" >
         <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
         <i class="fas fa-ellipsis-h"></i>
-        <Dropdown/>
+        <Dropdown :account_id="data.account_id" :id="data.id" :text="data.text"/>
         </span>
       </div>
       </span>
@@ -128,6 +128,9 @@ export default{
           this.data.love.splice(i, 1)
         }
       })
+    },
+    updateText(text) {
+      this.data.text = text
     },
     reply() {
       let parameter = {
