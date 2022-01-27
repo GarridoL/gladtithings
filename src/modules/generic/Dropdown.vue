@@ -12,7 +12,7 @@
           <i class="fas fa-file-alt file"></i>
           <label style="cursor: pointer;">Report</label>
         </span>
-        <span class="dropdown-item" v-if="account_id === user.userID">
+        <span class="dropdown-item" v-if="account_id === user.userID" @click="showRemove(id)">
           <i class="fas fa-trash-alt trash"></i>
           <label style="color: red; cursor: pointer;">Delete</label>
         </span>
@@ -34,13 +34,26 @@
         </div>
       </div>
     </div>
+    <Confirmation
+    ref="confirm"
+    :title="'Confirmation'"
+    :message="'Are you sure you want to delete this event?'"
+    @onConfirm="remove($event)"
+    />
   </div>
 </template>
 <script>
 import AUTH from 'src/services/auth'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   props: ['id', 'account_id', 'text'],
+  components: {
+    Confirmation
+  },
   methods: {
+    showRemove(id) {
+      this.$refs.confirm.show(id)
+    },
     report() {
       let parameter = {
         payload: 'comment_id',
@@ -68,6 +81,18 @@ export default{
           this.$parent.updateText(this.text)
           $('#editPost').modal('hide')
           this.text = null
+        }
+      })
+    },
+    remove(id){
+      let parameter = {
+        id: id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('comments/delete', parameter, response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.$parent.removePost(id)
         }
       })
     },

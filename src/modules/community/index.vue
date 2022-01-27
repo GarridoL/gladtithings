@@ -175,6 +175,9 @@ export default{
         }
       })
     },
+    removePost(id) {
+      this.retrieve()
+    },
     messageClick(){
       if(!this.message) {
         this.firstClass = this.firstClass + ' active'
