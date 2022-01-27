@@ -19,7 +19,7 @@
       </span>
     </div>
     </div>
-    <div style="padding: 10px;">
+    <div style="padding: 10px;" class="body-comment">
       <p>{{data.text}}</p>
       <PostImage :images="data.images"/>
       <i :class="data.amen.includes(user.userID) ? 'fas fa-praying-hands praying-hands-true' : 'fas fa-praying-hands praying-hands'" @click="react('amen')"></i>
@@ -38,7 +38,7 @@
           <b>{{item.account.information.first_name ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}}</b>
           <p style="font-size: 12px;">{{item.created_at}}</p>
         </div>
-        <div class="column" style="width: 5%;">
+        <!-- <div class="column" style="width: 5%;">
           <span class="right-menu-icons">
           <div class="dropdown">
             <span class="nav-item" data-toggle="dropdown" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
@@ -47,7 +47,7 @@
             </span>
             </div>
           </span>
-        </div>
+        </div> -->
         <p style="margin: 10px; margin-top: 10px;">{{item.text}}</p>
       </div>
     </div>
@@ -129,6 +129,9 @@ export default{
         }
       })
     },
+    removePost(id) {
+      this.$parent.removePost(id)
+    },
     updateText(text) {
       this.data.text = text
     },
@@ -173,6 +176,9 @@ export default{
   outline: none;
   width: 95%;
   padding: 15px;
+}
+.body-comment {
+  border-bottom: .5px solid rgb(245, 244, 244);
 }
 .love, .share, .praying-hands{
   font-size: 20px;
