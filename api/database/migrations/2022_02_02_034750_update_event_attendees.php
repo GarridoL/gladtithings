@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventAttendees extends Migration
+class UpdateEventAttendees extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateEventAttendees extends Migration
      */
     public function up()
     {
-        Schema::create('event_attendees', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('account_id');
-            $table->timestamps();
-            $table->softDeletes();
-          });
+        Schema::table('event_attendees', function (Blueprint $table) {
+            $table->bigInteger('event_id')->after('account_id');
+        });
     }
 
     /**
