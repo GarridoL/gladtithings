@@ -16,6 +16,7 @@ class CreateEventAttendees extends Migration
         Schema::create('event_attendees', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('account_id');
+            $table->bigInteger('event_id');
             $table->timestamps();
             $table->softDeletes();
           });
