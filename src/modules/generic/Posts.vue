@@ -20,7 +20,7 @@
     </div>
     </div>
     <div style="padding: 10px;" class="body-comment">
-      <p>{{data.text}}</p>
+      <p style="word-wrap: break-word;">{{data.text}}</p>
       <PostImage :images="data.images"/>
       <i :class="data.amen.includes(user.userID) ? 'fas fa-praying-hands praying-hands-true' : 'fas fa-praying-hands praying-hands'" @click="react('amen')"></i>
       <span style=" margin-right: 50px; vertical-align: 2px;" @click="react('amen')">{{data.amen.length}}</span>
@@ -30,25 +30,27 @@
       <span style=" margin-right: 50px; vertical-align: 3px;">Share</span>
     </div>
     <div style="width: 100%; margin-left: 0px; margin: 10px;" v-if="data.comment_replies && data.comment_replies.length > 0">
-      <div class="row" style="margin-left: 15px;" v-for="(item, index) in data.comment_replies" :key="index">
-        <div class="column" style="margin-right: 10px;">
-          <img :src="item.account.profile && item.account.profile.url ? config.BACKEND_URL + item.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
-        </div>
-        <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
-          <b>{{item.account.information.first_name ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}}</b>
-          <p style="font-size: 12px;">{{item.created_at}}</p>
-        </div>
-        <!-- <div class="column" style="width: 5%;">
-          <span class="right-menu-icons">
-          <div class="dropdown">
-            <span class="nav-item" data-toggle="dropdown" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-            <i class="fas fa-ellipsis-h"></i>
-            <Dropdown/>
+      <div style="margin-left: 15px;" v-for="(item, index) in data.comment_replies" :key="index">
+        <div class="row">
+          <div class="column" style="margin-right: 10px;">
+            <img :src="item.account.profile && item.account.profile.url ? config.BACKEND_URL + item.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
+          </div>
+          <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
+            <b>{{item.account.information.first_name ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}}</b>
+            <p style="font-size: 12px;">{{item.created_at}}</p>
+          </div>
+          <!-- <div class="column" style="width: 5%;">
+            <span class="right-menu-icons">
+            <div class="dropdown">
+              <span class="nav-item" data-toggle="dropdown" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
+              <i class="fas fa-ellipsis-h"></i>
+              <Dropdown/>
+              </span>
+              </div>
             </span>
-            </div>
-          </span>
-        </div> -->
-        <p style="margin: 10px; margin-top: 10px;">{{item.text}}</p>
+          </div> -->
+        </div>
+        <p style="margin: 10px; margin-top: 10px; word-wrap: break-word;">{{item.text}}</p>
       </div>
     </div>
     <div style="width: 100%; margin-left: 0px; margin: 10px;">
