@@ -29,7 +29,7 @@
             <td class="header">{{item.created_at}}</td>
             <td class="header">{{item.name}}</td>
             <td class="header">{{item.start_date}}</td>
-            <td class="header">0</td>
+            <td class="header">{{item.donations * -1}}</td>
             <td class="header">UPCOMING</td>
             <td class="header">
               <span>

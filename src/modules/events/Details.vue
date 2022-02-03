@@ -42,7 +42,7 @@
         :grid="['list', 'th-large']">
       </basic-filter>
     </div>
-    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <empty v-if="data === null" :title="'No data available!'" :action="'Keep growing.'"></empty>
     <div class="table-container" v-else>
       <table class="table table-bordered table-responsive" v-if="data.length > 0">
         <thead>
@@ -57,6 +57,27 @@
             <td class="header">{{item.created_at}}</td>
             <td class="header">{{item.account.username}}</td>
             <td class="header">{{item.amount * -1}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p style="font-size: 16px; margin-top: 20px;"><b>Event Attendees</b></p>
+      <p style="margin-top: 10px;">The following data shows the attendees for this event.</p>
+    </div>
+    <empty v-if="attendees.length === 0" :title="'No data available!'" :action="'Keep growing.'"></empty>
+    <div class="table-container" v-else>
+      <table class="table table-bordered table-responsive" v-if="attendees.length > 0">
+        <thead>
+          <tr>
+            <td class="header"><b>Date</b></td>
+            <td class="header"><b>Attendee Name</b></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in attendees" :key="index">
+            <td class="header">{{item.created_at}}</td>
+            <td class="header">{{item.account.username}}</td>
           </tr>
         </tbody>
       </table>
@@ -77,6 +98,7 @@ import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.retrieve(this.$route.params.id)
+    this.retrieveAttendees(this.$route.params.id)
   },
   data(){
     return {
@@ -111,7 +133,9 @@ export default{
       activePage: 1,
       details: null,
       sponsors: 0,
-      donations: 0
+      donations: 0,
+      attendees: [],
+      attendeeLimit: 5
     }
   },
   components: {
@@ -185,6 +209,25 @@ export default{
           this.data = response.data
           this.sponsors = response.sponsors
           this.donations = response.donations
+        }
+      })
+    },
+    retrieveAttendees(id){
+      let parameter = {
+        condition: [{
+          value: id,
+          column: 'event_id',
+          clause: '='
+        }],
+        sort: {created_at: 'asc'},
+        limit: this.attendeeLimit,
+        offset: 0
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('event_attendees/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.attendees = response.data
         }
       })
     }
