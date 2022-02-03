@@ -12,6 +12,7 @@
           </div>
           <div class="column" style="width: 65%;">
             <p style="margin: 0;"><b>{{details.name}}</b></p>
+            <p style="margin: 0;"><b>{{details.limit}}</b></p>
             <span class="mr-4 gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.start_date}}</span>
             <span class="gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.end_date}}</span>
             <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>{{details.location}}</p>
