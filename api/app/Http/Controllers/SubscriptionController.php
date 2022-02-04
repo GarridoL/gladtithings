@@ -7,6 +7,7 @@ use App\Subscription;
 use Increment\Finance\Models\Ledger;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Jobs\Notifications;
 use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends APIController
@@ -23,6 +24,10 @@ class SubscriptionController extends APIController
         $data['code'] = $this->generateCode();
         $data['start_date'] = Carbon::now();
         $this->insertDB($data);
+        $data['topic'] = 'message';
+        $data['title'] = 'New Subscription';
+        $data['message'] = 'You have new subscriber!';
+        Notifications::dispatch('message', $data);
         return $this->response();
     }
 
