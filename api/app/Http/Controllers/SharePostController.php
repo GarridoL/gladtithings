@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SharePost;
 
-class SharePostController extends Controller
+class SharePostController extends APIController
 {
   function __construct(){
     $this->model = new SharePost();
