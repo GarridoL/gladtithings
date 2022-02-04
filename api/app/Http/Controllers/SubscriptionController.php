@@ -26,7 +26,7 @@ class SubscriptionController extends APIController
         $this->insertDB($data);
         $data['topic'] = 'subscription';
         $data['title'] = 'New Subscription';
-        $data['message'] = 'You have new subscriber!';
+        $data['message'] = 'You have new church subscriber!';
         Notifications::dispatch('message', $data);
         return $this->response();
     }
