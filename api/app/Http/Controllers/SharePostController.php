@@ -11,8 +11,11 @@ class SharePostController extends Controller
     $this->model = new SharePost();
   }
 
-  public function retrieveByPayloads($payload, $payload_value) {
-    $result = SharePost::where('payload', '=', $payload_value)->where('payload_value', '=', $payload_value)->get();
+  public function retrieveByPayloads($id) {
+    $result = SharePost::where('id', '=', $id)->get();
+    if(sizeof($result) > 0) {
+      $result[0]['account'] = $this->retrieveAccountDetails($result[0]['account_id']);
+    }
     return sizeof($result) > 0 ? $result[0] : null;
   }
 }
