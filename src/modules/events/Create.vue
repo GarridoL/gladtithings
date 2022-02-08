@@ -25,6 +25,10 @@
         <input type="text" placeholder="Be precise and descriptive" v-model="name">
       </div>
       <div class="inputs">
+        <span><b>Limit Attendees to </b><span style="color: red;">*</span></span>
+        <input type="number" placeholder="Limit attendees to" v-model="limitAttendees">
+      </div>
+      <div class="inputs">
         <span><b>Type </b><span style="color: red;">*</span></span>
         <select style="color: gray;" v-model="type">
           <option disabled selected>Select type</option>
@@ -160,7 +164,8 @@ export default{
       base64: null,
       id: null,
       details: null,
-      updateSuccess: false
+      updateSuccess: false,
+      limitAttendees: null
     }
   },
   methods: {
@@ -262,7 +267,7 @@ export default{
       return result
     },
     create() {
-      if(this.validate([this.name, this.description, this.type, this.category, this.location, this.startDate, this.startDateTime, this.endDate, this.endDateTime, this.timeZone])) {
+      if(this.validate([this.name, this.description, this.type, this.category, this.location, this.startDate, this.startDateTime, this.endDate, this.endDateTime, this.timeZone, this.limitAttendees])) {
         this.errorMessage = 'All fields are required.'
         return
       } else {
@@ -277,7 +282,8 @@ export default{
         location: this.location,
         start_date: this.startDate + ' ' + this.startDateTime,
         end_date: this.endDate + ' ' + this.endDateTime,
-        time_zone: this.timeZone
+        time_zone: this.timeZone,
+        limit: this.limitAttendees
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('events/create', parameter).then(response => {
@@ -292,7 +298,7 @@ export default{
       })
     },
     update() {
-      if(this.validate([this.name, this.description, this.type, this.category, this.location, this.startDate, this.startDateTime, this.endDate, this.endDateTime, this.timeZone])) {
+      if(this.validate([this.name, this.description, this.type, this.category, this.location, this.startDate, this.startDateTime, this.endDate, this.endDateTime, this.timeZone, this.limitAttendees])) {
         this.errorMessage = 'All fields are required.'
         return
       } else {
@@ -307,7 +313,8 @@ export default{
         location: this.location,
         start_date: this.startDate + ' ' + this.startDateTime,
         end_date: this.endDate + ' ' + this.endDateTime,
-        time_zone: this.timeZone
+        time_zone: this.timeZone,
+        limit: this.limitAttendees
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('events/update', parameter).then(response => {

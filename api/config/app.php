@@ -189,6 +189,7 @@ return [
         Increment\Finance\Paypal\PaypalServiceProvider::class,
         Increment\Common\Sms\SmsServiceProvider::class,
         Increment\Common\Cache\CacheServiceProvider::class,
+        Increment\Imarket\Location\LocationServiceProvider::class,
         /*
          * Application Service Providers...
          */
