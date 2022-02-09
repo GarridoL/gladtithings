@@ -30,7 +30,7 @@
     <div class="row" style="width: 100%; margin-top: 40px;">
       <div class="column" style="width: 80%;">
         <p><b>Summary</b></p>
-        <p style="margin-top: 5px;">Here are the summary over the last 30 days</p>
+        <p style="margin-top: 5px;">Here are the summary over the month.</p>
       </div>
     </div>
     <div class="graph">
