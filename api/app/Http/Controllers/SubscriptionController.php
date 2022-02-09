@@ -96,6 +96,7 @@ class SubscriptionController extends APIController
         $data = $request->all();
         $currDate = Carbon::now();
         $fTransaction = Subscription::where('merchant', '=', $data['merchant_id'])->first();
+        $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
         $dates = [];
@@ -135,9 +136,9 @@ class SubscriptionController extends APIController
                 ->get();
             if(sizeof($temp) > 0){
                 for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
-                $item = $temp[$i];
-                array_push($resDates, $item['year']);
-                array_push($resData, $item['amount']);
+                    $item = $temp[$i];
+                    array_push($resDates, $item['year']);
+                    array_push($resData, abs($item['amount']));
                 }
             }
         }else if($data['date'] === 'current_year'){
@@ -145,19 +146,29 @@ class SubscriptionController extends APIController
                 $temp = Subscription::where('merchant', '=', $data['merchant_id'])
                 ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
                 array_push($resDates, $key);
-                array_push($resData, $temp);
+                array_push($resData, abs($temp));
             }
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
                 $temp = Subscription::where('merchant', '=', $data['merchant_id'])->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-                array_push($resDates, array_search($key, $dates));
-                array_push($resData, $temp);
+                $tempPosition = array_search($key, $dates);
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, abs($temp));
             }
         }else if($data['date'] === 'current_month'){
             foreach ($dates as $key) {
                 $temp = Subscription::where('merchant', '=', $data['merchant_id'])->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-                array_push($resDates, array_search($key, $dates));
-                array_push($resData, $temp);
+                $tempPosition = array_search($key, $dates);
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, abs($temp));
             }
         }else if($data['date'] === 'custom'){
             foreach ($dates as $key) {
@@ -177,6 +188,7 @@ class SubscriptionController extends APIController
         $data = $request->all();
         $currDate = Carbon::now();
         $last30days = Carbon::now()->subDays(30)->toDateTimeString();
+        $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $dates = [];
         $amount = [];
         //getting total sends for last 30 days
@@ -250,7 +262,7 @@ class SubscriptionController extends APIController
             for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
               $item = $temp[$i];
               array_push($resDates, $item['year']);
-              array_push($resData, $item['amount']);
+              array_push($resData, abs($item['amount']));
             }
           }
         }else if($data['date'] === 'current_year'){
@@ -259,25 +271,35 @@ class SubscriptionController extends APIController
               ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
             
             array_push($resDates, $key);
-            array_push($resData, $temp);
+            array_push($resData, abs($temp));
           }
         }else if($data['date'] === 'last_month'){
           foreach ($dates as $key) {
             $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            array_push($resDates, array_search($key, $dates));
-            array_push($resData, $temp);
-          }
+            $tempPosition = array_search($key, $dates);
+            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                array_push($resDates, $tempPosition."th week");
+            }else{
+                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+            }
+            array_push($resData, abs($temp));
+        }
         }else if($data['date'] === 'current_month'){
           foreach ($dates as $key) {
             $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            array_push($resDates, array_search($key, $dates));
-            array_push($resData, $temp);
+            $tempPosition = array_search($key, $dates);
+            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                array_push($resDates, $tempPosition."th week");
+            }else{
+                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+            }
+            array_push($resData, abs($temp));
           }
         }else if($date['custom'] === 'custom'){
           foreach ($dates as $key) {
             $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
             array_push($resDates, $key);
-            array_push($resData, $temp);
+            array_push($resData, abs($temp));
           }
         }
     
@@ -294,6 +316,7 @@ class SubscriptionController extends APIController
         $data = $request->all();
         $currDate = Carbon::now();
         $fTransaction = Ledger::where('description', '=', 'subscription')->where('account_id', '=', $data['account_id'])->first();
+        $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
         $whereArray= array(
@@ -359,17 +382,23 @@ class SubscriptionController extends APIController
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
             $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            array_push($resDates, array_search($key, $dates));
+            $tempPosition = array_search($key, $dates);
+            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                array_push($resDates, $tempPosition."th week");
+            }else{
+                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+            }
             array_push($resData, ($temp * -1));
-            // array_push($res, array(
-            //   'week' => array_search($key, $dates),
-            //   'total_amount' => $temp
-            // ));
             }
         }else if($data['date'] === 'current_month'){
             foreach ($dates as $key) {
             $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            array_push($resDates, array_search($key, $dates));
+            $tempPosition = array_search($key, $dates);
+            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                array_push($resDates, $tempPosition."th week");
+            }else{
+                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+            }
             array_push($resData, ($temp * -1));
             }
         }else if($data['date'] === 'custom'){

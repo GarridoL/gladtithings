@@ -58,6 +58,9 @@ export default {
     DatePicker
   },
   methods: {
+    dataSet(data){
+      return data
+    },
     exportD(){
       let options = {
         fieldSeparator: ',',
@@ -75,11 +78,11 @@ export default {
       var exportData = []
       if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
         for (let index = 0; index < this.data.labels.length; index++) {
-          let result = this.dataSet(this.data.datasets[0].data[index])
           const items = this.data.labels[index]
+          const item = this.dataSet(this.data.datasets[0].data[index])
           let obj = {
             date: items,
-            amount: result
+            amount: item
           }
           exportData.push(obj)
         }
