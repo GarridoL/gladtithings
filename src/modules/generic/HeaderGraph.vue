@@ -92,16 +92,12 @@ export default {
         csvExporter.generateCsv(exportData)
       }
     },
-    dataSet(data){
-      return data
-    },
     print(data){
       this.PdfTemplate.getItem(data)
       this.PdfTemplate.getDate(this.tempStyle === null ? 'yearly' : this.tempStyle)
       this.PdfTemplate.template()
     },
     activate(id){
-      console.log('[>????????????]', id)
       if(this.tempStyle === null){
         this.tempStyle = id
         document.getElementById(`${id}`).style.backgroundColor = 'white'

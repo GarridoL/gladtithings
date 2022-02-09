@@ -234,7 +234,7 @@ export default{
       this.subSelected = e
       let parameter = {
         merchant_id: this.user.merchant.id,
-        date: this.subSelected === null ? 'last_month' : this.subSelected
+        date: this.subSelected === null ? 'yearly' : this.subSelected
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_subscribers_graph', parameter).then(response => {
