@@ -42,7 +42,7 @@ import 'vue2-datepicker/index.css'
 import { ExportToCsv } from 'export-to-csv'
 export default {
   name: 'GraphHeader',
-  props: ['data'],
+  props: ['data', 'name'],
   mounted(){
     const {vfs} = pdfFonts.pdfMake
     PDFTemplate.vfs = vfs
@@ -58,6 +58,9 @@ export default {
     DatePicker
   },
   methods: {
+    dataSet(data){
+      return data
+    },
     exportD(){
       let options = {
         fieldSeparator: ',',
@@ -65,7 +68,7 @@ export default {
         decimalSeparator: '.',
         showLabels: true,
         showTitle: true,
-        title: 'Summary',
+        title: 'Summary of ' + this.name,
         useTextFile: false,
         useBom: true,
         // useKeysAsHeaders: true,
@@ -74,23 +77,12 @@ export default {
       }
       var exportData = []
       if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
-        this.dataSet(this.data.datasets[0].data)
-        for (let indexs = 0; indexs < this.data.labels.length; indexs++) {
-          const items = this.data.labels[indexs]
-          // for (let index = 0; index < this.data.datasets[0].data.length; index++) {
-          //   const item = this.data.datasets[0].data[index]
+        for (let index = 0; index < this.data.labels.length; index++) {
+          const items = this.data.labels[index]
+          const item = this.dataSet(this.data.datasets[0].data[index])
           let obj = {
             date: items,
-            amount: null
-          }
-          exportData.push(obj)
-          // }
-        }
-        for (let index = 0; index < this.data.datasets[0].data.length; index++) {
-          const item = this.data.datasets[0].data[index]
-          let obj = {
-            date: null,
-            amount: Math.abs(item)
+            amount: item
           }
           exportData.push(obj)
         }
