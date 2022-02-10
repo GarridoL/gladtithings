@@ -3,15 +3,15 @@ import PDFTemplate from 'pdfmake'
 export default {
   dataSet: [],
   data: null,
-  item: [],
   getItem(data) {
+    console.log('[dfasdfasdf]', data)
     this.dataSet = data
-  },
-  setData(data){
-    this.item = data
   },
   getDate(date){
     this.date = date.replace(/_/g, ' ').toUpperCase()
+  },
+  setData(data){
+    return data
   },
   template() {
     var retrieve = []
@@ -19,16 +19,15 @@ export default {
       [
         {
           text: 'Date',
-          alignment: 'center',
           // margin: [120, 0, 0, 0],
+          alignment: 'center',
           fontSize: 10,
           bold: true
         },
         // {
         //   text: ' ',
         //   margin: [0, 0, 0, 0],
-        //   fontSize: 10,
-        //   bold: true
+        //   fontSize: 10
         // },
         {
           text: 'Amount',
@@ -42,18 +41,17 @@ export default {
     )
     if(this.dataSet !== undefined && this.dataSet.labels.length > 0 && this.dataSet.datasets[0].data.length > 0){
       for (let index = 0; index < this.dataSet.labels.length; index++) {
-        this.setData(this.dataSet.datasets[0].data[index])
         const items = this.dataSet.labels[index]
+        const item = this.setData(this.dataSet.datasets[0].data[index])
         retrieve.push([
-          { text: items, fontSize: 10, alignment: 'center', border: [true, true, true, true] },
+          { text: items, fontSize: 10, alignment: 'center' },
           // { text: ' ', fontSize: 10, margin: [0, 0, 0, 0], border: [false, false, false, false] },
-          { text: this.item, fontSize: 10, alignment: 'center', border: [true, true, true, true] }
-          // { text: this.item, fontSize: 10, margin: [0, 0, 120, 0], border: [false, false, false, false], alignment: 'right' }
+          { text: item, fontSize: 10, alignment: 'center' }
         ])
       }
     }
     var docDefinition = {
-      pageMargins: [50, 60, 50, 60],
+      pageMargins: [40, 60, 40, 60],
       pageSize: 'A4',
       // pageSize: {
       //   width: 595.28,
@@ -90,19 +88,19 @@ export default {
         },
         {
           columns: [
-            { width: 50, text: '' },
+            { width: 100, text: '' },
             {
               style: 'tableExample',
               table: {
-                headerRows: 1,
                 widths: ['*', '*'],
+                alignment: 'center',
                 // widths: ['*', '*', '*'],
                 body: retrieve
               }
-              // layout: 'lightHorizontalLines'
             },
-            { width: 50, text: '' }
+            { width: 100, text: '' }
           ]
+          // layout: 'lightHorizontalLines'
         }
       ]
     }

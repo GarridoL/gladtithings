@@ -42,7 +42,7 @@ import 'vue2-datepicker/index.css'
 import { ExportToCsv } from 'export-to-csv'
 export default {
   name: 'GraphHeader',
-  props: ['data'],
+  props: ['data', 'name'],
   mounted(){
     const {vfs} = pdfFonts.pdfMake
     PDFTemplate.vfs = vfs
@@ -68,7 +68,7 @@ export default {
         decimalSeparator: '.',
         showLabels: true,
         showTitle: true,
-        title: 'Summary',
+        title: 'Summary of ' + this.name,
         useTextFile: false,
         useBom: true,
         // useKeysAsHeaders: true,
