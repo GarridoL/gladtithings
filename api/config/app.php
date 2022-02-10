@@ -187,6 +187,8 @@ return [
         Increment\Finance\FinanceProvider::class,
         Increment\Finance\Stripe\StripeServiceProvider::class,
         Increment\Finance\Paypal\PaypalServiceProvider::class,
+        Increment\Finance\UnionBank\UnionBankServiceProvider::class,
+        Increment\Finance\Paymaya\PaymayaServiceProvider::class,
         Increment\Common\Sms\SmsServiceProvider::class,
         Increment\Common\Cache\CacheServiceProvider::class,
         Increment\Imarket\Location\LocationServiceProvider::class,

@@ -50,6 +50,8 @@
             "packages/increment/finance/src/",
             "packages/increment/finance/stripe/src/",
             "packages/increment/finance/paypal/src/",
+            "packages/increment/finance/unionbank/src/",
+            "packages/increment/finance/paymaya/src/",
             "packages/increment/common/cache/",
             "packages/increment/imarket/location/src"
         ],
