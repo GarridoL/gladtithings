@@ -40,76 +40,6 @@
     </div>
   </div>
 </template>
-<style>
-.btn-block{
-  height: 50px !important;
-}
-.payment-accounts, .billing-summary{
-  width: 100%;
-  float: left;
-}
-.payment-accounts .accounts-item{
-  width: 100%;
-  float: left;
-  min-height: 10px;
-  overflow-y: hidden;
-  display: table;
-}
-.new-payment-method{
-  width: 50%;
-  float: left;
-}
-.accounts-item .details{
-  margin-right: 10px;
-  margin-top: 10px;
-  width: 100%;
-  float: left;
-}
-.accounts-item i{
-  font-size: 32px;
-  display:inline-block;
-  vertical-align: -6px;
-  margin-right: 10px;
-}
-.accounts-item i:hover{
-  cursor: pointer;
-}
-.stripe-element{
-  height: 45px;
-  display: block;
-  width: 100%;
-  padding: .5rem .75rem;
-  font-size: 12px;
-  background-color: #fff;
-  background-image: none;
-  background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: .25rem;
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-.stripe-element.card-number, .stripe-element.card-expiry, .stripe-element.card-cvc{
-  padding: 0px;
-}
-.StripeElement{
-  padding: .90rem .75rem;
-  color: #495057;
-  line-height: 1.25;
-}
-@media (max-width: 992px){
-  .new-payment-method{
-    width: 100%;
-    float: left;
-  }
-}
-.payment-methods{
-  float: left;
-  width: 100%;
-}
-.payment-label{
-  line-height: 100px;
-  border-bottom: solid 1px #eee;
-}
-</style>
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
@@ -128,7 +58,7 @@ export default {
       number: false,
       expiry: false,
       cvc: false,
-      stripeSK: CONFIG.stripe.dev_pk,
+      stripeSK: CONFIG.stripe.pk,
       options: {
         style: {base: {
           fontSize: '16px'
@@ -225,3 +155,73 @@ export default {
   }
 }
 </script>
+<style>
+.btn-block{
+  height: 50px !important;
+}
+.payment-accounts, .billing-summary{
+  width: 100%;
+  float: left;
+}
+.payment-accounts .accounts-item{
+  width: 100%;
+  float: left;
+  min-height: 10px;
+  overflow-y: hidden;
+  display: table;
+}
+.new-payment-method{
+  width: 50%;
+  float: left;
+}
+.accounts-item .details{
+  margin-right: 10px;
+  margin-top: 10px;
+  width: 100%;
+  float: left;
+}
+.accounts-item i{
+  font-size: 32px;
+  display:inline-block;
+  vertical-align: -6px;
+  margin-right: 10px;
+}
+.accounts-item i:hover{
+  cursor: pointer;
+}
+.stripe-element{
+  height: 45px;
+  display: block;
+  width: 100%;
+  padding: .5rem .75rem;
+  font-size: 12px;
+  background-color: #fff;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: .25rem;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.stripe-element.card-number, .stripe-element.card-expiry, .stripe-element.card-cvc{
+  padding: 0px;
+}
+.StripeElement{
+  padding: .90rem .75rem;
+  color: #495057;
+  line-height: 1.25;
+}
+@media (max-width: 992px){
+  .new-payment-method{
+    width: 100%;
+    float: left;
+  }
+}
+.payment-methods{
+  float: left;
+  width: 100%;
+}
+.payment-label{
+  line-height: 100px;
+  border-bottom: solid 1px #eee;
+}
+</style>

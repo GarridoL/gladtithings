@@ -56,7 +56,7 @@
             <img :src="item.account.profile && item.account.profile.url ? config.BACKEND_URL + item.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
           </div>
           <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
-            <b>{{item.account.information.first_name ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}}</b>
+            <b>{{item.account.username}}</b>
             <p style="font-size: 12px;">{{item.created_at}}</p>
           </div>
           <!-- <div class="column" style="width: 5%;">
