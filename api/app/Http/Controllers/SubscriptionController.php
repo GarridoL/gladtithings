@@ -152,7 +152,9 @@ class SubscriptionController extends APIController
             foreach ($dates as $key) {
                 $temp = Subscription::where('merchant', '=', $data['merchant_id'])
                 ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
-                array_push($resDates, $key);
+                
+                $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
+                array_push($resDates, $month);
                 array_push($resData, abs($temp));
             }
         }else if($data['date'] === 'last_month'){
@@ -291,7 +293,8 @@ class SubscriptionController extends APIController
             $temp = Ledger::where($whereArray)
               ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
             
-            array_push($resDates, $key);
+            $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
+            array_push($resDates, $month);
             array_push($resData, abs($temp));
           }
         }else if($data['date'] === 'last_month'){
@@ -408,12 +411,9 @@ class SubscriptionController extends APIController
             $temp = Ledger::where($whereArray)
                 ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
             
-            array_push($resDates, $key);
+            $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
+            array_push($resDates, $month);
             array_push($resData, ($temp));
-            // array_push($res, array(
-            //   'month' => $key,
-            //   'total_amount' => $temp
-            // ));
             }
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
