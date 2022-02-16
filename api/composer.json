@@ -19,7 +19,7 @@
         "paypal/paypal-checkout-sdk": "^1.0",
         "paypal/rest-api-sdk-php": "*",
         "pusher/pusher-php-server": "^4.1",
-        "stripe/stripe-php": "^7.111",
+        "stripe/stripe-php": "^7.113",
         "twilio/sdk": "^6.30",
         "tymon/jwt-auth": "0.5.*"
     },
