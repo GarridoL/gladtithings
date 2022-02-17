@@ -66,9 +66,8 @@ button:focus{
 
   .input-group{
     width: 100% !important;
-    min-height: 50px !important;
+    min-height: 30px !important;
   }
-
   .btn, .form-control{
     float: left;
     width: 100% !important;

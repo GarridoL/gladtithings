@@ -189,8 +189,9 @@ export default{
   align-items: center;
 }
 @media (max-width: 992px){
-  .container{
-    width: 60%;
+  .container, .cards-container{
+    width: 100%;
+    margin: 10px;
   }
 }
 </style>
