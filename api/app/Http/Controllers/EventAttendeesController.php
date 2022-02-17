@@ -6,6 +6,7 @@ use App\EventAttendee;
 use App\Event;
 use Increment\Finance\Models\Ledger;
 use Illuminate\Http\Request;
+use App\Jobs\Notifications;
 
 class EventAttendeesController extends APIController
 {
@@ -21,6 +22,11 @@ class EventAttendeesController extends APIController
         $this->response['error'] = 'You have already attended to this event.';
       } else {
         $this->insertDB($data);
+        $name = $this->retrieveNameOnly($data['account_id']);
+        $data['topic'] = 'attend-event';
+        $data['title'] = 'New Event Attendee';
+        $data['message'] = $data['username'].' attended your event '.$data['event_name'].'.';
+        Notifications::dispatch('message', $data);
       }
       return $this->response();
     }
