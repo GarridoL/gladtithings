@@ -475,15 +475,11 @@ label{
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
   }
   .no-image{
-    background-color: $primary;
-    height: 100px;
-    width: 100px;
-    float: right;
-    border-radius: 100px;
-    margin-bottom: 10px;
+    height: 60px;
+    width: 60px;
   }
 }
 </style>

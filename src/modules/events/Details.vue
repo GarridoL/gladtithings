@@ -4,23 +4,23 @@
     <span style="font-size: 22px;"><b>Event Details</b></span>
     <p style="margin-top: 10px;">Here are the lates update of this event as of today.</p>
     <div class="top-container row" v-if="details">
-      <div class="column image-container" style="width: 68%;">
+      <div class="column image-container">
         <div class="row">
           <div class="column image">
             <img :src="config.BACKEND_URL + details.image[0].category" width="85%" height="100%" v-if="details && details.image.length > 0">
             <i class="far fa-image" style="font-size: 80px; color: gray;" v-else></i>
           </div>
-          <div class="column" style="width: 65%;">
+          <div class="column text-container">
             <p style="margin: 0;"><b>{{details.name}}</b></p>
             <p style="margin: 0;"><b>{{details.limit}}</b></p>
+            <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>{{details.location}}</p>
             <span class="mr-4 gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.start_date}}</span>
             <span class="gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.end_date}}</span>
-            <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>{{details.location}}</p>
             <p class="long-text">{{details.description}}</p>
           </div>
         </div>
       </div>
-      <div class="column" style="width: 29%;">
+      <div class="column">
         <div class="black">
           <p class="title">Total Amount of Donations</p>
           <p style="color: white; margin: 0;"><b>{{donations * -1}}</b></p>
@@ -272,10 +272,14 @@ button:focus{
   color: gray;
   font-size: 12px;
 }
+.text-container{
+  width: 65%;
+}
 .image-container{
   background-color: white;
   padding: 10px;
   margin-right: 10px;
+  width: 68%
 }
 .table{
   background-color: white;
@@ -302,8 +306,14 @@ td i {
 }
 
 @media (max-width: 992px){
-  .container, .table{
+  .container, .table, .column, .text-container, .image-container{
     width: 100%;
+  }
+  .text-container{
+    text-align: center;
+  }
+  .image-container{
+    margin-bottom: 15px;
   }
   .top-container{
     margin-bottom: 10%;

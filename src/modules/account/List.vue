@@ -95,7 +95,7 @@ td i {
 
 
 @media (max-width: 992px){
-  .ledger-summary-container{
+  .ledger-summary-container, .container{
     width: 100%;
   }
 }

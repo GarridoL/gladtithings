@@ -169,7 +169,8 @@ p{
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
+    margin: 10px;
   }
 }
 </style>
