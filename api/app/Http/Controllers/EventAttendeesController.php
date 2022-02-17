@@ -39,6 +39,7 @@ class EventAttendeesController extends APIController
       if(sizeof($result) > 0) {
         foreach($result as $key) {
           $result[$i]['account'] = $this->retrieveAccountDetails($result[$i]['account_id']);
+          $i++;
         }
       }
       $this->response['data'] = $result;
