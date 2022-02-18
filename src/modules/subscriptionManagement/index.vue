@@ -2,7 +2,7 @@
     <div class="container">
       <div v-if="user.merchant != null">
           <div class="row" style="width: 100%;">
-            <div class="column" style="width: 80%;">
+            <div class="column">
               <h3>Subscriptions Management</h3>
               <p style="margin-top: 5px;">Here are the latest update of subscriptions as of the moment.</p>
             </div>

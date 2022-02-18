@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="fromProfile === true ? 'width: 90%;' : 'width: 60%;'">
+  <div class="container">
    <h3>Account Settings</h3>
     <span class="error text-danger" v-if="errorMessage1 !== null">
       <b>Oops!</b> {{errorMessage1}}
@@ -48,19 +48,19 @@
       {{successMessage}}
     </span>
    <div class="row" style="width: 100%; margin-top: 10px;">
-      <div class="column" style="width: 33%;">
+      <div class="column account-info">
       <div class="input-containers">
         <label><b>First Name&nbsp;</b><span style="color: red;">*</span></label><br>
         <input placeholder="First Name" class="generic-input" v-model="first_name">
       </div>
       </div>
-      <div class="column" style="width: 33%; text-align: center;">
+      <div class="column account-info">
       <div class="input-containers">
         <label><b>Middle Name&nbsp;</b></label><br>
         <input placeholder="Middle Name" class="generic-input" v-model="middle_name">
       </div>
       </div>
-      <div class="column" style="width: 33%; text-align: center;">
+      <div class="column account-info">
        <div class="input-containers">
         <label><b>Last Name&nbsp;</b><span style="color: red;">*</span></label><br>
         <input placeholder="Last Name" class="generic-input" v-model="last_name">
@@ -303,6 +303,9 @@ export default{
 label{
   margin-top: 5px;
 }
+.account-info{
+  width: 33%;
+}
 .generic-input{
   height: 40px;
   width: 100%;
@@ -315,6 +318,7 @@ label{
 .container{
   margin-top: 15px;
   margin-bottom: 50px;
+  width: 60%;
 }
 button:focus{
   outline: none;
@@ -338,6 +342,13 @@ button:focus{
 }
 @media (max-width: 992px){
   .container{
+    width: 100%;
+  }
+  .no-image{
+    height: 60px;
+    width: 60px;
+  }
+  .account-info{
     width: 100%;
   }
 }

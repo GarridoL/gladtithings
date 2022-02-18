@@ -1,14 +1,14 @@
 <template>
   <div class="containers">
-    <div class="row" style="width: 103%; margin-left: 0px;" v-if="data.shared !== null">
+    <div class="row con" v-if="data.shared !== null">
       <div class="column" style="margin-right: 10px;">
         <img :src="data.shared.account.profile !== null ? config.BACKEND_URL + data.shared.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
-      <div class="column" style=" width: 84%; margin-top: 4px; line-height: 15px;"> 
+      <div class="column con-username"> 
         <b>{{data.shared.account.username}}</b>
         <p style="font-size: 12px;">{{data.shared.created_at_human}}</p>
       </div>
-      <div class="column" style="padding-right: 8px;">
+      <div class="column con-icon">
         <span class="right-menu-icons">
         <div class="dropdown">
           <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
@@ -20,15 +20,15 @@
       </div>
     </div>
     <p class="shared-text" v-if="data.shared !== null">{{data.shared.text}}</p>
-    <div class="row" style="width: 103%; margin-left: 0px;">
-      <div class="column" style="margin-right: 10px;">
+    <div class="row comment-con">
+      <div class="column comment-con-image">
         <img :src="data.account.profile && data.account.profile.url ? config.BACKEND_URL + data.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px; margin-left: 2px;">
       </div>
-      <div class="column" style=" width: 84%; margin-top: 4px; line-height: 15px;"> 
+      <div class="column comment-username"> 
         <b>{{data.account.username}}</b>
         <p style="font-size: 12px;">{{data.created_at_human}}</p>
       </div>
-      <div class="column" style="padding-right: 8px;">
+      <div class="column on-icon">
         <span class="right-menu-icons">
         <div class="dropdown" v-if="data.shared === null">
           <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
@@ -39,23 +39,22 @@
         </span>
       </div>
     </div>
-    <div style="padding: 10px;" class="body-comment">
+    <div class="body-comment">
       <p style="word-wrap: break-word;">{{data.text}}</p>
       <PostImage :images="data.images"/>
       <i :class="data.amen.includes(user.userID) ? 'fas fa-praying-hands praying-hands-true' : 'fas fa-praying-hands praying-hands'" @click="react('amen')"></i>
-      <span style=" margin-right: 50px; vertical-align: 2px;" @click="react('amen')">{{data.amen.length}}</span>
+      <span class="amen-span" @click="react('amen')">{{data.amen.length}}</span>
       <i :class="data.love.includes(user.userID) ? 'fas fa-heart love-true' : 'fas fa-heart love'" @click="react('love')"></i>
-      <span style=" margin-right: 50px; vertical-align: 3px;" @click="react('love')">{{data.love.length}}</span>
+      <span class="amen-span" @click="react('love')">{{data.love.length}}</span>
       <i class="fas fa-share share" @click="shareModalShow()" ></i>
-      <span style=" margin-right: 50px; vertical-align: 3px;" @click="shareModalShow()">Share</span>
     </div>
-    <div style="width: 100%; margin-left: 0px; margin: 10px;" v-if="data.comment_replies && data.comment_replies.length > 0">
+    <div class="comment-replies" v-if="data.comment_replies && data.comment_replies.length > 0">
       <div style="margin-left: 15px;" v-for="(item, index) in data.comment_replies" :key="index">
         <div class="row">
           <div class="column" style="margin-right: 10px;">
             <img :src="item.account.profile && item.account.profile.url ? config.BACKEND_URL + item.account.profile.url : require('src/assets/img/test.jpg')" width="40px" height="40px" style="border-radius: 25px;">
           </div>
-          <div class="column" style="width: 82%; margin-top: 4px; line-height: 15px;">
+          <div class="column" style="username-column">
             <b>{{item.account.username}}</b>
             <p style="font-size: 12px;">{{item.created_at}}</p>
           </div>
@@ -254,6 +253,35 @@ export default{
   border-bottom: .5px solid rgb(235, 235, 235);
   padding: 10px;
 }
+.comment-con{
+  width: 103%;
+  margin-left: 0px;
+}
+.con-username{
+   width: 84%;
+   margin-top: 4px;
+   line-height: 15px;
+}
+.comment-username{
+  width: 84%;
+  margin-top: 4px;
+  line-height: 15px;
+}
+.con-icon{
+  padding-right: 8px;
+}
+.comment-replies{
+  width: 100%;
+  margin-left: 0px;
+  margin: 10px;
+}
+.amen-span{
+  margin-right: 50px;
+  vertical-align: 2px;
+}
+.comment-con-image{
+  margin-right: 10px;
+}
 .inputs-share{
   border-top-style: hidden;
   border-right-style: hidden;
@@ -267,8 +295,18 @@ export default{
 input:focus, textarea:focus, select:focus{
   outline: none;
 }
+.con{
+  width: 103%;
+  margin-left: 0px;
+}
+.username-column{
+  width: 82%;
+  margin-top: 4px;
+  line-height: 15px;
+}
 .body-comment {
   border-bottom: .5px solid rgb(245, 244, 244);
+  padding: 10px;
 }
 .love, .share, .praying-hands{
   font-size: 20px;

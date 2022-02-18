@@ -115,9 +115,9 @@ p {
   margin-top: 20px;
 }
 @media (max-width: 992px){
-  .container{
+  .containers, .container-add{
     width: 100%;
-    display: flex;
+    margin: 10px;
   }
 }
 </style>
