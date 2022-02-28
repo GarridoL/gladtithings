@@ -13,14 +13,14 @@
           </div>
             <br>
             <div class="mt-4">
-                <basic-filter
-                    v-bind:category="category"
-                    :activeCategoryIndex="0"
-                    :activeSortingIndex="0"
-                    @changeSortEvent="retrieve($event.sort, $event.filter)"
-                    @changeStyle="manageGrid($event)"
-                    :grid="['list', 'th-large']">
-                </basic-filter>
+              <basic-filter
+                v-bind:category="category"
+                :activeCategoryIndex="0"
+                :activeSortingIndex="0"
+                @changeSortEvent="retrieve($event.sort, $event.filter)"
+                @changeStyle="manageGrid($event)"
+                :grid="['list', 'th-large']">
+              </basic-filter>
             </div>
             <div class="table-container">
               <table class="table table-bordered table-responsive" v-if="data.length > 0">

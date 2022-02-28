@@ -9,7 +9,7 @@
           <td class="header" id="current_month" @click="activate('current_month')"><b>This Month</b></td>
           <td class="header" id="last_days" @click="activate('last_days')"><b>Last 7 Days</b></td>
           <td class="header">
-            <b>Custom:</b>
+            <!-- <b>Custom:</b>
             <date-picker
               class="datetime-picker"
               v-model="custom"
@@ -18,7 +18,7 @@
               :format="'MMM D, YYYY'"
               :input-class="'form-control'"
             >
-            </date-picker> 
+            </date-picker>  -->
             <div class="fas fa-file-export hover" @click="exportD(data)">
               <div class="tooltip">Export
               </div>
