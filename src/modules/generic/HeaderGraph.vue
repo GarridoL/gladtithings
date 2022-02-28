@@ -1,35 +1,35 @@
 <template>
   <div>
     <table class="table table-bordered">
-          <thead style="text-align: left; margin-top: 3%">
-            <tr class="header123">
-              <td class="header" id="yearly" @click="activate('yearly')"><b>Yearly</b></td>
-              <td class="header" id="current_year" @click="activate('current_year')"><b>This Year</b></td>
-              <td class="header" id="last_month" @click="activate('last_month')"><b>Last Month</b></td>
-              <td class="header" id="current_month" @click="activate('current_month')"><b>This Month</b></td>
-              <td class="header" id="last_days" @click="activate('last_days')"><b>Last 7 Days</b></td>
-              <td class="header">
-                <b>Custom:</b>
-                <date-picker
-                  class="datetime-picker"
-                  v-model="custom"
-                  range
-                  :value-type="'YYYY-MM-DD'"
-                  :format="'MMM D, YYYY'"
-                  :input-class="'form-control'"
-                >
-                </date-picker> 
-                <div class="fas fa-file-export hover" @click="exportD(data)">
-                  <div class="tooltip">Export
-                  </div>
-                </div>
-                <div class="fas fa-print hover" @click="print(data)">
-                  <div class="tooltip">Print
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </thead>
+      <thead style="text-align: left; margin-top: 3%">
+        <tr class="header123">
+          <td class="header" id="yearly" @click="activate('yearly')"><b>Yearly</b></td>
+          <td class="header" id="current_year" @click="activate('current_year')"><b>This Year</b></td>
+          <td class="header" id="last_month" @click="activate('last_month')"><b>Last Month</b></td>
+          <td class="header" id="current_month" @click="activate('current_month')"><b>This Month</b></td>
+          <td class="header" id="last_days" @click="activate('last_days')"><b>Last 7 Days</b></td>
+          <td class="header">
+            <!-- <b>Custom:</b>
+            <date-picker
+              class="datetime-picker"
+              v-model="custom"
+              range
+              :value-type="'YYYY-MM-DD'"
+              :format="'MMM D, YYYY'"
+              :input-class="'form-control'"
+            >
+            </date-picker>  -->
+            <div class="fas fa-file-export hover" @click="exportD(data)">
+              <div class="tooltip">Export
+              </div>
+            </div>
+            <div class="fas fa-print hover" @click="print(data)">
+              <div class="tooltip">Print
+              </div>
+            </div>
+          </td>
+        </tr>
+      </thead>
     </table>
   </div> 
 </template>
@@ -41,9 +41,9 @@ import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import { ExportToCsv } from 'export-to-csv'
 export default {
-  name: 'GraphHeader',
   props: ['data', 'name'],
   mounted(){
+    console.log('[data>>>>>>>>>>>>]', this.data)
     const {vfs} = pdfFonts.pdfMake
     PDFTemplate.vfs = vfs
   },
@@ -104,10 +104,10 @@ export default {
       }else{
         document.getElementById(`${this.tempStyle}`).style.backgroundColor = '#F6F6F6'
         document.getElementById(`${id}`).style.backgroundColor = 'white'
-        // let tempStyle = document.querySelector(`#${tempStyle}`)
         this.tempStyle = id
         this.$emit('temp', this.tempStyle)
       }
+      this.$parent.retrieve(null, null)
     }
   }
 }
