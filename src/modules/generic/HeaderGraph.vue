@@ -175,4 +175,10 @@ $(document).ready(function(){
 .hover:hover .tooltip {
   opacity: 1;
 }
+@media (max-width: 992px){
+  .table-bordered{
+    width: 100%;
+    text-align: center;
+  }
+}
 </style>

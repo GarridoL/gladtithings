@@ -405,7 +405,7 @@ input, textarea, select {
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
   }
   .alert-fixed {
     position:fixed; 

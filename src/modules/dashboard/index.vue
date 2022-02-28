@@ -198,8 +198,10 @@ p{
   border-radius: 5px;
 }
 @media (max-width: 992px){
-  .container{
-    width: 60%;
+  .container, .first, .second, .third{
+    width: 100%;
+    text-align: center;
+    margin: 10px;
   }
 }
 </style>

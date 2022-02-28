@@ -1,13 +1,13 @@
 <template>
   <div class="containers row" @click="redirect(route)" v-if="version === 3">
-    <div class="column first" style="width: 7%;">
+    <div class="column first">
       <i :class="description === 'Direct Transfer' ? 'fas fa-church' : 'fas fa-credit-card'" style="font-size: 30px; line-height: inherit;"></i>
     </div>
-    <div class="column second" style="width: 60%;">
+    <div class="column second">
       <p><b>{{title}}</b></p>
       <p>{{dates}}</p>
     </div>
-    <div class="column third" style="width: 32%;">
+    <div class="column third">
       <p class="amount" :style="styles"><b>{{amount}}</b></p>
     </div>
   </div>
@@ -90,6 +90,13 @@ p {
 .first{
   text-align: center;
   vertical-align: middle;
+  width: 7%;
+}
+.second{
+  width: 60%;
+}
+.third{
+  width: 32%;
 }
 .amount{
   color: $primary;
@@ -124,6 +131,15 @@ p {
 @media (max-width: 992px){
   .container{
     width: 100%;
+  }
+  .first{
+    width: 15%;
+  }
+  .second{
+    width: 65%;
+  }
+  .third{
+    width: 20%;
   }
 }
 </style>
