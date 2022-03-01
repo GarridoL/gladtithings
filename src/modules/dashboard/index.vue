@@ -35,7 +35,7 @@
     </div>
     <div class="graph">
       <GraphHeader @temp="headSub" :data="data"/>
-      <BarGraph :data="data" v-if="data.labels.length > 0"/>
+      <BarGraph :data="data" v-if="data.labels.length > 0" :options="{responsive: true, maintainAspectRatio: false}"/>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
