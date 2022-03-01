@@ -6,22 +6,22 @@
       </p>
       <span v-if="data !== null">
         <span v-bind:class="{'active-image': item.active === true }" class="image-holder" v-for="(item, index) in data" v-bind:key="index" @click="select(index)">
-          <img style="width: 100%;height: 100%;display: block;" :src="config.BACKEND_URL + item.url"/>
+          <img class="images-features" :src="config.BACKEND_URL + item.url"/>
           <button type="button" class="btn btn-danger" id="deleteBtn" data-toggle="modal" data-target="#featured-confirm-delete" v-if="item.active" @click="selectDeleteImage(item.id)">
             <i class="fa fa-times"></i>
           </button>
         </span>
       </span>
-      <span v-if="data.length === 0" class="image-holder" style="text-align: center;" @click="addImage()">
-        <i class="fa fa-plus" style="font-size: 60px; line-height: 120px;"></i>
+      <span v-if="data.length === 0" class="image-holder" @click="addImage()">
+        <i class="fa fa-plus icons-feature"></i>
         <input type="file" id="FeaturedImage" :accept="type ? type : 'image/*'" @change="setUpFileUpload($event)">
       </span>
-      <span v-if="data.length <= 1" class="image-holder" style="text-align: center;" @click="addImage()">
-        <i class="fa fa-plus" style="font-size: 60px; line-height: 120px;"></i>
+      <span v-if="data.length <= 1" class="image-holder" @click="addImage()">
+        <i class="fa fa-plus icons-feature"></i>
         <input type="file" id="FeaturedImage" :accept="type ? type : 'image/*'" @change="setUpFileUpload($event)">
       </span>
-      <span v-if="data.length <= 2" class="image-holder" style="text-align: center;" @click="addImage()">
-        <i class="fa fa-plus" style="font-size: 60px; line-height: 120px;"></i>
+      <span v-if="data.length <= 2" class="image-holder" @click="addImage()">
+        <i class="fa fa-plus icons-feature"></i>
         <input type="file" id="FeaturedImage" :accept="type ? type : 'image/*'" @change="setUpFileUpload($event)">
       </span>
     </span>
@@ -260,11 +260,21 @@ export default {
   margin-bottom: 5px;
   border: solid 1px #ddd;
   border-radius: 2px;
+  text-align: center;
 }
 .image-holder img{
   max-height: 200px;
   max-width: 100%;
   float: left;
+}
+.images-features{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.icons-feature{
+  font-size: 60px;
+  line-height: 120px;
 }
 .image-holder input{
   display: none;

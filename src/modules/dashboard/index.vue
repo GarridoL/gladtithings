@@ -1,33 +1,33 @@
 <template>
   <div class="container">
-    <div class="row" style="width: 100%;">
-      <div class="column" style="width: 80%;">
+    <div class="row">
+      <div class="column welcome-div">
         <h3>Welcome to your Dashboard!</h3>
         <p style="margin-top: 5px;">Here are the latest update of activities as of today in GladTithings</p>
       </div>
-      <div class="column" style="width: 20%;">
-        <div style="float: right; cursor: pointer;" @click="showQr()">
-          <span style="margin-right: 10px;">Click to show</span>
+      <div class="column qr-div">
+        <div class="qr" @click="showQr()">
+          <span class="qr-text">Click to show</span>
           <span><i class="fas fa-qrcode" style="font-size: 25px;"></i></span>
         </div>
       </div>
     </div>
-    <div class="row" style="width: 100%; margin-top: 40px;">
+    <div class="row balances">
       <div class="column first">
         <p class="title">Available Balance</p>
-        <p style="color: white; margin: 0; font-size: 17px;" v-if="ledger && ledger.length > 0 || ledger"><b>{{ledger.currency && ledger.currency.toUpperCase()}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : '0.0'}}</b></p>
-        <p style="color: white; margin: 0; font-size: 17px;" v-else><b>0.0</b></p>
+        <p class="balances-text" v-if="ledger && ledger.length > 0 || ledger"><b>{{ledger.currency && ledger.currency.toUpperCase()}} {{ledger.available_balance ? ledger.available_balance.toLocaleString() : '0.0'}}</b></p>
+        <p class="balances-text" v-else><b>0.0</b></p>
       </div>
       <div class="column second">
         <p class="title">Sent Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ ledger && ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
+        <p class="balances-text"><b>{{ ledger && ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
       </div>
       <div class="column third">
         <p class="title">Received Last 30 Days</p>
-        <p style="color: white; margin: 0; font-size: 17px;"><b>{{ledger && ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
+        <p class="balances-text"><b>{{ledger && ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
       </div>
     </div>
-    <div class="row" style="width: 100%; margin-top: 40px;">
+    <div class="row summary-column">
       <div class="column" style="width: 80%;">
         <p><b>Summary</b></p>
         <p style="margin-top: 5px;">Here are the summary last month.</p>
@@ -180,6 +180,24 @@ p{
   text-align: center;
   border-radius: 5px;
 }
+.welcome-div{
+  width: 80%;
+}
+.qr-div{
+  width: 20%;
+}
+.qr-text{
+  margin-right: 10px;
+}
+.balances-text{
+  color: white;
+  margin: 0;
+  font-size: 17px;
+}
+.balances{
+  width: 100%;
+  margin-top: 40px;
+}
 .second{
   height: 100px;
   width: 32%;
@@ -188,6 +206,14 @@ p{
   padding-top: 25px;
   text-align: center;
   border-radius: 5px;
+}
+.summary-column{
+  width: 100%;
+  margin-top: 40px;
+}
+.qr{
+  float: right;
+  cursor: pointer;
 }
 .third{
   height: 100px;

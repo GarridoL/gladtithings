@@ -13,11 +13,11 @@ class SharePostController extends APIController
   }
 
   public function retrieveByPayloads($id) {
-    $result = SharePost::where('id', '=', $id)->get();
-    if(sizeof($result) > 0) {
-      $result[0]['account'] = $this->retrieveAccountDetails($result[0]['account_id']);
-      $result[0]['created_at_human'] = Carbon::createFromFormat('Y-m-d H:i:s', $result[0]['created_at'])->copy()->tz($this->response['timezone'])->diffForHumans();
+    $result = SharePost::where('id', '=', $id)->first();
+    if($result !== null) {
+      $result['account'] = $this->retrieveAccountDetails($result['account_id']);
+      $result['created_at_human'] = Carbon::createFromFormat('Y-m-d H:i:s', $result['created_at'])->copy()->tz($this->response['timezone'])->diffForHumans();
     }
-    return sizeof($result) > 0 ? $result[0] : null;
+    return $result;
   }
 }

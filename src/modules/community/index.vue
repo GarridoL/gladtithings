@@ -156,6 +156,7 @@ export default{
         if(response.data > 0) {
           this.input = null
           this.$refs.createPost.upload(response.data)
+      // this.$refs.createPost.uploadVid(50)
         }
       })
     },
@@ -324,7 +325,10 @@ input{
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
+  }
+  .sort-button1{
+    width: 45%;
   }
 }
 </style>

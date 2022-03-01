@@ -2,7 +2,7 @@
   <div class="container" v-if="afterLoad">
     <h3>Church Details</h3>
     <div class="row top">
-      <div class="column" style="width: 60%; margin-right: 10%;">
+      <div class="column church-details-1">
         <span class="error text-danger" v-if="errorMessage">
           <b>Oops!</b> {{errorMessage}}
         </span>
@@ -17,7 +17,7 @@
         <label><b>Address&nbsp;</b><span style="color: red;">*</span></label><br>
         <location-merchant @onFinish="getResult($event)" :property="property"></location-merchant><br>
       </div>
-      <div class="column" style="width: 20%; text-align: center;">
+      <div class="column church-details-2">
         <div class="no-image" v-if="logo === null" >
         </div>
         <span class="image" v-else>
@@ -53,7 +53,7 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Schedule</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -434,6 +434,14 @@ export default{
 .time{
   width: 49%;
   margin-right: 1%;
+}
+.church-details-1{
+  width: 60%;
+  margin-right: 10%;
+}
+.church-details-2{
+  width: 20%;
+  text-align: center;
 }
 .sort-button{
   border-radius: 25px;
