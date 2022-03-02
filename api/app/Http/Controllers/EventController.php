@@ -40,7 +40,7 @@ class EventController extends APIController
     public function retrieveRandom(Request $request){
       $data = $request->all();
       $result = Event::where('account_id', '!=', $data['account_id'])->inRandomOrder()->first();
-      if(sizeof($result) > 0) {
+      if($result !== null) {
         $result['image'] = app('Increment\Common\Payload\Http\PayloadController')->retrievePayloads('payload', 'event_id', 'payload_value', $result['id']);
         $result['donations'] = Ledger::where('details', '=', $result['id'])->where('description', '=', 'Event Donation')->sum('amount');
       }
