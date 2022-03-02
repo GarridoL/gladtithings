@@ -148,8 +148,10 @@ export default{
             item.start_date = moment(new Date(item.start_date)).format('LLL')
           })
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
+          this.numPages = null
         }
       })
     },
