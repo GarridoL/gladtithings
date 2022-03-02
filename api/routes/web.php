@@ -145,6 +145,7 @@ Route::post($route.'create', $controller."create");
 Route::post($route.'retrieve', $controller."retrieve");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");
+Route::post($route.'retrieve_random', $controller."retrieveRandom");
 
 //Recently Visited Churches Controller
 $route = env('PACKAGE_ROUTE', '').'/recently_visited_churches/';
