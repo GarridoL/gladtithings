@@ -28,7 +28,7 @@ class EventController extends APIController
         }
       }
       if(sizeof($con) == 2) {
-        $size = Event::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->where($con[1]['column'], $con[1]['clause'], $con[1]['value'])->where('deleted_at', '=', null)-get();
+        $size = Event::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->where($con[1]['column'], $con[1]['clause'], $con[1]['value'])->where('deleted_at', '=', null)->get();
         $this->response['size'] = sizeof($size);
       }
       $this->response['data'] = $result;
