@@ -48,8 +48,7 @@ class EventAttendeesController extends APIController
           $i++;
         }
       }
-      $size = EventAttendee::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->get();
-      $this->response['size'] = sizeof($size);
+      $this->response['size'] = EventAttendee::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->count();
       $this->response['data'] = $result;
       return $this->response();
     }

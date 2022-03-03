@@ -88,14 +88,12 @@ class SubscriptionController extends APIController
             ->orderBy($con[0]['column'] == 'name' ? 'T2.'.array_keys($data['sort'])[0] : array_keys($data['sort'])[0], array_values($data['sort'])[0])
             ->get(['T1.username', 'T1.email', 'T2.address', 'T2.first_name', 'T2.last_name', DB::raw('SUM(subscriptions.amount) as total_amount')]);
 
-        $size = Subscription::leftJoin('accounts as T1', 'T1.id', '=', 'subscriptions.account_id')
+        $this->response['size'] = Subscription::leftJoin('accounts as T1', 'T1.id', '=', 'subscriptions.account_id')
         ->leftJoin('account_informations as T2', 'T2.account_id', '=', 'T1.id')
         ->where($whereArray)
         ->groupBy('subscriptions.account_id')
         ->orderBy($con[0]['column'] == 'name' ? 'T2.'.array_keys($data['sort'])[0] : array_keys($data['sort'])[0], array_values($data['sort'])[0])
-        ->get();
-
-        $this->response['size'] = sizeof($size);
+        ->count();
         $this->response['data'] = $result;
         return $this->response();
     }

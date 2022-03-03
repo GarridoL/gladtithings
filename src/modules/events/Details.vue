@@ -43,7 +43,7 @@
         :grid="['list', 'th-large']">
       </basic-filter>
     </div>
-    <empty v-if="data === null" :title="'No data available!'" :action="'Keep growing.'"></empty>
+    <empty v-if="data.length === 0" :title="'No data available!'" :action="'Keep growing.'"></empty>
     <div class="table-container" v-else>
       <table class="table table-bordered table-responsive" v-if="data.length > 0">
         <thead>
@@ -62,6 +62,12 @@
         </tbody>
       </table>
     </div>
+    <Pager
+      :pages="numPages1"
+      :active="activePage1"
+      :limit="limit"
+      v-if="data.length > 0"
+    />
     <div>
       <p style="font-size: 16px; margin-top: 20px;"><b>Event Attendees</b></p>
       <p style="margin-top: 10px;">The following data shows the attendees for this event.</p>
@@ -132,6 +138,8 @@ export default{
       limit: 5,
       numPages: null,
       activePage: 1,
+      numPages1: null,
+      activePage1: 1,
       details: null,
       sponsors: 0,
       donations: 0,
@@ -182,13 +190,16 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: 0
+        offset: (this.activePage1 > 0) ? ((this.activePage1 - 1) * this.limit) : this.activePage1
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('ledger/retrieve_with_condition', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages1 = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+        } else {
+          this.numPages1 = null
         }
       })
     },
