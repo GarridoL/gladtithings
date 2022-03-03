@@ -30,8 +30,8 @@
 .header{
   width: 100%;
   float: left;
-  min-height: 70px;
-  background: $primary;
+  min-height: 10vh;
+  background: $secondary;
   overflow-y: hidden;
 }
 .header-section{
