@@ -203,8 +203,10 @@ export default{
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = []
+          this.numPages = null
         }
       })
     },
