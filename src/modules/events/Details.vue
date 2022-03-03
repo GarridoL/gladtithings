@@ -86,8 +86,8 @@
     <Pager
       :pages="numPages"
       :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
+      :limit="attendeeLimit"
+      v-if="attendees.length > 0"
     />
   </div>
 </template>
@@ -222,13 +222,16 @@ export default{
         }],
         sort: {created_at: 'asc'},
         limit: this.attendeeLimit,
-        offset: 0
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.attendeeLimit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('event_attendees/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.attendees = response.data
+          this.numPages = parseInt(response.size / this.attendeeLimit) + (response.size % this.attendeeLimit ? 1 : 0)
+        } else {
+          this.numPages = null
         }
       })
     }

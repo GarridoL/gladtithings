@@ -38,6 +38,7 @@ class EventAttendeesController extends APIController
 
     public function retrieve(Request $request) {
       $data = $request->all();
+      $con = $data['condition'];
       $this->retrieveDB($data);
       $result = $this->response['data'];
       $i = 0;
@@ -47,6 +48,8 @@ class EventAttendeesController extends APIController
           $i++;
         }
       }
+      $size = EventAttendee::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->get();
+      $this->response['size'] = sizeof($size);
       $this->response['data'] = $result;
       return $this->response();
     }
