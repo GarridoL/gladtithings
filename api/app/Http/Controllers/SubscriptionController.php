@@ -21,6 +21,12 @@ class SubscriptionController extends APIController
 
     public function create(Request $request){
         $data = $request->all();
+        $exist = Subscription::where('account_id', '=', $data['account_id'])->where('merchant', '=', $data['merchant'])->where('deleted_at', '=', null)->get();
+        if(sizeof($exist) > 0){
+            $this->response['error'] = 'Subscription already existed';
+            $this->response['data'] = null;
+            return $this->response();
+        }
         $data['code'] = $this->generateCode();
         $data['start_date'] = Carbon::now();
         $this->insertDB($data);
