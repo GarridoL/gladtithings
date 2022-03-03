@@ -48,11 +48,13 @@ export default{
         sorting: [{
           title: 'Created Ascending',
           payload: 'created_at',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          input_type: 'date'
         }, {
           title: 'Created Descending',
           payload: 'created_at',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          input_type: 'date'
         }, {
           title: 'Description Ascending',
           payload: 'description',
@@ -147,9 +149,9 @@ export default{
           value: this.user.userID,
           clause: '='
         }, {
-          column: 'account_id',
-          value: this.user.userID,
-          clause: 'or'
+          value: '%' + filter.value + '%',
+          column: filter.column,
+          clause: 'like'
         }],
         sort: sort,
         limit: this.limit,
@@ -161,6 +163,10 @@ export default{
         console.log(response)
         if(response.data.length > 0) {
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+        } else {
+          this.data = []
+          this.numPages = null
         }
       })
     }

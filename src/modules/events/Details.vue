@@ -31,37 +31,7 @@
         </div>
       </div>
     </div>
-    <div>
-      <p style="font-size: 16px;"><b>Donation History</b></p>
-      <p style="margin-top: 10px;">The following data shows the transaction history of sponsor's donation for this event.</p>
-      <basic-filter 
-        v-bind:category="category" 
-        :activeCategoryIndex="0"
-        :activeSortingIndex="0"
-        @changeSortEvent="retrieveEvent($event.sort, $event.filter)"
-        @changeStyle="manageGrid($event)"
-        :grid="['list', 'th-large']">
-      </basic-filter>
-    </div>
-    <empty v-if="data === null" :title="'No data available!'" :action="'Keep growing.'"></empty>
-    <div class="table-container" v-else>
-      <table class="table table-bordered table-responsive" v-if="data.length > 0">
-        <thead>
-          <tr>
-            <td class="header"><b>Date</b></td>
-            <td class="header"><b>Sponsor Name</b></td>
-            <td class="header"><b>Donations</b></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in data" :key="index">
-            <td class="header">{{item.created_at}}</td>
-            <td class="header">{{item.account.username}}</td>
-            <td class="header">{{item.amount * -1}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <Donation ref="donation"/>
     <div>
       <p style="font-size: 16px; margin-top: 20px;"><b>Event Attendees</b></p>
       <p style="margin-top: 10px;">The following data shows the attendees for this event.</p>
@@ -86,8 +56,8 @@
     <Pager
       :pages="numPages"
       :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
+      :limit="attendeeLimit"
+      v-if="attendees.length > 0"
     />
   </div>
 </template>
@@ -96,6 +66,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
+import Donation from 'src/modules/events/Donations.vue'
 export default{
   mounted(){
     this.retrieve(this.$route.params.id)
@@ -129,9 +100,11 @@ export default{
       }],
       filter: null,
       sort: null,
-      limit: 5,
+      limit: 1,
       numPages: null,
       activePage: 1,
+      numPages1: null,
+      activePage1: 1,
       details: null,
       sponsors: 0,
       donations: 0,
@@ -143,7 +116,8 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('modules/generic/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Pager
+    Pager,
+    Donation
   },
   methods: {
     redirect(route){
@@ -165,51 +139,7 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.details = response.data[0]
-          this.retrieveEventSponsors(this.details.id)
-        }
-      })
-    },
-    retrieveEvent(sort, filter){
-      let parameter = {
-        condition: [{
-          value: '%' + filter.value + '%',
-          column: filter.column,
-          clause: 'like'
-        }, {
-          value: this.details.id,
-          column: 'details',
-          clause: '='
-        }],
-        sort: sort,
-        limit: this.limit,
-        offset: 0
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/retrieve_with_condition', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          this.data = response.data
-        }
-      })
-    },
-    retrieveEventSponsors(id){
-      let parameter = {
-        condition: [{
-          value: id,
-          column: 'details',
-          clause: '='
-        }],
-        sort: {created_at: 'asc'},
-        limit: this.limit,
-        offset: 0
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('ledger/retrieve_with_condition', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          this.data = response.data
-          this.sponsors = response.sponsors
-          this.donations = response.donations
+          this.$refs.donation.setDetails(response.data[0])
         }
       })
     },
@@ -222,13 +152,16 @@ export default{
         }],
         sort: {created_at: 'asc'},
         limit: this.attendeeLimit,
-        offset: 0
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.attendeeLimit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('event_attendees/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.attendees = response.data
+          this.numPages = parseInt(response.size / this.attendeeLimit) + (response.size % this.attendeeLimit ? 1 : 0)
+        } else {
+          this.numPages = null
         }
       })
     }

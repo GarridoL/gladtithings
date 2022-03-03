@@ -27,6 +27,9 @@ class EventController extends APIController
           $i++;
         }
       }
+      if(sizeof($con) == 2) {
+        $this->response['size'] = Event::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->where($con[1]['column'], $con[1]['clause'], $con[1]['value'])->where('deleted_at', '=', null)->count();
+      }
       $this->response['data'] = $result;
       return $this->response();
     }
@@ -34,6 +37,17 @@ class EventController extends APIController
     public function create(Request $request) {
       $data = $request->all();
       $this->insertDB($data);
+      return $this->response();
+    }
+
+    public function retrieveRandom(Request $request){
+      $data = $request->all();
+      $result = Event::where('account_id', '!=', $data['account_id'])->inRandomOrder()->first();
+      if($result !== null) {
+        $result['image'] = app('Increment\Common\Payload\Http\PayloadController')->retrievePayloads('payload', 'event_id', 'payload_value', $result['id']);
+        $result['donations'] = Ledger::where('details', '=', $result['id'])->where('description', '=', 'Event Donation')->sum('amount');
+      }
+      $this->response['data'] = $result;
       return $this->response();
     }
 }

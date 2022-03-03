@@ -21,18 +21,24 @@ class EventAttendeesController extends APIController
         $this->response['data'] = null;
         $this->response['error'] = 'You have already attended to this event.';
       } else {
-        $this->insertDB($data);
-        $name = $this->retrieveNameOnly($data['account_id']);
-        $data['topic'] = 'attend-event';
-        $data['title'] = 'New Event Attendee';
-        $data['message'] = $data['username'].' attended your event '.$data['event_name'].'.';
-        Notifications::dispatch('message', $data);
+        if($this->checkLimit($data['event_id']) == true) {
+          $this->insertDB($data);
+          $name = $this->retrieveNameOnly($data['account_id']);
+          $data['topic'] = 'attend-event';
+          $data['title'] = 'New Event Attendee';
+          $data['message'] = $data['username'].' attended your event '.$data['event_name'].'.';
+          Notifications::dispatch('message', $data);
+        } else {
+          $this->response['data'] = null;
+          $this->response['error'] = 'Limit reached. You can no longer attend to this event for this event is only limited to a specific number of users.';
+        }
       }
       return $this->response();
     }
 
     public function retrieve(Request $request) {
       $data = $request->all();
+      $con = $data['condition'];
       $this->retrieveDB($data);
       $result = $this->response['data'];
       $i = 0;
@@ -42,6 +48,7 @@ class EventAttendeesController extends APIController
           $i++;
         }
       }
+      $this->response['size'] = EventAttendee::where($con[0]['column'], $con[0]['clause'], $con[0]['value'])->count();
       $this->response['data'] = $result;
       return $this->response();
     }
@@ -57,6 +64,20 @@ class EventAttendeesController extends APIController
         }
       }
       return sizeof($result) > 0 ? $result[0] : null;
+    }
+
+    public function checkLimit($id){
+      $result = Event::where('id', '=', $id)->first();
+      if($result != null) {
+        $limit = $result['limit'];
+        $attendees = EventAttendee::where('event_id', '=', $id)->where('deleted_at', '=', null)->get();
+        if(sizeof($attendees) == $limit) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+      return true;
     }
 
     public function retrieveEventsAttended(Request $request) {

@@ -13,14 +13,14 @@
           </div>
             <br>
             <div class="mt-4">
-                <basic-filter
-                    v-bind:category="category"
-                    :activeCategoryIndex="0"
-                    :activeSortingIndex="0"
-                    @changeSortEvent="retrieve($event.sort, $event.filter)"
-                    @changeStyle="manageGrid($event)"
-                    :grid="['list', 'th-large']">
-                </basic-filter>
+              <basic-filter
+                v-bind:category="category"
+                :activeCategoryIndex="0"
+                :activeSortingIndex="0"
+                @changeSortEvent="retrieve($event.sort, $event.filter)"
+                @changeStyle="manageGrid($event)"
+                :grid="['list', 'th-large']">
+              </basic-filter>
             </div>
             <div class="table-container">
               <table class="table table-bordered table-responsive" v-if="data.length > 0">
@@ -54,16 +54,18 @@
           <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
         </div>
         <div class="graph">
-          <GraphHeader @temp="headSub" :data="graphSub" :name="'Subscription'"/>
-          <BarGraph v-if="graphSubscribe.labels.length > 0" :data="graphSub"/>
+          <GraphHeader v-if="graphSubscribe.labels.length > 0" @temp="headSub" :data="graphSub" :name="'Subscription'"/>
+          <BarGraph v-if="graphSubscribe.labels.length > 0" :data="graphSub" :options="{responsive: true, maintainAspectRatio: false}"/>
+          <empty v-else :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
         </div>
         <div class="mt-4">
           <p style="color: black; margin: 0; font-size: 17px;"><b>Donations Graph</b></p>
           <p style="margin-top: 5px;">The following data shows status of donations.</p>
         </div>
         <div class="graph">
-          <GraphHeader @temp="headDonate" :data="graphDon" :name="'Donations'"/>
-          <BarGraph v-if="graphDonations.labels.length > 0" :data="graphDon"/>
+          <GraphHeader v-if="graphDonations.labels.length > 0" @temp="headDonate" :data="graphDon" :name="'Donations'"/>
+          <BarGraph v-if="graphDonations.labels.length > 0" :data="graphDon" :options="{responsive: true, maintainAspectRatio: false}"/>
+          <empty v-else :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
         </div>
       </div>
       <div v-else>
@@ -201,8 +203,10 @@ export default{
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = []
+          this.numPages = null
         }
       })
     },
@@ -218,7 +222,6 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
-        console.log('[donation]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
@@ -227,6 +230,7 @@ export default{
       })
     },
     headSub(e){
+      console.log('[head sub]', e)
       this.subSelected = e
       this.subscriptionGraph(this.subSelected)
     },

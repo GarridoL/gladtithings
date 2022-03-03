@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <basic-filter 
+      <basic-filter
         v-bind:category="category" 
         :activeCategoryIndex="0"
         :activeSortingIndex="0"
@@ -78,11 +78,13 @@ export default{
         sorting: [{
           title: 'Created Ascending',
           payload: 'created_at',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          input_type: 'date'
         }, {
           title: 'Created Descending',
           payload: 'created_at',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          input_type: 'date'
         }, {
           title: 'Event Name Ascending',
           payload: 'name',
@@ -146,8 +148,10 @@ export default{
             item.start_date = moment(new Date(item.start_date)).format('LLL')
           })
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
+          this.numPages = null
         }
       })
     },

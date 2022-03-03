@@ -1,19 +1,21 @@
 <script>
 import AUTH from 'src/services/auth'
-import { Bar } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 export default {
-  extends: Bar,
-  props: ['data'],
+  name: 'Line',
+  extends: Line,
+  props: ['data', 'options'],
   components: {
-    Bar
+    Line
   },
   mounted() {
-    this.renderChart({
-      labels: this.data.labels,
-      datasets: this.data.datasets
-    }, {
-      maintainAspectRatio: false
-    })
+    console.log('[data received]', this.data)
+    this.renderChart(this.data, this.options)
+  },
+  watch: {
+    renderChart () {
+      this.$data._chart.update()
+    }
   },
   data(){
     return {

@@ -16,8 +16,13 @@
           <div class="upload-icon">
             <i class="fas fa-upload upload" @click="$refs.file.click()"></i>
             <input type="file" ref="file" id="Image" :accept="'image/*'" @change="setUpFileUpload($event)" style="display: none">
-            <p>Upload</p>
+            <p>Upload Photo</p>
           </div>
+          <!-- <div class="upload-icon">
+            <i class="fas fa-upload upload" @click="$refs.file.click()"></i>
+            <input type="file" ref="file" id="Video" :accept="'video/*'" @change="setUpFileUploadVideo($event)" style="display: none">
+            <p>Upload Video</p>
+          </div> -->
         </div>
       </div>
     </div>
@@ -39,6 +44,7 @@ export default{
       pictures: [],
       activeIndex: null,
       base64: null
+      // vid: null
     }
   },
   methods: {
@@ -48,6 +54,21 @@ export default{
     removeImage(index){
       this.pictures.splice(index, 1)
     },
+    // setUpFileUploadVideo(event){
+    //   let files = event.target.files || event.dataTransfer.files
+    //   if(!files.length){
+    //     return false
+    //   }else{
+    //     this.vid = files[0]
+    //     let filename = this.vid.name.toLowerCase()
+    //     if(filename.substring(filename.lastIndexOf('.')) === '.mp4'){
+    //       console.log(this.vid)
+    //     }else{
+    //       this.errorMessage = 'Upload video only!'
+    //       this.vid = null
+    //     }
+    //   }
+    // },
     setUpFileUpload(event){
       let files = event.target.files || event.dataTransfer.files
       if(!files.length){
@@ -89,8 +110,37 @@ export default{
         console.log(response, 'response')
         this.$parent.retrieve()
       })
-
     }
+    // uploadVid(commentId){
+    //   if(this.vid) {
+    //     let formData = new FormData()
+    //     formData.append('file', {
+    //       name: this.vid.name,
+    //       type: this.vid.type
+    //     })
+    //     formData.append('file_url', this.vid.name)
+    //     formData.append('account_id', this.user.userID)
+    //     formData.append('category', 'video-from-comment')
+    //     $('#loading').css({'display': 'block'})
+    //     axios.post(this.config.BACKEND_URL + '/files/upload_file?token=' + AUTH.tokenData.token, formData).then(response => {
+    //       $('#loading').css({'display': 'none'})
+    //       let par = {
+    //         account_id: this.user.userID,
+    //         payload: 'comment_id',
+    //         payload_value: commentId,
+    //         category: response.data
+    //       }
+    //       this.APIRequest('payloads/create', par, res => {
+    //         if(res.data) {
+    //           this.$parent.retrieve()
+    //           this.vid = null
+    //         }
+    //       }, error => {
+    //         console.log(error, 'payloads')
+    //       })
+    //     })
+    //   }
+    // }
   }
 }
 </script>

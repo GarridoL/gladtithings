@@ -21,6 +21,14 @@
       />
     <br>
     </div>
+    <div class="pager">
+      <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="defaults && posts.length > 0"
+      />
+    </div>
     <div v-if="message" v-for="(item, index) in tweet" :key="index">
        <Twitter
         :name="item.name"
@@ -85,6 +93,7 @@ import Twitter from 'src/modules/community/TwitterCard'
 import CommunityCard from 'src/modules/community/CommunityCard'
 import CreatePost from 'src/modules/community/CreatePost'
 import CONFIG from 'src/config.js'
+import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.retrieve()
@@ -124,14 +133,14 @@ export default{
       recommendation: false,
       firstClass: 'text-center sort-button1 mr-2',
       secondClass: 'text-center sort-button1 mr-2',
-      input: null
+      input: null,
+      limit: 5,
+      numPages: null,
+      activePage: 1
     }
   },
   components: {
-    Posts,
-    Twitter,
-    CommunityCard,
-    CreatePost
+    Pager, Posts, Twitter, CommunityCard, CreatePost
   },
   methods: {
     showModalCreate() {
@@ -156,13 +165,15 @@ export default{
         if(response.data > 0) {
           this.input = null
           this.$refs.createPost.upload(response.data)
+      // this.$refs.createPost.uploadVid(50)
         }
       })
     },
     retrieve(){
       let parameter = {
-        limit: 5,
-        offset: 0,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage,
+        filter: 'all',
         sort: {
           created_at: 'desc'
         }
@@ -172,6 +183,9 @@ export default{
         $('#loading').css({display: 'none'})
         if(response.data.length > 0) {
           this.posts = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+        } else {
+          this.numPages = null
         }
       })
     },
@@ -288,6 +302,9 @@ button:focus{
   margin-right: 13px;
   float: left;
 }
+.pager {
+  margin-bottom: 10px;
+}
 .recommendation{
   padding: 0px;
   border: none;
@@ -324,7 +341,10 @@ input{
 }
 @media (max-width: 992px){
   .container{
-    width: 60%;
+    width: 100%;
+  }
+  .sort-button1{
+    width: 45%;
   }
 }
 </style>
