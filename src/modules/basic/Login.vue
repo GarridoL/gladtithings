@@ -48,7 +48,8 @@
 <style scoped lang="scss">
 @import "~assets/style/colors.scss";
 .holder{
-  min-height: 88.9vh;
+  margin-top: 25px;
+  min-height: 86.2vh;
 }
 
 .account {
