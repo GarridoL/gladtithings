@@ -228,7 +228,7 @@ export default{
         date: this.donateSelected === null ? 'yearly' : this.donateSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_donations', parameter).then(response => {
         console.log('[donation]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
@@ -245,11 +245,11 @@ export default{
     subscriptionGraph(e){
       this.subSelected = e
       let parameter = {
-        merchant_id: this.user.merchant.id,
+        account_id: this.user.userID,
         date: this.subSelected === null ? 'yearly' : this.subSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('subscriptions/retrieve_subscribers_graph', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
         console.log('[subscription]', parameter)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
