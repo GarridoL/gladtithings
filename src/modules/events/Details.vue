@@ -22,11 +22,11 @@
       </div>
       <div class="column">
         <div class="black">
-          <p class="title">Total Amount of Donations</p>
+          <p class="title">&nbsp;Total Amount of Donations&nbsp;</p>
           <p style="color: white; margin: 0;"><b>{{donations * -1}}</b></p>
         </div>
         <div class="red">
-          <p class="title">Total Number of Sponsors</p>
+          <p class="title">&nbsp;Total Number of Sponsors&nbsp;</p>
           <p style="color: white; margin: 0;"><b>{{sponsors}}</b></p>
         </div>
       </div>
