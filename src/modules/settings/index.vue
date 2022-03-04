@@ -51,6 +51,11 @@ export default{
           title: 'Announcements',
           description: 'Let people know your happenings.',
           route: '/announcements'
+        },
+        {
+          title: 'Multiple Languages',
+          description: 'Change your language settings by selecting the language you want.',
+          route: '/languages'
         }
       ]
     }
@@ -64,7 +69,7 @@ export default{
 @import "~assets/style/colors.scss";
 .container{
   width: 60%;
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
   align-items: center;
 }

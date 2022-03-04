@@ -14,7 +14,7 @@
                 </span>
                 <br>
             </li>
-            <li v-for="(item, index) in menu" :key="index" :class="item.flag || $route.path === '/' + item.path ? ' active-menu' : ''" v-on:click="setActive(index)" v-if="(((item.accountType === user.type || item.accountType === 'ALL') && user.type !== 'ADMIN') || (user.type === 'ADMIN' && item.showOnAdmin === true)) && (item.accountStatus === 'ALL' || (user.subAccount === null || (user.subAccount !== null && user.subAccount.status === item.accountStatus))) && menuFlag === true" class="menu-holder">
+            <li v-for="(item, index) in language.sideBarMenu" :key="index" :class="item.flag || $route.path === '/' + item.path ? ' active-menu' : ''" v-on:click="setActive(index)" v-if="(((item.accountType === user.type || item.accountType === 'ALL') && user.type !== 'ADMIN') || (user.type === 'ADMIN' && item.showOnAdmin === true)) && (item.accountStatus === 'ALL' || (user.subAccount === null || (user.subAccount !== null && user.subAccount.status === item.accountStatus))) && menuFlag === true" class="menu-holder">
               <i v-bind:class="item.icon" class=" visible"></i> 
               <label>{{item.description}}</label>
               <ul class="sub-menu" v-if="item.subMenu !== null">
@@ -24,16 +24,16 @@
                 </li>
                 <li v-on:click="logOut()" class="log-out menu-holder">
                   <i class="fas fa-sign-out-alt visible"></i>
-                  <label>Logout</label>
+                  <label class="text-logout">{{language.logout}}</label>
                 </li>
               </ul>
             </li>
-            <li v-for="item, index in menuOff" v-bind:class="{ 'active-menu': item.flag === true }" v-on:click="setActiveOff(index)" v-if="(((item.accountType === user.type || item.accountType === 'ALL') && user.type !== 'ADMIN') || (user.type === 'ADMIN' && item.showOnAdmin === true)) && menuFlag === false" class="menu-holder-hidden">
+            <li v-for="item, index in language.sideBarMenu" v-bind:class="{ 'active-menu': item.flag === true }" v-on:click="setActiveOff(index)" v-if="(((item.accountType === user.type || item.accountType === 'ALL') && user.type !== 'ADMIN') || (user.type === 'ADMIN' && item.showOnAdmin === true)) && menuFlag === false" class="menu-holder-hidden">
               <i v-bind:class="item.icon"></i>
             </li>
             <li v-on:click="logOut()" class="log-out menu-holder">
               <i class="fas fa-sign-out-alt visible"></i>
-              <label>Logout</label>
+              <label class="text-logout">{{language.logout}}</label>
             </li>
           </ul>
         </div>
@@ -72,13 +72,13 @@ import COMMON from 'src/common.js'
 import ROUTER from 'src/router'
 export default {
   mounted(){
+    console.log()
   },
   data(){
     return{
       user: AUTH.user,
       config: CONFIG,
-      menu: COMMON.sidebarMenu,
-      menuOff: COMMON.sidebarMenu,
+      menu: AUTH.language.sideBarMenu,
       toggleSidebar: 'fa fa-toggle-on',
       hide: '',
       flag: false,
@@ -89,6 +89,11 @@ export default {
       prevMenu: 0,
       subPrevMenu: 0,
       menuFlag: true
+    }
+  },
+  computed: {
+    language: function () {
+      return AUTH.language
     }
   },
   components: {
@@ -107,7 +112,7 @@ export default {
         this.setActiveOnWatch(index, to.path)
       }else{
         if(this.prevMenu !== null){
-          this.menu[this.prevMenu].flag = false
+          this.language.sideBarMenu[this.prevMenu].flag = false
         }
       }
     }
@@ -118,77 +123,77 @@ export default {
     },
     setActive(index, code = null){
       if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        this.language.sideBarMenu[this.prevMenu].flag = false
+        this.language.sideBarMenu[index].flag = true
+        if(this.language.sideBarMenu[this.prevMenu].subMenu !== null){
+          this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
         }
         this.prevMenu = index
       }
-      if(this.menu[index].subMenu === null){
-        ROUTER.push('/' + this.menu[this.prevMenu].path)
+      if(this.language.sideBarMenu[index].subMenu === null){
+        ROUTER.push('/' + this.language.sideBarMenu[this.prevMenu].path)
         $('.navbar-collapse').collapse('hide')
       }
     },
     setActiveOnWatch(index, path){
       if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        this.language.sideBarMenu[this.prevMenu].flag = false
+        this.language.sideBarMenu[index].flag = true
+        if(this.language.sideBarMenu[this.prevMenu].subMenu !== null){
+          this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
         }
         this.prevMenu = index
       }
-      if(this.menu[index].subMenu === null){
+      if(this.language.sideBarMenu[index].subMenu === null){
         ROUTER.push(path)
         $('.navbar-collapse').collapse('hide')
       }
     },
     setActiveOff(index){
       if(this.prevMenu !== index){
-        this.menuOff[this.prevMenu].flag = false
-        this.menuOff[index].flag = true
+        this.language.sideBarMenu[this.prevMenu].flag = false
+        this.language.sideBarMenu[index].flag = true
         this.prevMenu = index
       }
-      if(this.menuOff[index].subMenu === null){
-        ROUTER.push('/' + this.menuOff[this.prevMenu].path)
+      if(this.language.sideBarMenu[index].subMenu === null){
+        ROUTER.push('/' + this.language.sideBarMenu[this.prevMenu].path)
         $('.navbar-collapse').collapse('hide')
       }
     },
     setActiveSubMenu(index, subIndex){
       if(this.prevMenu !== index){
-        this.menu[this.prevMenu].flag = false
-        this.menu[index].flag = true
-        if(this.menu[index].subMenu !== null){
-          this.menu[index].subMenu[subIndex].flag = true
+        this.language.sideBarMenu[this.prevMenu].flag = false
+        this.language.sideBarMenu[index].flag = true
+        if(this.language.sideBarMenu[index].subMenu !== null){
+          this.language.sideBarMenu[index].subMenu[subIndex].flag = true
         }
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        if(this.language.sideBarMenu[this.prevMenu].subMenu !== null){
+          this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
         }
         this.prevMenu = index
         this.subPrevMenu = subIndex
       }else{
         if(this.subPrevMenu !== subIndex){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
-          this.menu[index].subMenu[subIndex].flag = true
+          this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+          this.language.sideBarMenu[index].subMenu[subIndex].flag = true
           this.subPrevMenu = subIndex
         }else{
           this.subPrevMenu = subIndex
         }
       }
-      ROUTER.push('/' + this.menu[this.prevMenu].subMenu[this.subPrevMenu].path)
+      ROUTER.push('/' + this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].path)
       $('.navbar-collapse').collapse('hide')
     },
     changeToggleSidebarIcon(){
       if(this.menuFlag === false){
         // from off
-        this.menuOff[this.prevMenu].flag = false
+        this.language.sideBarMenu[this.prevMenu].flag = false
         this.prevMenu = 0
       }else{
         // from on
-        this.menu[this.prevMenu].flag = false
-        if(this.menu[this.prevMenu].subMenu !== null){
-          this.menu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
+        this.language.sideBarMenu[this.prevMenu].flag = false
+        if(this.language.sideBarMenu[this.prevMenu].subMenu !== null){
+          this.language.sideBarMenu[this.prevMenu].subMenu[this.subPrevMenu].flag = false
         }
         this.prevMenu = 0
         this.subPrevMenu = 0
@@ -208,6 +213,9 @@ export default {
   transition: all 1s ease 0s;
   z-index: 1;
   margin-top: 50px;
+}
+.fa-sign-out-alt, .text-logout{
+  color: $danger;
 }
 .main-sidebar{
   overflow-y: hidden;

@@ -12,12 +12,12 @@
       <p style="font-size: 18px;"><b>Basic Info</b></p>
       <p>Name your event and tell people why they should come. Add details to let attendees know what the event is all about.</p>
       <div class="default-image">
-        <input type="file" ref="file" id="EventImage" :accept="'image/*'" @change="setUpFileUpload($event)" style="display: none">
+        <input type="file" ref="file" id="EventImage" :accept="'image/*'" @change="setUpFileUpload($event)" class="input-image">
         <center>
         <i class="fas fa-times-circle remove-event-photo" @click="base64 = null" v-if="base64 !== null"></i>
-        <i class="far fa-image" style="font-size: 80px; color: gray;" v-if="base64 === null" @click="$refs.file.click()"></i>
-        <p style="font-size: 12px;" v-if="base64 === null" @click="$refs.file.click()">Click to add featured image</p>
-        <img :src="base64" width="100px" height="110px" v-if="base64 !== null" @click="$refs.file.click()"/>
+        <i class="far fa-image image-icon" v-if="base64 === null" @click="$refs.file.click()"></i>
+        <p style="font-size: 12px;" v-if="base64 === null" @click="$refs.file.click()">Click to add image</p>
+        <img :src="base64" class="input-images" v-if="base64 !== null" @click="$refs.file.click()"/>
         </center>
       </div>
       <div class="inputs">
@@ -176,7 +176,7 @@ export default{
       let parameter = {
         condition: [{
           value: id,
-          column: 'id',
+          column: 'code',
           clause: '='
         }],
         sort: {created_at: 'asc'},
@@ -190,6 +190,7 @@ export default{
           this.name = response.data[0].name
           this.description = response.data[0].description
           this.type = response.data[0].type
+          this.limitAttendees = response.data[0].limit
           this.category = response.data[0].category
           this.location = response.data[0].location
           this.startDate = response.data[0].start_date.split(' ')[0]
@@ -385,16 +386,35 @@ input, textarea, select {
 }
 .default-image{
   border: 1px solid rgb(204, 204, 204);
-  width: 130px;
-  padding: 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
   cursor: pointer;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
 }
 .remove-event-photo{
   float: right;
   color: red;
   margin-top: -10px;
   margin-right: -12px;
+}
+.image-icon{
+  font-size: 80px; 
+  color: gray;
+  margin-top: 20px;
+}
+.input-image{
+  display: none;
+  width: 150px;
+  height: 150px;
+}
+.input-images{
+  width: 147.3px;
+  height: 147px;
+  margin-top: -3.5px;
+  border-radius: 75px;
 }
 .remove-alert{
   float: right;

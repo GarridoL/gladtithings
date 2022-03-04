@@ -33,8 +33,8 @@
             <td class="header">UPCOMING</td>
             <td class="header">
               <span>
-                <i class="fas fa-eye icon-eye" @click="redirect('events/details/' + item.id)"></i>
-                <i class="fas fa-edit icon-edit" @click="redirect('events/update/' + item.id)"></i>
+                <i class="fas fa-eye icon-eye" @click="redirect('events/details/' + item.code)"></i>
+                <i class="fas fa-edit icon-edit" @click="redirect('events/update/' + item.code)"></i>
                 <i class="fas fa-trash-alt icon-trash" @click="showRemove(item)"></i>
               </span>
             </td>
@@ -214,7 +214,7 @@ button:focus{
 .container{
   width: 65%;
   margin-bottom: 100px;
-  margin-top: 25px;
+  margin-top: 30px;
 }
 td i {
   padding-right: 0px !important;
