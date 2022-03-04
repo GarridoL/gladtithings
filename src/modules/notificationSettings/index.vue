@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-   <h3 style="margin-left: -10px;">Notification Settings</h3>
+    <div class="row">
+      <i class="fas fa-chevron-left icon-back" @click="back()"></i>
+      <h3>Notification Settings</h3>
+    </div>
    <div v-for="(item, index) in list" :key="index">
     <Cards
       :title="item.title"
@@ -17,6 +20,7 @@
 <script>
 import AUTH from 'src/services/auth'
 import Cards from 'src/modules/settings/CardSettings.vue'
+import ROUTER from 'src/router'
 export default{
   mounted(){
     this.retrieve()
@@ -61,6 +65,9 @@ export default{
     Cards
   },
   methods: {
+    back() {
+      ROUTER.push('/settings')
+    },
     update(index, payload){
       let parameter = {
         id: this.id
@@ -121,8 +128,15 @@ export default{
 @import "~assets/style/colors.scss";
 .container{
   width: 60%;
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
+}
+.icon-back{
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 4px;
+  color: gray
 }
 @media (max-width: 992px){
   .container{

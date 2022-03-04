@@ -15,16 +15,18 @@
     <div class="row" v-if="data">
       <div class="column data-col">
         <p class="title with-border"><b>More Details</b></p>
-        <p class="title">Trasaction #:</p>
-        <p class="title">Trasaction Type:</p>
-        <p class="title with-border" v-if="data.other_details && data.other_details.account"><b>{{data.other_details ? data.other_details.type === 'receive' ? 'From' : 'To' : 'From'}}</b></p>
-        <p class="title" v-if="data.other_details && data.other_details.account">Account Code:</p>
+        <p class="title">Trasaction #</p>
+        <p class="title">Trasaction Type</p>
+        <p class="title" v-if="data.other_details && data.other_details.amount">Total</p>
+        <p class="title with-border" v-if="data.other_details && data.other_details.charge">Fee</p>
+        <p class="title" v-if="data.other_details && data.other_details.account">{{data.other_details ? data.other_details.type === 'receive' ? 'From' : 'To' : 'From'}}</p>
       </div>
       <div class="column data-col">
         <p class="title with-border"><b>&nbsp;</b></p>
         <p class="title" v-if="data && data.code">****{{data.code.substring(data.code.length - 4, data.code.length)}}</p>
         <p class="title">{{data.description.toUpperCase()}}</p>
-        <p class="title with-border" v-if="data.other_details && data.other_details.account"><b>&nbsp;</b></p>
+        <p class="title" v-if="data.other_details && data.other_details.amount">{{data.other_details.amount}}</p>
+        <p class="title with-border" v-if="data.other_details && data.other_details.charge">{{data.other_details.charge}}</p>
         <p class="title" v-if="data.other_details && data.other_details.account">****{{data.other_details.account.code.substring(data.other_details.account.code.length - 4, data.other_details.account.code.length)}}</p>
       </div>
     </div>
@@ -49,11 +51,10 @@ export default{
       ROUTER.push('/transactions')
     },
     retrieve(){
-      console.log(this.$route.params)
       if(this.$route.params){
         let parameter = {
           condition: [{
-            column: 'id',
+            column: 'code',
             value: this.$route.params.id,
             clause: '='
           }, {
@@ -68,7 +69,6 @@ export default{
         $('#loading').css({display: 'block'})
         this.APIRequest('ledger/transaction_history', parameter).then(response => {
           $('#loading').css({display: 'none'})
-          console.log(response)
           if(response.data.length > 0) {
             try{
               response.data[0]['other_details'] = JSON.parse(response.data[0].details)
@@ -76,7 +76,6 @@ export default{
               console.log(e)
             }
             this.data = response.data[0]
-            console.log(this.data)
           }
         })
       }

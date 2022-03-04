@@ -20,7 +20,7 @@
       :version="3"
       :description="item.description"
       :amount="item.currency.toUpperCase() + ' ' + (item.amount !== null ? item.amount.toLocaleString() : item.amount)"
-      :route="'transaction/details/' + item.id"
+      :route="'transaction/details/' + item.code"
       :styles="item.amount > 0 ? 'color: #56C596;' : 'color: red;'"
     />
     </div>
@@ -190,8 +190,7 @@ export default{
 }
 .container{
   width: 60%;
-  margin-top: 15px;
-  margin-bottom: 50px;
+  margin-top: 30px;
   align-items: center;
 }
 @media (max-width: 992px){

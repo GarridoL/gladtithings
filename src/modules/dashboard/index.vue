@@ -153,7 +153,7 @@ export default{
 @import "~assets/style/colors.scss";
 .container{
   width: 60%;
-  margin-bottom: 50px;
+  margin-top: 10px;
   align-items: center;
   padding: 20px;
 }

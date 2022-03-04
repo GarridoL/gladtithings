@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-   <h3 style="margin-left: -10px;">Subscription Settings</h3>
+    <div class="row">
+      <i class="fas fa-chevron-left icon-back" @click="back()"></i>
+      <h3>Subscription Settings</h3>
+    </div>
    <div>
     <p style="color: red;" v-if="errorMessage">{{errorMessage}}</p>
    </div>
@@ -37,6 +40,9 @@ export default{
     Cards
   },
   methods: {
+    back() {
+      ROUTER.push('/settings')
+    },
     update() {
       if(this.user.merchant === null) {
         this.errorMessage = 'Please setup your church account first.'
@@ -79,8 +85,15 @@ export default{
 @import "~assets/style/colors.scss";
 .container{
   width: 60%;
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
+}
+.icon-back{
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 4px;
+  color: gray
 }
 @media (max-width: 992px){
   .container{

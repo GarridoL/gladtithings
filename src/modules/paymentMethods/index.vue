@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <h3 style="margin-left: -15px;">Payment Methods</h3>
+    <div class="row">
+      <i class="fas fa-chevron-left icon-back" @click="back()"></i>
+      <h3>Payment Methods</h3>
+    </div>
     <div class="row mt-4" style="width: 100%;">
       <div class="column" style="width: 50%;">
         <p><b>Payment Methods</b></p>
@@ -65,6 +68,9 @@ export default{
     Confirmation
   },
   methods: {
+    back() {
+      ROUTER.push('/settings')
+    },
     authorize(){
       console.log('refs', this.$refs.stripe)
       this.$refs.stripe.createCustomer()
@@ -142,6 +148,13 @@ button:focus{
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.icon-back{
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 4px;
+  color: gray
+}
 p{
   margin: 0
 }
@@ -151,7 +164,7 @@ p{
 }
 .container{
   width: 60%;
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
 }
 .add{

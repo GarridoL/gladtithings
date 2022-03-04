@@ -1,6 +1,9 @@
 <template>
   <div class="container" v-if="afterLoad">
-    <h3>Church Details</h3>
+    <div class="row">
+      <i class="fas fa-chevron-left icon-back" @click="back()"></i>
+      <h3>Church Details</h3>
+    </div>
     <div class="row top">
       <div class="column church-details-1">
         <span class="error text-danger" v-if="errorMessage">
@@ -162,6 +165,9 @@ export default{
     'location-merchant': require('components/increment/settings/MerchantLocation.vue')
   },
   methods: {
+    back() {
+      ROUTER.push('/settings')
+    },
     getResult($event) {
       if($event !== null) {
         let address = {
@@ -469,7 +475,7 @@ label{
 }
 .container{
   width: 60%;
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
   align-items: center;
 }
@@ -480,6 +486,13 @@ label{
   float: right;
   border-radius: 100px;
   margin-bottom: 10px;
+}
+.icon-back{
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 4px;
+  color: gray
 }
 @media (max-width: 992px){
   .container{

@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-   <h3>Account Settings</h3>
+    <div class="row">
+      <i class="fas fa-chevron-left icon-back" @click="back()"></i>
+      <h3>Account Settings</h3>
+    </div>
     <span class="error text-danger" v-if="errorMessage1 !== null">
       <b>Oops!</b> {{errorMessage1}}
     </span>
@@ -132,6 +135,9 @@ export default{
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue')
   },
   methods: {
+    back() {
+      ROUTER.push('/settings')
+    },
     validate(){
       if(this.password !== null && this.password !== '') {
         if(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/.test(this.password) || this.password.length >= COMMON.passwordLimit) {
@@ -316,9 +322,16 @@ label{
   margin-bottom: 20px;
 }
 .container{
-  margin-top: 15px;
+  margin-top: 25px;
   margin-bottom: 50px;
   width: 60%;
+}
+.icon-back{
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 4px;
+  color: gray
 }
 button:focus{
   outline: none;
