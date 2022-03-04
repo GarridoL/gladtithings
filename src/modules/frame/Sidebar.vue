@@ -24,7 +24,7 @@
                 </li>
                 <li v-on:click="logOut()" class="log-out menu-holder">
                   <i class="fas fa-sign-out-alt visible"></i>
-                  <label>Logout</label>
+                  <label class="text-logout">Logout</label>
                 </li>
               </ul>
             </li>
@@ -33,7 +33,7 @@
             </li>
             <li v-on:click="logOut()" class="log-out menu-holder">
               <i class="fas fa-sign-out-alt visible"></i>
-              <label>Logout</label>
+              <label class="text-logout">Logout</label>
             </li>
           </ul>
         </div>
@@ -208,6 +208,9 @@ export default {
   transition: all 1s ease 0s;
   z-index: 1;
   margin-top: 50px;
+}
+.fa-sign-out-alt, .text-logout{
+  color: $danger;
 }
 .main-sidebar{
   overflow-y: hidden;

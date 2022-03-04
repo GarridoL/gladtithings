@@ -21,10 +21,10 @@
                  <img v-bind:src="config.BACKEND_URL + user.profile.url" style="width: 30px; height: 30px; border-radius: 100px; margin-top: 8px;">
               </div>
               <div class="column">
-                <p style="font-size: 17px; margin-top: 12px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username}}</p>
+                <p style="font-size: 17px; margin-top: 12px;" v-if="user.profile !== null">&nbsp;&nbsp;{{user.username.charAt(0).toUpperCase() + user.username.slice(1)}}</p>
               </div>
             </div>
-            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 15px; font-size: 1.5em; margin-left: 10px;" v-else><span style="font-family: Poppins; font-size: 20px;">&nbsp;&nbsp;{{user.username}}</span></i>
+            <i class="fa fa-user-circle-o profile-icon" style="margin-top: 13px; font-size: 1.65em; margin-left: 10px;" v-else><span style="font-family: Poppins; font-size: 20px;">&nbsp;&nbsp;{{user.username.charAt(0).toUpperCase() + user.username.slice(1)}}</span></i>
             <span class="dropdown-menu dropdown-menu-right" aria-labelledby="settings">
               <span class="dropdown-item-profile">
                 <span class="account-picture text-center">
@@ -64,7 +64,7 @@
               </span>
               <span class="dropdown-item" v-on:click="logOut()">
                 <i class="fas fa-sign-out-alt"></i>
-                  <label>Logout</label>
+                  <label class="text-logout">Logout</label>
                 </span>
             </span>
           </span>
@@ -332,6 +332,9 @@ body{
   font-size: 13px;
   font-weight: 400;
 }
+.fa-sign-out-alt, .text-logout{
+  color: $danger;
+}
 .btn{ 
   font-size: 12px;
 }
@@ -365,7 +368,7 @@ body{
     font-size: 24px;
     width: 18%;
     background: $primary;
-    text-align: center;
+    padding-left: 10px;
     position: fixed;
   }
   
@@ -793,8 +796,9 @@ body{
       width: 20%;
     }
     .logo-brand{
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
+      margin-top: 5px;
     }
     .left-menu-icons{
       width: 20% !important;
@@ -808,8 +812,9 @@ body{
   }
   @media (max-width: 300px){
     .logo-brand{
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
+      margin-top: 5px;
     }
   }
 </style>

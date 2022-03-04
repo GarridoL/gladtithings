@@ -154,13 +154,12 @@ export default{
       }
     },
     updatePhoto(object){
-      $('#loading').css({'display': 'block'})
+      // $('#loading').css({'display': 'block'})
       this.APIRequest('account_profiles/update', object).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data === true){
           this.hideImages()
-          this.retrieve()
-          AUTH.checkAuthentication()
+          AUTH.checkAuthentication(null, true)
         }
       })
     },
@@ -168,7 +167,7 @@ export default{
       this.APIRequest('account_profiles/create', object).then(response => {
         if(response.data > 0){
           this.hideImages()
-          AUTH.checkAuthentication()
+          AUTH.checkAuthentication(null, true)
         }
       })
     },
