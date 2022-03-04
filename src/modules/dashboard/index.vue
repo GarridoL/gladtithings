@@ -33,9 +33,12 @@
         <p style="margin-top: 5px;">Here are the summary last month.</p>
       </div>
     </div>
-    <div class="graph">
+    <div class="graph" v-if="data.labels.length > 0">
       <GraphHeader @temp="headSub" :data="data"/>
-      <BarGraph :data="data" v-if="data.labels.length > 0" :options="{responsive: true, maintainAspectRatio: false}"/>
+      <BarGraph :data="data" :options="{responsive: true, maintainAspectRatio: false}"/>
+    </div>
+    <div v-else>
+      <empty v-if="data.length === 0" :title="'Last summary is not available!'" :action="'Keep growing.'"></empty>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -100,7 +103,8 @@ export default{
     Posts,
     VueQrcode,
     BarGraph,
-    GraphHeader
+    GraphHeader,
+    'empty': require('components/increment/generic/empty/Empty.vue')
   },
   methods: {
     headSub(e){
