@@ -70,7 +70,6 @@ import Donation from 'src/modules/events/Donations.vue'
 export default{
   mounted(){
     this.retrieve(this.$route.params.id)
-    this.retrieveAttendees(this.$route.params.id)
   },
   data(){
     return {
@@ -127,7 +126,7 @@ export default{
       let parameter = {
         condition: [{
           value: id,
-          column: 'id',
+          column: 'code',
           clause: '='
         }],
         sort: {created_at: 'asc'},
@@ -140,6 +139,7 @@ export default{
         if(response.data.length > 0){
           this.details = response.data[0]
           this.$refs.donation.setDetails(response.data[0])
+          this.retrieveAttendees(response.data[0].id)
         }
       })
     },
