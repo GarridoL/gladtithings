@@ -176,7 +176,7 @@ export default{
       let parameter = {
         condition: [{
           value: id,
-          column: 'id',
+          column: 'code',
           clause: '='
         }],
         sort: {created_at: 'asc'},
@@ -190,6 +190,7 @@ export default{
           this.name = response.data[0].name
           this.description = response.data[0].description
           this.type = response.data[0].type
+          this.limitAttendees = response.data[0].limit
           this.category = response.data[0].category
           this.location = response.data[0].location
           this.startDate = response.data[0].start_date.split(' ')[0]

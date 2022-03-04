@@ -186,5 +186,12 @@ export default{
     meta: {
       tokenRequired: true
     }
+  }, {
+    path: '/languages',
+    name: 'languages',
+    component: resolve => require(['modules/languageSettings/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }]
 }

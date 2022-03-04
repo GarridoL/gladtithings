@@ -1,6 +1,7 @@
 // src/auth/index.js
 import {router} from 'src/router/index'
 import ROUTER from 'src/router'
+import {English, Spanish} from 'src/modules/locales'
 import {Howl} from 'howler'
 import Vue from 'vue'
 import Echo from 'laravel-echo'
@@ -32,6 +33,7 @@ export default {
       currency: 'PHP'
     }
   },
+  language: English,
   messenger: {
     messages: [],
     badge: 0,
