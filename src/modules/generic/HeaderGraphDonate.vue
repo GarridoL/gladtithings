@@ -105,7 +105,7 @@ export default {
         document.getElementById(`${this.tempStyle}`).style.backgroundColor = '#F6F6F6'
         document.getElementById(`${id}`).style.backgroundColor = 'white'
         this.tempStyle = id
-        this.$emit('temp', this.tempStyle)
+        this.$emit('tempDonate', this.tempStyle)
       }
       this.$parent.retrieve(null, null)
     }

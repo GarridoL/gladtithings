@@ -1,11 +1,15 @@
 <template>
     <div class="container">
       <div v-if="user.merchant != null">
-          <h3>Subscriptions Management</h3>
-          <p style="margin-top: 5px;">Here are the latest update of subscriptions as of the moment.</p>
-        <div>
-          <p class="list-of"><b>List of Subscribers</b></p>
-          <p>The following data shows the list of subscribers.</p>
+          <div class="row" style="width: 100%;">
+            <div class="column">
+              <h3>Subscriptions Management</h3>
+              <p style="margin-top: 5px;">Here are the latest update of subscriptions as of the moment.</p>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p style="color: black; margin: 0; font-size: 17px; margin-top: 30px"><b>List of Subscribers</b></p>
+            <p style="margin-top: 5px;">The following data shows the list of subscribers.</p>
           </div>
             <br>
             <div class="mt-4">
@@ -18,8 +22,8 @@
                 :grid="['list', 'th-large']">
               </basic-filter>
             </div>
-            <div class="table-container">
-              <table class="table table-bordered table-responsive" v-if="data.length > 0">
+            <div class="table-container" v-if="data.length > 0">
+              <table class="table table-bordered table-responsive">
                 <thead>
                   <tr>
                       <td class="header"><b>Username</b></td>
@@ -37,31 +41,35 @@
                   </tr>
                 </tbody>
               </table>
-              <empty v-if="data.length === 0" :title="'No Subscriptions available!'" :action="'Keep growing.'"></empty>
             </div>
+            <empty class="table-container" v-if="data.length === 0" :title="'No Subscriptions available!'" :action="'Keep growing.'"></empty>
           <Pager
           :pages="numPages"
           :active="activePage"
           :limit="limit"
           v-if="data.length > 0"
         />
-        <div>
-          <p class="list-of"><b>Subscribers Graph</b></p>
-          <p>The following data shows status of subscribers.</p>
+        <div class="mt-5 pt-5">
+          <p style="color: black; margin: 0; font-size: 17px;"><b>Subscribers Graph</b></p>
+          <p style="margin-top: 5px;">The following data shows status of subscribers.</p>
         </div>
-        <div class="graph">
-          <GraphHeader v-if="graphSubscribe.labels.length > 0" @temp="headSub" :data="graphSub" :name="'Subscription'"/>
-          <BarGraph v-if="graphSubscribe.labels.length > 0" :data="graphSub" :options="{responsive: true, maintainAspectRatio: false}"/>
-          <empty v-else :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
+        <div class="graph" v-if="graphSubscribe.labels.length > 0">
+          <GraphHeader @temp="headSub" :data="graphSub" :name="'Subscription'"/>
+          <BarGraph :data="graphSub" :options="{responsive: true, maintainAspectRatio: false}"/>
         </div>
-        <div>
-          <p class="list-of"><b>Donations Graph</b></p>
-          <p>The following data shows status of donations.</p>
+        <div v-else>
+          <empty class="table-container" :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
         </div>
-        <div class="graph">
-          <GraphHeader v-if="graphDonations.labels.length > 0" @temp="headDonate" :data="graphDon" :name="'Donations'"/>
-          <BarGraph v-if="graphDonations.labels.length > 0" :data="graphDon" :options="{responsive: true, maintainAspectRatio: false}"/>
-          <empty v-else :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
+        <div class="mt-4">  
+          <p style="color: black; margin: 0; font-size: 17px;"><b>Donations Graph</b></p>
+          <p style="margin-top: 5px;">The following data shows status of donations.</p>
+        </div>
+        <div class="graph" v-if="graphDonations.labels.length > 0">
+          <GraphHeaderDonate @tempDonate="headDonate" :data="graphDon" :name="'Donations'"/>
+          <BarGraphDonate :data="graphDon" :options="{responsive: true, maintainAspectRatio: false}"/>
+        </div>
+        <div v-else>
+          <empty class="table-container" :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
         </div>
       </div>
       <div v-else>
@@ -77,6 +85,8 @@ import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 import BarGraph from 'src/modules/generic/BarGraph.vue'
 import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
+import BarGraphDonate from 'src/modules/generic/BarGraphDonate.vue'
+import GraphHeaderDonate from 'src/modules/generic/HeaderGraphDonate.vue'
 export default{
   mounted(){
     if(this.user.merchant !== null){
@@ -166,7 +176,9 @@ export default{
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
     BarGraph,
-    GraphHeader
+    GraphHeader,
+    BarGraphDonate,
+    GraphHeaderDonate
   },
   methods: {
     redirect(route){
@@ -199,14 +211,13 @@ export default{
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
         if(response.data.length > 0){
           this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = []
-          this.numPages = null
         }
       })
     },
     headDonate(e){
+      console.log('[donate::::]', e)
       this.donateSelected = e
       this.donationGraph(this.donateSelected)
     },
@@ -218,6 +229,7 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
+        console.log('[donation]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
@@ -260,12 +272,6 @@ export default{
   border-radius: 7px;
   padding: 30px 30px 30px 30px;
   margin-bottom: 50px;
-}
-.list-of{
-  color: black;
-  margin: 2px;
-  font-size: 17px;
-  margin-top: 30px
 }
 .icon-eye{
   color: $secondary;
