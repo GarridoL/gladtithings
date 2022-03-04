@@ -358,6 +358,7 @@ class SubscriptionController extends APIController
     public function retrieveSubscriptionsGraph(Request $request){
         $data = $request->all();
         $currDate = Carbon::now();
+        
         $fTransaction = Ledger::where('description', '=', 'Subscription')->where('account_id', '=', $data['account_id'])->first();
         $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
