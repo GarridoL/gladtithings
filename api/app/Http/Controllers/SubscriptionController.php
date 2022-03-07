@@ -531,7 +531,7 @@ class SubscriptionController extends APIController
             for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
                 $item = $temp[$i];
                 array_push($resDates, $item['year']);
-                array_push($resData, $item['amount']);
+                array_push($resData, ((float)$item['amount'] * -1));
             }
             }
         }else if($data['date'] === 'current_year'){
@@ -541,7 +541,7 @@ class SubscriptionController extends APIController
             
             $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
             array_push($resDates, $month);
-            array_push($resData, ($temp));
+            array_push($resData, ($temp * -1));
             }
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
@@ -552,7 +552,7 @@ class SubscriptionController extends APIController
             }else{
                 array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
             }
-            array_push($resData, ($temp));
+            array_push($resData, ($temp * -1));
             }
         }else if($data['date'] === 'current_month'){
             foreach ($dates as $key) {
@@ -563,20 +563,14 @@ class SubscriptionController extends APIController
             }else{
                 array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
             }
-            array_push($resData, ($temp));
+            array_push($resData, ($temp * -1));
             }
         }else if($data['date'] === '7days'){
             foreach($dates as $value){
                 $day = Carbon::createFromFormat('Y-m-d', $value)->format('l');
                 $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->sum('amount');
                 array_push($resDates, $day);
-                array_push($resData, $temp);
-            }
-        }else if($data['date'] === 'custom'){
-            foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
-            array_push($resDates, $key);
-            array_push($resData, ($temp * -1));
+                array_push($resData, ($temp * -1));
             }
         }
 
