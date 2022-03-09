@@ -14,20 +14,16 @@
               <i class="fas fa-trash-alt delete-image" v-if="activeIndex === index" @click="removeImage(index)"></i>
           </span>
           <div class="upload-icon">
-            <i class="fas fa-upload upload" @click="$refs.file.click()"></i>
-            <input type="file" ref="file" id="Image" :accept="'image/*'" @change="setUpFileUpload($event)" style="display: none">
-            <span>Upload Photo</span>
+            <!-- <i class="fas fa-upload upload" @click="$refs.file.click()"></i> -->
+            <span><b>Upload Photo</b></span>
+            <input type="file" ref="file" id="Image" :accept="'image/*'" @change="setUpFileUpload($event)">
           </div>
           <div class="upload-icon">
-            <i class="fas fa-upload upload" @click="$refs.file.click()"></i>
-            <input type="file" ref="file" id="Image" :accept="'video/*'" @change="setUpFileUploadVideo($event)" style="display: none">
-            <span>Upload Video</span>
+            <!-- <i class="fas fa-upload upload" @click="$refs.files.click()"></i> -->
+            <span><b>Upload Video</b></span>
+            <input type="file" ref="file" id="Image" :accept="'video/*'" @change="setUpFileUploadVideo($event)">
+            <p v-if="vid">{{this.vid.name}}</p>
           </div>
-          <!-- <div class="upload-icon">
-            <i class="fas fa-upload upload" @click="$refs.file.click()"></i>
-            <input type="file" ref="file" id="Video" :accept="'video/*'" @change="setUpFileUploadVideo($event)" style="display: none">
-            <p>Upload Video</p>
-          </div> -->
         </div>
       </div>
     </div>
@@ -60,6 +56,12 @@ export default{
       this.pictures.splice(index, 1)
     },
     setUpFileUploadVideo(event){
+      if(this.vid !== null) {
+        this.errorMessage = 'You can only upload 1 video.'
+        return
+      } else {
+        this.errorMessage = null
+      }
       let files = event.target.files || event.dataTransfer.files
       if(!files.length){
         return false
@@ -126,11 +128,7 @@ export default{
         return
       }
       let formData = new FormData()
-      formData.append('file', {
-        name: this.vid.name,
-        type: this.vid.type,
-        uri: 'file:///data/user/0/com.gladtithings/cache/react-native-image-crop-picker/' + this.vid.name
-      })
+      formData.append('file', this.vid)
       formData.append('file_url', this.vid.name)
       formData.append('account_id', this.user.userID)
       formData.append('category', 'video-from-comment')

@@ -147,27 +147,27 @@ export default{
       $('#createPost').modal('show')
     },
     createPost() {
-      // if(this.input === null || this.input === '') {
-      //   return
-      // }
-      // let parameter = {
-      //   account_id: this.user.userID,
-      //   payload: 'account_id',
-      //   payload_value: this.user.userID,
-      //   text: this.input || ' ',
-      //   to: this.user.id,
-      //   from: this.user.id,
-      //   route: 'statusStack'
-      // }
-      // $('#loading').css({display: 'block'})
-      // this.APIRequest('comments/create', parameter).then(response => {
-      //   $('#loading').css({display: 'none'})
-      //   if(response.data > 0) {
-      //     this.input = null
-      //     this.$refs.createPost.upload(response.data)
-      this.$refs.createPost.uploadVid(50)
-      //   }
-      // })
+      if(this.input === null || this.input === '') {
+        return
+      }
+      let parameter = {
+        account_id: this.user.userID,
+        payload: 'account_id',
+        payload_value: this.user.userID,
+        text: this.input || ' ',
+        to: this.user.id,
+        from: this.user.id,
+        route: 'statusStack'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('comments/create', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.input = null
+          this.$refs.createPost.upload(response.data)
+          this.$refs.createPost.uploadVid(response.data)
+        }
+      })
     },
     retrieve(){
       let parameter = {

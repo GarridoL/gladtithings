@@ -19,20 +19,22 @@ Vue.mixin({
     },
     uploadByFetch(route, parameter, callback, errorCallback) {
       let apiRoute = AUTH.tokenData.token ? route + '?token=' + AUTH.tokenData.token : route
-      let request = jQuery.ajax({
+      let request = jQuery.post({
         url: apiRoute,
-        method: 'POST',
-        body: parameter,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        data: parameter,
+        cache: false,
+        contentType: false,
+        processData: false
+        // headers: {
+        //   'Content-Type': 'multipart/form-data'
+        // }
       }, (response) => {
+        console.log('>>>>>>>>>', response)
         this.APISuccessRequestHandler(response, callback)
       }).fail((jqXHR) => {
         $('#loading').css({display: 'none'})
         this.APIFailRequestHandler(apiRoute, jqXHR, errorCallback)
       })
-      console.log(request)
       return request
     },
     APIAudioRequest(link, parameter, callback, errorCallback){
