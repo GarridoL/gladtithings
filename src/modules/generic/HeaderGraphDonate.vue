@@ -28,7 +28,6 @@ import TemplatePdf from './PdfTemplate.js'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import { ExportToCsv } from 'export-to-csv'
-import { LayoutPlugin } from 'bootstrap-vue'
 export default {
   props: ['dataDonate', 'name'],
   mounted(){
@@ -104,6 +103,7 @@ export default {
           }
         }
         this.tempStyleDonate = id
+        this.$emit('tempDonate', this.tempStyleDonate)
       }
     }
   }
