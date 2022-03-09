@@ -1,35 +1,23 @@
 <template>
   <div>
     <table class="table table-bordered">
-      <thead style="text-align: left; margin-top: 3%">
-        <tr class="header123">
-          <td class="header" id="yearly" @click="activate('yearly')"><b>Yearly</b></td>
-          <td class="header" id="current_year" @click="activate('current_year')"><b>This Year</b></td>
-          <td class="header" id="last_month" @click="activate('last_month')"><b>Last Month</b></td>
-          <td class="header" id="current_month" @click="activate('current_month')"><b>This Month</b></td>
-          <td class="header" id="last_days" @click="activate('last_days')"><b>Last 7 Days</b></td>
-          <td class="header">
-            <!-- <b>Custom:</b>
-            <date-picker
-              class="datetime-picker"
-              v-model="custom"
-              range
-              :value-type="'YYYY-MM-DD'"
-              :format="'MMM D, YYYY'"
-              :input-class="'form-control'"
-            >
-            </date-picker>  -->
-            <div class="fas fa-file-export hover" @click="exportD(data)">
-              <div class="tooltip">Export
-              </div>
+      <tr class="test">
+        <td class="header" id="yearlyD" @click="activateDon('yearly', 'yearlyD')"><b>Yearly</b></td>
+        <td class="header" id="current_yearD" @click="activateDon('current_year', 'current_yearD')"><b>This Year</b></td>
+        <td class="header" id="last_monthD" @click="activateDon('last_month', 'last_monthD')"><b>Last Month</b></td>
+        <td class="header" id="current_monthD" @click="activateDon('current_month', 'current_monthD')"><b>This Month</b></td>
+        <td class="header" id="7daysD" @click="activateDon('7days', '7daysD')"><b>Last 7 Days</b></td>
+        <td class="header">
+          <div class="fas fa-file-export hover" @click="exportD(data)">
+            <div class="tooltip">Export
             </div>
-            <div class="fas fa-print hover" @click="print(data)">
-              <div class="tooltip">Print
-              </div>
+          </div>
+          <div class="fas fa-print hover" @click="print(data)">
+            <div class="tooltip">Print
             </div>
-          </td>
-        </tr>
-      </thead>
+          </div>
+        </td>
+      </tr>
     </table>
   </div> 
 </template>
@@ -40,10 +28,11 @@ import TemplatePdf from './PdfTemplate.js'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import { ExportToCsv } from 'export-to-csv'
+import { LayoutPlugin } from 'bootstrap-vue'
 export default {
-  props: ['data', 'name'],
+  props: ['dataDonate', 'name'],
   mounted(){
-    this.activate('yearly')
+    this.activateDon('yearly', 'yearlyD')
     const {vfs} = pdfFonts.pdfMake
     PDFTemplate.vfs = vfs
   },
@@ -51,7 +40,8 @@ export default {
     return {
       PdfTemplate: TemplatePdf,
       custom: null,
-      tempStyle: null
+      tempStyleDonate: null,
+      temp: null
     }
   },
   components: {
@@ -72,14 +62,14 @@ export default {
         useTextFile: false,
         useBom: true,
         // useKeysAsHeaders: true,
-        filename: this.data !== undefined ? this.data.datasets[0].label : 'No Summary',
+        filename: this.dataDonate !== undefined ? this.dataDonate.datasets[0].label : 'No Summary',
         headers: ['Date', 'Amount']
       }
       var exportData = []
-      if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
-        for (let index = 0; index < this.data.labels.length; index++) {
-          const items = this.data.labels[index]
-          const item = this.dataSet(this.data.datasets[0].data[index])
+      if(this.dataDonate !== undefined && this.dataDonate.labels.length > 0 && this.dataDonate.datasets[0].data.length > 0){
+        for (let index = 0; index < this.dataDonate.labels.length; index++) {
+          const items = this.dataDonate.labels[index]
+          const item = this.dataSet(this.dataDonate.datasets[0].data[index])
           let obj = {
             date: items,
             amount: item
@@ -94,20 +84,27 @@ export default {
     },
     print(data){
       this.PdfTemplate.getItem(data)
-      this.PdfTemplate.getDate(this.tempStyle === null ? 'yearly' : this.tempStyle)
+      this.PdfTemplate.getDate(this.tempStyleDonate === null ? 'yearly' : this.tempStyleDonate)
       this.PdfTemplate.template()
     },
-    activate(id){
-      if(this.tempStyle === null){
-        this.tempStyle = id
-        document.getElementById(`${id}`).style.backgroundColor = 'white'
+    activateDon(id, name){
+      if(this.tempStyleDonate === null){
+        this.temp = name
+        this.tempStyleDonate = id
+        document.getElementById(`${name}`).style.backgroundColor = 'white'
       }else{
-        document.getElementById(`${this.tempStyle}`).style.backgroundColor = '#F6F6F6'
-        document.getElementById(`${id}`).style.backgroundColor = 'white'
-        this.tempStyle = id
-        this.$emit('tempDonate', this.tempStyle)
+        if(this.temp === null){
+          document.getElementById(`${name}`).style.backgroundColor = 'white'
+          this.temp = name
+        }else{
+          if(this.temp !== name){
+            document.getElementById(`${this.temp}`).style.backgroundColor = '#F6F6F6'
+            document.getElementById(`${name}`).style.backgroundColor = 'white'
+            this.temp = name
+          }
+        }
+        this.tempStyleDonate = id
       }
-      this.$parent.retrieve(null, null)
     }
   }
 }
@@ -117,9 +114,8 @@ $(document).ready(function(){
 </script>
 <style scoped lang="scss">
 @import '~assets/style/colors.scss';
-.datetime-picker{
-  width: 50% !important;
-  // margin-left: 2%;
+.theads{
+  width: 90%
 }
 .header{
 	text-align: center;
@@ -127,8 +123,8 @@ $(document).ready(function(){
   background-color: #F6F6F6;
 }
 .fa-file-export {
-  margin-right: 2px;
-  margin-left: 2%;
+  // margin-right: 2px;
+  // margin-left: 2%;
 }
 
 .fa-file-export, .fa-print{
@@ -167,7 +163,7 @@ $(document).ready(function(){
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -5px;
+  // margin-left: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: black transparent transparent transparent;
@@ -175,10 +171,16 @@ $(document).ready(function(){
 .hover:hover .tooltip {
   opacity: 1;
 }
-@media (max-width: 992px){
-  .table-bordered{
-    width: 100%;
-    text-align: center;
+@media (max-width: 991px){
+  .head{
+    width: 80% !important;
+    // text-align: center;
+  }
+  .test{
+    width: 100% !important;
+  }
+  .canvas{
+    width: 100% !important;
   }
 }
 </style>
