@@ -224,7 +224,6 @@ export default{
     },
     headDonate(ex){
       this.donateSelected = ex
-      console.log('[]', ex)
       this.donationGraph(this.donateSelected)
     },
     donationGraph(e){
