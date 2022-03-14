@@ -34,8 +34,8 @@
       </div>
     </div>
     <div class="graph" v-if="data.labels.length > 0">
-      <GraphHeader @temp="headSub" :data="data"/>
-      <BarGraph :data="data" :options="{responsive: true, maintainAspectRatio: false}"/>
+      <GraphHeader @temp="headSub" :data="data" :name="'Summary'"/>
+      <BarGraph :data="data" :options="{responsive: true, maintainAspectRatio: false}" ref="subscription"/>
     </div>
     <div v-else>
       <empty v-if="data.length === 0" :title="'Last summary is not available!'" :action="'Keep growing.'"></empty>
@@ -65,8 +65,8 @@
 <script>
 import AUTH from 'src/services/auth'
 import Posts from 'src/modules/generic/Posts.vue'
-import BarGraph from 'src/modules/generic/BarGraph.vue'
-import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
+import BarGraph from 'src/modules/generic/BarGraphDashboard.vue'
+import GraphHeader from 'src/modules/generic/HeaderGraphDashboard.vue'
 import VueQrcode from 'qrcode.vue'
 export default{
   mounted(){
@@ -111,6 +111,11 @@ export default{
       this.selected = e
       this.retrieveGraphData()
     },
+    summary(){
+      if(this.$refs.subscription && this.$refs.subscription.retrieve !== undefined){
+        this.$refs.subscription.retrieve(this.data, {responsive: true, maintainAspectRatio: false})
+      }
+    },
     showQr(){
       $('#qrcode').modal('show')
     },
@@ -147,6 +152,7 @@ export default{
           this.data.datasets[0].data = response.data.total_amount_received
           this.receive = response.data.received
           this.sent = Math.abs(response.data.sends)
+          this.summary()
         }
       })
     }

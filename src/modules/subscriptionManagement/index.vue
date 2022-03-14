@@ -50,8 +50,8 @@
           <p>The following data shows status of subscribers.</p>
         </div>
         <div class="graph" v-if="graphSubscribe.labels.length > 0">
-          <GraphHeader @temp="headSub" :data="graphSub" :name="'Subscription'"/>
-          <BarGraph :data="graphSub" :options="{responsive: true, maintainAspectRatio: false}"/>
+          <GraphHeader @temp="headSub" :data="graphSubscribe" :name="'Subscription'"/>
+          <BarGraph ref="subscription" :data="graphSubscribe" :options="{responsive: true, maintainAspectRatio: false}"/>
         </div>
         <div v-else>
           <empty class="table-container" :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
@@ -61,8 +61,8 @@
           <p>The following data shows status of donations.</p>
         </div>
         <div class="graph" v-if="graphDonations.labels.length > 0">
-          <GraphHeaderDonate @tempDonate="headDonate" :data="graphDon" :name="'Donations'"/>
-          <BarGraphDonate :data="graphDon" :options="{responsive: true, maintainAspectRatio: false}"/>
+          <GraphHeaderDonate @tempDonate="headDonate" :dataDonate="graphDonations" :name="'Donations'"/>
+          <BarGraphDonate ref="donation" :chartData="graphDonations" :options="{responsive: true, maintainAspectRatio: false}"/>
         </div>
         <div v-else>
           <empty class="table-container" :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
@@ -84,13 +84,6 @@ import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
 import BarGraphDonate from 'src/modules/generic/BarGraphDonate.vue'
 import GraphHeaderDonate from 'src/modules/generic/HeaderGraphDonate.vue'
 export default{
-  mounted(){
-    if(this.user.merchant !== null){
-      this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
-      this.donationGraph(this.donateSelected)
-      this.subscriptionGraph(this.subSelected)
-    }
-  },
   data(){
     return {
       user: AUTH.user,
@@ -136,9 +129,9 @@ export default{
         labels: [],
         datasets: [
           {
-            fill: true,
-            borderColor: '#f87979',
-            backgroundColor: '#56C596',
+            fill: false,
+            backgroundColor: '#f87979',
+            borderColor: '#56C596',
             label: 'SUBSCRIBERS',
             data: []
           }
@@ -156,6 +149,11 @@ export default{
           }
         ]
       }
+    }
+  },
+  mounted(){
+    if(this.user.merchant !== null){
+      this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
     }
   },
   computed: {
@@ -177,6 +175,16 @@ export default{
     GraphHeaderDonate
   },
   methods: {
+    donation(){
+      if(this.$refs.donation && this.$refs.donation.retrieve !== undefined){
+        this.$refs.donation.retrieve(this.graphDonations, {responsive: true, maintainAspectRatio: false})
+      }
+    },
+    subscription(){
+      if(this.$refs.subscription && this.$refs.subscription.retrieve !== undefined){
+        this.$refs.subscription.retrieve(this.graphSubscribe, {responsive: true, maintainAspectRatio: false})
+      }
+    },
     redirect(route){
       ROUTER.push(route)
     },
@@ -207,14 +215,15 @@ export default{
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
         if(response.data.length > 0){
           this.data = response.data
+          this.donationGraph(this.donateSelected)
+          this.subscriptionGraph(this.subSelected)
         }else{
           this.data = []
         }
       })
     },
-    headDonate(e){
-      console.log('[donate::::]', e)
-      this.donateSelected = e
+    headDonate(ex){
+      this.donateSelected = ex
       this.donationGraph(this.donateSelected)
     },
     donationGraph(e){
@@ -225,16 +234,15 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_donations', parameter).then(response => {
-        console.log('[donation]', response)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
           this.graphDonations.datasets[0].data = response.data.result
+          this.donation()
         }
       })
     },
     headSub(e){
-      console.log('[head sub]', e)
       this.subSelected = e
       this.subscriptionGraph(this.subSelected)
     },
@@ -246,11 +254,11 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
-        console.log('[subscription]', parameter)
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphSubscribe.labels = response.data.dates
           this.graphSubscribe.datasets[0].data = response.data.result
+          this.subscription()
         }
       })
     }
