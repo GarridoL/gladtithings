@@ -413,55 +413,61 @@ class SubscriptionController extends APIController
             ->groupby('year')
             ->get();
             if(sizeof($temp) > 0){
-            for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
-                $item = $temp[$i];
-                array_push($resDates, $item['year']);
-                array_push($resData, $item['amount']);
-            }
+                for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
+                    $item = $temp[$i];
+                    $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
+                    array_push($resDates, $item['year']);
+                    array_push($resData, $item['amount']);
+                    array_push($resDetails, $account);
+                }
             }
         }else if($data['date'] === 'current_year'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)
-                ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
-            
-            $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
-            array_push($resDates, $month);
-            array_push($resData, ($temp));
+                $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
+                $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
+                $data =Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                array_push($resDates, $month);
+                array_push($resData, ($temp));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            $tempPosition = array_search($key, $dates);
-            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
-                array_push($resDates, $tempPosition."th week");
-            }else{
-                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
-            }
-            array_push($resData, ($temp));
+                $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+                $tempPosition = array_search($key, $dates);
+                $data =Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, ($temp));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === 'current_month'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            $tempPosition = array_search($key, $dates);
-            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
-                array_push($resDates, $tempPosition."th week");
-            }else{
-                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
-            }
-            array_push($resData, ($temp));
+                $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+                $tempPosition = array_search($key, $dates);
+                $data =Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, ($temp));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === '7days'){
             foreach($dates as $value){
                 $day = Carbon::createFromFormat('Y-m-d', $value)->format('l');
                 $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->sum('amount');
+                $data =Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 array_push($resDates, $day);
                 array_push($resData, $temp);
-            }
-        }else if($data['date'] === 'custom'){
-            foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
-            array_push($resDates, $key);
-            array_push($resData, ($temp * -1));
+                array_push($resDetails, $account);
             }
         }
 
@@ -471,7 +477,6 @@ class SubscriptionController extends APIController
         );
         return $this->response();
     }
-
     public function retrieveDonations(Request $request){
         $data = $request->all();
         $currDate = Carbon::now();
@@ -479,6 +484,7 @@ class SubscriptionController extends APIController
         $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
+        $resDetails = [];
         $whereArray= array(
             array('details', '=', $data['account_id']),
             array('description', '=', 'Event Donation'),
@@ -528,49 +534,61 @@ class SubscriptionController extends APIController
             ->groupby('year')
             ->get();
             if(sizeof($temp) > 0){
-            for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
-                $item = $temp[$i];
-                array_push($resDates, $item['year']);
-                array_push($resData, ((float)$item['amount'] * -1));
-            }
+                for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
+                    $item = $temp[$i];
+                    $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
+                    array_push($resDates, $item['year']);
+                    array_push($resData, ((float)$item['amount'] * -1));
+                    array_push($resDetails, $account);
+                }
             }
         }else if($data['date'] === 'current_year'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)
-                ->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
-            
-            $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
-            array_push($resDates, $month);
-            array_push($resData, ($temp * -1));
+                $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
+                $month = Carbon::createFromFormat('m/d/Y', $key.'/01/'.$currDate->year)->format('F');
+                $data = Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                array_push($resDates, $month);
+                array_push($resData, ($temp * -1));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === 'last_month'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            $tempPosition = array_search($key, $dates);
-            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
-                array_push($resDates, $tempPosition."th week");
-            }else{
-                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
-            }
-            array_push($resData, ($temp * -1));
+                $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+                $tempPosition = array_search($key, $dates);
+                $data = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, ($temp * -1));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === 'current_month'){
             foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
-            $tempPosition = array_search($key, $dates);
-            if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
-                array_push($resDates, $tempPosition."th week");
-            }else{
-                array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
-            }
-            array_push($resData, ($temp * -1));
+                $temp = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->sum('amount');
+                $tempPosition = array_search($key, $dates);
+                $data = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
+                if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
+                    array_push($resDates, $tempPosition."th week");
+                }else{
+                    array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
+                }
+                array_push($resData, ($temp * -1));
+                array_push($resDetails, $account);
             }
         }else if($data['date'] === '7days'){
             foreach($dates as $value){
                 $day = Carbon::createFromFormat('Y-m-d', $value)->format('l');
                 $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->sum('amount');
+                $data = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->first();
+                $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 array_push($resDates, $day);
                 array_push($resData, ($temp * -1));
+                array_push($resDetails, $account);
             }
         }
 
@@ -580,7 +598,6 @@ class SubscriptionController extends APIController
         );
         return $this->response();
     }
-
     public function dashboard(Request $request){
         $data = $request->all();
         $result = array();
