@@ -363,6 +363,7 @@ class SubscriptionController extends APIController
         $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
+        $resDetails = [];
         $whereArray= array(
             array('account_id', '=', $data['account_id']),
             array('description', '=', 'Subscription'),
@@ -506,7 +507,8 @@ class SubscriptionController extends APIController
 
         $this->response['data'] = array(
             'dates' => $resDates,
-            'result' => $resData
+            'result' => $resData,
+            'details' => $resDetails,
         );
         return $this->response();
     }
@@ -659,7 +661,8 @@ class SubscriptionController extends APIController
 
         $this->response['data'] = array(
             'dates' => $resDates,
-            'result' => $resData
+            'result' => $resData,
+            'details' => $resDetails,
         );
         return $this->response();
     }
