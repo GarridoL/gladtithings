@@ -23,7 +23,7 @@
         <p class="balances-text"><b>{{ ledger && ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
       </div>
       <div class="column third">
-        <p class="title">Received Last 30 Days</p>
+        <p class="title">Received Donations</p>
         <p class="balances-text"><b>{{ledger && ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
       </div>
     </div>
