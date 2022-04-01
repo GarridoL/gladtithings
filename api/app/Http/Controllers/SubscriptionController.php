@@ -227,6 +227,11 @@ class SubscriptionController extends APIController
         
         //getting total received for last 30 days
         $tempReceived = Ledger::where('account_id', '=', $data['account_id'])
+          ->where(function($query){
+              $query->where('description', '=', 'Event Donation')
+                ->orWhere('description', '=', 'Church Donation')
+                ->orWhere('description', '=', 'Subscription');
+          })
           ->where('amount', '>', 0)
           ->whereBetween('created_at', [$last30days, $currDate->toDateTimeString()])
           ->get([DB::raw('SUM(amount) as total_received')]);
@@ -417,6 +422,10 @@ class SubscriptionController extends APIController
                 for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
                     $item = $temp[$i];
                     $temp[$i]['details'] = json_decode($item['details']) !== null ? json_decode($item['details']) : $item['details'];
+                    if(isset($temp[$i]['details']->to)){
+                        $temp[$i]['details']->to = $this->retrieveNameOnly($temp[$i]['details']->to);
+                        $temp[$i]['details']->from = $this->retrieveNameOnly($temp[$i]['details']->from);
+                    }
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
                         'account' => $account,
@@ -434,6 +443,10 @@ class SubscriptionController extends APIController
                 $data =Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
@@ -451,6 +464,10 @@ class SubscriptionController extends APIController
                 $data =Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
@@ -472,6 +489,10 @@ class SubscriptionController extends APIController
                 $data =Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
@@ -492,7 +513,11 @@ class SubscriptionController extends APIController
                 $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->sum('amount');
                 $data =Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->first();
                 if($data != null){
-                    $data['details'] = json_decode($item['details']);
+                    $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
@@ -564,13 +589,17 @@ class SubscriptionController extends APIController
         }
 
         if($data['date'] === 'yearly'){
-            $temp = Ledger::select(DB::raw('sum(amount) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
+            $temp = Ledger::select('*', DB::raw('sum(amount) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
             ->where($whereArray)
             ->groupby('year')
             ->get();
             if(sizeof($temp) > 0){
                 for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
                     $item = $temp[$i];
+                    if(isset($item['details']->to)){
+                        $temp[$i]['details']->to = $this->retrieveNameOnly($item['details']->to);
+                        $temp[$i]['details']->from = $this->retrieveNameOnly($item['details']->from);
+                    }
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
                         'account' => $account,
@@ -588,6 +617,10 @@ class SubscriptionController extends APIController
                 $data = Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
@@ -605,6 +638,10 @@ class SubscriptionController extends APIController
                 $data = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
@@ -626,6 +663,10 @@ class SubscriptionController extends APIController
                 $data = Ledger::where($whereArray)->whereBetween('created_at', [$key[array_key_first($key)], end($key)])->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
@@ -647,6 +688,10 @@ class SubscriptionController extends APIController
                 $data = Ledger::where($whereArray)->where('created_at', 'like', '%'.$value.'%')->first();
                 if($data !== null){
                     $data['details'] = json_decode($data['details']);
+                    if(isset($data['details']->to)){
+                        $data['details']->to = $this->retrieveNameOnly($data['details']->to);
+                        $data['details']->from = $this->retrieveNameOnly($data['details']->from);
+                    }
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
