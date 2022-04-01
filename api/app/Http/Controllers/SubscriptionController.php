@@ -227,7 +227,12 @@ class SubscriptionController extends APIController
         
         //getting total received for last 30 days
         $tempReceived = Ledger::where('account_id', '=', $data['account_id'])
-          ->where('amount', '>', 0)
+          ->where(function($query){
+              $query->where('description', '=', 'Event Donation')
+                ->orWhere('description', '=', 'Church Donation')
+                ->orWhere('description', '=', 'Subscription');
+          })
+          ->where('amount', '<', 0)
           ->whereBetween('created_at', [$last30days, $currDate->toDateTimeString()])
           ->get([DB::raw('SUM(amount) as total_received')]);
     
