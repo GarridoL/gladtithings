@@ -43,7 +43,7 @@ class EventController extends APIController
 
     public function generateCode()
   {
-    $code = 'det_' . substr(str_shuffle($this->codeSource), 0, 60);
+    $code = 'evt_' . substr(str_shuffle($this->codeSource), 0, 60);
     $codeExist = Event::where('code', '=', $code)->get();
     if (sizeof($codeExist) > 0) {
       $this->generateCode();

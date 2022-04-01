@@ -7,7 +7,7 @@
       <div class="column image-container">
         <div class="row">
           <div class="column image">
-            <img :src="config.BACKEND_URL + details.image[0].category" width="85%" height="100%" v-if="details && details.image.length > 0">
+            <img :src="config.BACKEND_URL + details.image[0].category" width="100%" height="auto" v-if="details && details.image.length > 0">
             <i class="far fa-image" style="font-size: 80px; color: gray;" v-else></i>
           </div>
           <div class="column text-container">
@@ -179,7 +179,9 @@ button:focus{
 }
 .image{
   width: 35%;
-  text-align: center;
+  padding: 10px;
+  align-items: center;
+  display: flex;
 }
 .black{
   height: 48.5%;

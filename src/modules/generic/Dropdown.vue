@@ -18,7 +18,7 @@
         </span>
       </span>
     </span>
-    <div class="modal fade" id="editPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="editPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" v-if="forEdit">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -28,7 +28,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <textarea wrap="off" rows="5" class="input-post"  v-model="text" :placeholder="text"></textarea>
+            <div class="grow-wrap">
+              <textarea onInput="this.parentNode.dataset.replicatedValue = this.value" class="input-post" v-model="forEdit.text" :placeholder="'Update your post'"/>
+            </div>
+            <PostImage :images="forEdit.images"/>
             <button class="text-center sort-button" @click="edit()">Update</button>
           </div>
         </div>
@@ -45,10 +48,18 @@
 <script>
 import AUTH from 'src/services/auth'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
+import PostImage from 'src/modules/generic/EditImages.vue'
 export default{
-  props: ['id', 'account_id', 'text'],
+  props: ['id', 'account_id', 'text', 'images'],
+  data(){
+    return {
+      user: AUTH.user,
+      forEdit: null
+    }
+  },
   components: {
-    Confirmation
+    Confirmation,
+    PostImage
   },
   methods: {
     showRemove(id) {
@@ -99,11 +110,6 @@ export default{
     showModal() {
       $('#editPost').modal('show')
     }
-  },
-  data(){
-    return {
-      user: AUTH.user
-    }
   }
 }
 </script>
@@ -112,7 +118,31 @@ export default{
 .dropdown-menu.show{
   position: absolute;
   margin: 10px -25px;
-  
+}
+.grow-wrap{
+  display: grid;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) " ";
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  outline: none;
+  font: inherit;
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
 }
 .sort-button{
   margin-top: 10px;
@@ -125,13 +155,8 @@ export default{
   float: right;
 }
 .input-post{
+  border-style: none;
   outline: none;
-  overflow:hidden;
-  border-radius: 20px;
-  border: .5px solid rgb(235, 235, 235);
-  margin-top: 10px;
-  outline: none;
-  padding: 10px;
   width: 100%;
 }
 .dropdown-menu{
