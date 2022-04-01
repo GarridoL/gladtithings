@@ -232,7 +232,7 @@ class SubscriptionController extends APIController
                 ->orWhere('description', '=', 'Church Donation')
                 ->orWhere('description', '=', 'Subscription');
           })
-          ->where('amount', '<', 0)
+          ->where('amount', '>', 0)
           ->whereBetween('created_at', [$last30days, $currDate->toDateTimeString()])
           ->get([DB::raw('SUM(amount) as total_received')]);
     
