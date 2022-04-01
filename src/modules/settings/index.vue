@@ -51,11 +51,6 @@ export default{
           title: 'Announcements',
           description: 'Let people know your happenings.',
           route: '/announcements'
-        },
-        {
-          title: 'Multiple Languages',
-          description: 'Change your language settings by selecting the language you want.',
-          route: '/languages'
         }
       ]
     }
