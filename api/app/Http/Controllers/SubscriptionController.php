@@ -429,7 +429,7 @@ class SubscriptionController extends APIController
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
                         'account' => $account,
-                        'details' => $temp
+                        'details' => $temp ? $temp : []
                     );
                     array_push($resDates, $item['year']);
                     array_push($resData, $item['amount']);
@@ -598,7 +598,7 @@ class SubscriptionController extends APIController
                     }
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
-                        'details' => $item
+                        'details' => $item ? $item : []
                     );
                     array_push($resDates, $item['year']);
                     array_push($resData, ((float)$item['amount'] * -1));
