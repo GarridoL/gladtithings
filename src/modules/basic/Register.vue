@@ -193,9 +193,9 @@
 }
 /*-------------- Extra Small Screen for Mobile Phones --------------*/
 @media (max-width: 992px){
-  .login-wrapper{
+  .login-wrapper, .tag-line{
     width: 96%;
-    margin: 0 2% 0 2%;
+    margin: 0 2% 2% 2%;
   }
 }
 </style>
