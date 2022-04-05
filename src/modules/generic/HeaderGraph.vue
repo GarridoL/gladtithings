@@ -88,7 +88,7 @@ export default {
         useBom: true,
         // useKeysAsHeaders: true,
         filename: this.data !== undefined ? this.data.datasets[0].label : 'No Summary',
-        headers: ['FROM', 'CURRENCY', 'AMOUNT', 'DESCRIPTION', 'DATE/YEAR']
+        headers: ['DATE/YEAR', 'CURRENCY', 'AMOUNT', 'DESCRIPTION', 'FROM']
       }
       this.details()
       var exportData = []
@@ -97,11 +97,11 @@ export default {
           const items = this.data.labels[index]
           const item = this.dataSet(this.data.datasets[0].data[index])
           let obj = {
+            date: items,
             from: this.datum[index].from !== undefined ? this.datum[index].from : 'N/A',
             currencu: this.datum[index].currency !== undefined ? this.datum[index].currency : 'N/A',
             amount: item,
-            description: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A',
-            date: items
+            description: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A'
           }
           exportData.push(obj)
         }

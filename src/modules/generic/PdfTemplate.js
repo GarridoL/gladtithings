@@ -45,34 +45,44 @@ export default {
     retrieve.push(
       [
         {
+          text: 'DATE/YEAR',
+          bold: true,
+          alignment: 'center',
+          fontSize: 10,
+          color: '#56C596',
+          borderColor: ['#56C596', '#56C596', '#56C596', '#56C596']
+        },
+        {
           text: 'FROM',
           alignment: 'center',
           fontSize: 10,
-          bold: true
+          bold: true,
+          color: '#56C596',
+          borderColor: ['#56C596', '#56C596', '#56C596', '#56C596']
         },
         {
           text: 'CURRENCY',
           alignment: 'center',
           fontSize: 10,
-          bold: true
+          bold: true,
+          color: '#56C596',
+          borderColor: ['#56C596', '#56C596', '#56C596', '#56C596']
         },
         {
           text: 'AMOUNT',
           alignment: 'center',
           fontSize: 10,
-          bold: true
+          bold: true,
+          color: '#56C596',
+          borderColor: ['#56C596', '#56C596', '#56C596', '#56C596']
         },
         {
           text: 'DESCRIPTION',
           alignment: 'center',
           fontSize: 10,
-          bold: true
-        },
-        {
-          text: 'DATE/YEAR',
           bold: true,
-          alignment: 'center',
-          fontSize: 10
+          color: '#56C596',
+          borderColor: ['#56C596', '#56C596', '#56C596', '#56C596']
         }
       ]
     )
@@ -80,13 +90,15 @@ export default {
       for (let index = 0; index < this.dataSet.labels.length; index++) {
         const items = this.dataSet.labels[index]
         const item = this.setData(this.dataSet.datasets[0].data[index])
+        // if(item !== 0){
         retrieve.push([
-          { text: this.datum[index].from, fontSize: 10, alignment: 'center' },
-          { text: this.datum[index].currency, fontSize: 10, alignment: 'center' },
-          { text: item, fontSize: 10, alignment: 'center' },
-          { text: this.datum[index].description, fontSize: 10, alignment: 'center' },
-          { text: items, fontSize: 10, alignment: 'center' }
+          { text: items, fontSize: 10, alignment: 'center', margin: [0, 5] },
+          { text: this.datum[index].from !== undefined ? this.datum[index].from.toUpperCase() : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] },
+          { text: this.datum[index].currency !== undefined ? this.datum[index].currency : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] },
+          { text: item, fontSize: 10, alignment: 'center', margin: [0, 5] },
+          { text: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] }
         ])
+        // }
       }
     }
     var docDefinition = {
@@ -118,14 +130,14 @@ export default {
         // },
         {
           text: [ { text: 'Name:         ', bold: true }, { text: AUTH.user !== null ? AUTH.user.information.first_name + ' ' + AUTH.user.information.last_name : 'No name', bold: true } ],
-          fontSize: 13,
+          fontSize: 12,
           style: 'subheader',
           alignment: 'left',
           margin: [0, 0, 0, 5]
         },
         {
           text: [ { text: 'Email:          ', bold: true }, { text: AUTH.user !== null ? AUTH.user.email : 'No Email', bold: true } ],
-          fontSize: 13,
+          fontSize: 12,
           style: 'subheader',
           alignment: 'left',
           margin: [0, 0, 0, 20]
