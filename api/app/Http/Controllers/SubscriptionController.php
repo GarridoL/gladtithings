@@ -598,7 +598,7 @@ class SubscriptionController extends APIController
                     }
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
-                        'details' => $item ? $item : []
+                        'details' => $item
                     );
                     array_push($resDates, $item['year']);
                     array_push($resData, ((float)$item['amount'] * -1));
@@ -619,7 +619,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resDates, $month);
                 array_push($resData, ($temp * -1));
@@ -639,7 +639,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
                     array_push($resDates, $tempPosition."th week");
@@ -663,7 +663,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 if(($tempPosition%100) >= 11 &&  ($tempPosition%100) <= 13){
                     array_push($resDates, $tempPosition."th week");
@@ -687,7 +687,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resDates, $day);
                 array_push($resData, ($temp * -1));
