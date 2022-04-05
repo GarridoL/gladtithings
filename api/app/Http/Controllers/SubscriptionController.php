@@ -429,7 +429,7 @@ class SubscriptionController extends APIController
                     $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
                     $additionals = array(
                         'account' => $account,
-                        'details' => $temp ? $temp : []
+                        'details' => $temp
                     );
                     array_push($resDates, $item['year']);
                     array_push($resData, $item['amount']);
@@ -450,7 +450,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resDates, $month);
                 array_push($resData, ($temp));
@@ -475,7 +475,7 @@ class SubscriptionController extends APIController
                     array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
                 }
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resData, ($temp));
                 array_push($resDetails, $additionals);
@@ -499,7 +499,7 @@ class SubscriptionController extends APIController
                     array_push($resDates, $tempPosition.$ends[$tempPosition%10]." week");
                 }
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resData, ($temp));
                 array_push($resDetails, $additionals);
@@ -518,7 +518,7 @@ class SubscriptionController extends APIController
                 }
                 $account = $data !== null ? app('Increment\Account\Http\AccountController')->retrieveAccountInfo($data['account_id']) : null;
                 $additionals = array(
-                    'details' => $data !== null ?  $data : []
+                    'details' => $data
                 );
                 array_push($resDates, $day);
                 array_push($resData, $temp);
