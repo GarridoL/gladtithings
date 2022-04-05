@@ -92,11 +92,11 @@ export default {
         const item = this.setData(this.dataSet.datasets[0].data[index])
         // if(item !== 0){
         retrieve.push([
-          { text: items, fontSize: 10, alignment: 'center', margin: [0, 5] },
-          { text: this.datum[index].from !== undefined ? this.datum[index].from.toUpperCase() : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] },
-          { text: this.datum[index].currency !== undefined ? this.datum[index].currency : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] },
-          { text: item, fontSize: 10, alignment: 'center', margin: [0, 5] },
-          { text: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5] }
+          { text: items, fontSize: 10, alignment: 'center', margin: [0, 5], borderColor: ['#D3D3D3', '#D3D3D3', '#D3D3D3', '#D3D3D3'] },
+          { text: this.datum[index].from !== undefined ? this.datum[index].from.toUpperCase() : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5], borderColor: ['#D3D3D3', '#D3D3D3', '#D3D3D3', '#D3D3D3'] },
+          { text: this.datum[index].currency !== undefined ? this.datum[index].currency : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5], borderColor: ['#D3D3D3', '#D3D3D3', '#D3D3D3', '#D3D3D3'] },
+          { text: item, fontSize: 10, alignment: 'center', margin: [0, 5], borderColor: ['#D3D3D3', '#D3D3D3', '#D3D3D3', '#D3D3D3'] },
+          { text: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A', fontSize: 10, alignment: 'center', margin: [0, 5], borderColor: ['#D3D3D3', '#D3D3D3', '#D3D3D3', '#D3D3D3'] }
         ])
         // }
       }
