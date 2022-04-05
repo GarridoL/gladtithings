@@ -30,7 +30,7 @@
     <div class="row summary-column">
       <div class="column" style="width: 80%;">
         <p><b>Summary</b></p>
-        <p style="margin-top: 5px;">Here are the summary last month.</p>
+        <p style="margin-top: 5px;">Here are the summary over the year.</p>
       </div>
     </div>
     <div class="graph" v-if="data.labels.length > 0">
@@ -142,7 +142,7 @@ export default{
     retrieveGraphData(){
       let parameter = {
         account_id: this.user.userID,
-        date: this.selected === null ? 'last_month' : this.selected
+        date: this.selected === null ? 'yearly' : this.selected
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_dashboard', parameter).then(response => {
