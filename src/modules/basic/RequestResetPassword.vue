@@ -139,6 +139,8 @@
   .tag-line{
     box-shadow: 0 0 0 0 #fff !important;
     margin-top: 50px !important;
+    margin: 0px 20px 0px 20px;
+    width: 96%;
   }
 }
 </style>
