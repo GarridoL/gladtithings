@@ -135,7 +135,8 @@ export default{
             label: 'SUBSCRIBERS',
             data: []
           }
-        ]
+        ],
+        details: []
       },
       graphDonations: {
         labels: [],
@@ -147,7 +148,8 @@ export default{
             label: 'AMOUNT OF DONATIONS',
             data: []
           }
-        ]
+        ],
+        details: []
       }
     }
   },
@@ -238,6 +240,7 @@ export default{
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
           this.graphDonations.datasets[0].data = response.data.result
+          this.graphDonations.details = response.data.details
           this.donation()
         }
       })
@@ -258,6 +261,7 @@ export default{
         if(response.data.dates.length > 0){
           this.graphSubscribe.labels = response.data.dates
           this.graphSubscribe.datasets[0].data = response.data.result
+          this.graphSubscribe.details = response.data.details
           this.subscription()
         }
       })
