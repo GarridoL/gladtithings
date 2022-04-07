@@ -19,6 +19,7 @@
           <tr>
             <td class="header"><b>Date</b></td>
             <td class="header"><b>Sponsor Name</b></td>
+            <td class="header"><b>Currency</b></td>
             <td class="header"><b>Donations</b></td>
           </tr>
         </thead>
@@ -26,6 +27,7 @@
           <tr v-for="(item, index) in data" :key="index">
             <td class="header">{{item.created_at}}</td>
             <td class="header">{{item.account.username}}</td>
+            <td class="header">{{item.currency}}</td>
             <td class="header">{{item.amount * -1}}</td>
           </tr>
         </tbody>

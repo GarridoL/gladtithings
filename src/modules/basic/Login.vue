@@ -3,7 +3,7 @@
     <div class="login-wrapper column">
       <div style="padding: 60px;text-align: center;">
         <p style="font-size: 25px; color: white;">Glad Tithings Tagline here</p>
-        <p style="color: white; text-align: justify;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p style="color: white; text-align: justify;"> Glad Tithings began as a means for Catholics in developing countries to connect with, and receive support from, members of their faith around the world. It has since grown into something that can do so much more; From parish administration, to event planning, to browsing posts and news from your friends and Church figures, Glad Tithings is an all encompassing platform. Our mission, as a team of young entrepreneurs, is to foster the balance between our humanity, our faith, and the fact of our existence in the digital age. We hope to build a network that supports Catholics around the world, and promotes Catholic art, stories, teaching, and community.</p>
       </div>
     </div>
     <div class="login-wrapper column">
@@ -179,7 +179,7 @@
 @media (max-width: 992px){
   .login-wrapper{
     width: 96%;
-    margin: 0 2% 0 2%;
+    margin: 0 2% 2% 2%;
   }
   .tag-line{
     width: 100%;

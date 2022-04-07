@@ -11,7 +11,7 @@
       </basic-filter>
       <button class="text-center sort-button" @click="redirect('events/create')">Add Event</button>
     </div>
-    <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
+    <empty v-if="data === null" :title="'No events available!'" :action="'Keep growing.'"></empty>
     <div class="table-container" v-else>
       <table class="table table-bordered table-responsive" v-if="data !== null">
         <thead>
@@ -19,7 +19,6 @@
             <td class="header"><b>Published Date</b></td>
             <td class="header"><b>Event Name</b></td>
             <td class="header"><b>Event Date</b></td>
-            <td class="header"><b>Donations Gathered</b></td>
             <td class="header"><b>Status</b></td>
             <td class="header"><b>Actions</b></td>
           </tr>
@@ -29,7 +28,6 @@
             <td class="header">{{item.created_at}}</td>
             <td class="header">{{item.name}}</td>
             <td class="header">{{item.start_date}}</td>
-            <td class="header">{{item.donations * -1}}</td>
             <td class="header">UPCOMING</td>
             <td class="header">
               <span>

@@ -32,10 +32,10 @@
           <td class="header email">{{item.email}}</td>
           <td class="header">
             <label v-if="editTypeIndex !== index">{{item.account_type}}</label>
-            <!-- <i class="fa fa-pencil text-primary" style="margin-left: 10px;" @click="setEditTypeIndex(index, item)" v-if="editTypeIndex !== index"></i> -->
+            <i class="fa fa-pencil text-primary" style="margin-left: 10px;" @click="setEditTypeIndex(index, item)" v-if="editTypeIndex !== index"></i>
             <span v-if="editTypeIndex === index">
               <select class="form-control" v-model="newAccountType" style="float: left; width: 70%;">
-                <option v-for="(typeItem, typeIndex) in ['USER', 'ADMIN', 'CHURCH']" :key="typeIndex">{{typeItem}}</option>
+                <option v-for="(typeItem, typeIndex) in ['USER', 'ADMIN']" :key="typeIndex">{{typeItem}}</option>
               </select>
               <i class="fa fa-check text-primary" style="margin-left: 5px; float: left;" @click="updateType(item, index)"></i>
               <i class="fa fa-times text-danger" style="margin-left: 5px; float: left;" @click="setEditTypeIndex(index, item)"></i>
@@ -44,13 +44,30 @@
           <td class="header">{{item.status}}</td>
           <td class="header" style="width: 15%;">
             <span>
-              <i class="fas fa-edit" style="margin-left: 1px; color: #56C596"></i>
-              <i class="fas fa-eye icon-eye" style="margin-left: 1px; color: black;"></i>
-              <i class="fas fa-qrcode" style="margin-left: 1px; color: black;"></i>
-              <i class="fas fa-list-alt" style="margin-left: 1px; color: grey;"></i>
-              <i class="fas fa-trash-alt icon-trash" style="margin-left: 1px; color: red;"></i>
+              <i class="fas fa-qrcode" style="margin-left: 1px; color: black;" @click="showQr()"></i>
+              <i class="fas fa-trash-alt icon-trash" style="margin-left: 1px; color: red;" @click="removeAccount(item)"></i>
             </span>
           </td>
+          <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Present this QR code for scanning...</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                  <VueQrcode
+                    :value="item.code"
+                    :size="200"
+                  />
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -59,6 +76,12 @@
       :active="activePage"
       :limit="limit"
       v-if="data !== null"
+    />
+    <Confirmation
+    ref="confirm"
+    :title="'Confirmation'"
+    :message="'Are you sure you want to delete this event?'"
+    @onConfirm="remove($event)"
     />
     </div>
   </div>
@@ -105,6 +128,8 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
+import VueQrcode from 'qrcode.vue'
 export default{
   mounted(){
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
@@ -166,9 +191,29 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('modules/generic/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Pager
+    Pager,
+    Confirmation,
+    VueQrcode
   },
   methods: {
+    removeAccount(item) {
+      this.$refs.confirm.show(item.id)
+    },
+    remove(event){
+      let parameter = {
+        id: event.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('accounts/delete', parameter, response => {
+        $('#loading').css({display: 'none'})
+        if(response.data > 0) {
+          this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+        }
+      })
+    },
+    showQr(){
+      $('#qrcode').modal('show')
+    },
     setEditTypeIndex(index, item){
       if(index === this.editTypeIndex){
         this.editTypeIndex = null

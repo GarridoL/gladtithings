@@ -4,7 +4,7 @@
       <div class="image">
         <img :src="user.profile && user.profile.url ? config.BACKEND_URL + user.profile.url : require('src/assets/img/test.jpg')" width="100%" height="100%" class="image-post">
       </div>
-        <textarea wrap="off" cols="50" rows="5" class="input-post" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?"></textarea>
+        <textarea wrap="off" cols="50" rows="5" maxlength="1000" class="input-post" v-on:keyup.enter="createPost()" v-model="input" placeholder="Do you have something good to share?"></textarea>
         <i class="fas fa-paper-plane send-post" @click="createPost()"></i>
         <i class="fas fa-images add-image" @click="showModalCreate()"></i>
     </div>
@@ -97,7 +97,6 @@ import Pager from 'src/modules/generic/Pager.vue'
 export default{
   mounted(){
     this.retrieve()
-    console.log(this.user)
   },
   data(){
     return {
@@ -144,6 +143,7 @@ export default{
   },
   methods: {
     showModalCreate() {
+      this.$refs.createPost.errorMessage = null
       $('#createPost').modal('show')
     },
     createPost() {
@@ -165,7 +165,7 @@ export default{
         if(response.data > 0) {
           this.input = null
           this.$refs.createPost.upload(response.data)
-      // this.$refs.createPost.uploadVid(50)
+          this.$refs.createPost.uploadVid(response.data)
         }
       })
     },

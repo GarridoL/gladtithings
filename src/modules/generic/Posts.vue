@@ -13,7 +13,7 @@
         <div class="dropdown">
           <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
           <i class="fas fa-ellipsis-h"></i>
-          <Dropdown :account_id="data.shared.account_id" :id="data.id" :text="data.text"/>
+          <Dropdown ref="dropdown" :account_id="data.shared.account_id" :id="data.id" :text="data.text" :images="data.images"/>
           </span>
         </div>
         </span>
@@ -33,7 +33,7 @@
         <div class="dropdown" v-if="data.shared === null">
           <span class="nav-item"  data-toggle="dropdown" v-on:click="makeActive('dropdown')" >
           <i class="fas fa-ellipsis-h"></i>
-          <Dropdown :account_id="data.account_id" :id="data.id" :text="data.text"/>
+          <Dropdown ref="dropdown" :account_id="data.account_id" :id="data.id" :text="data.text" :images="data.images"/>
           </span>
         </div>
         </span>
@@ -58,16 +58,6 @@
             <b>{{item.account.username}}</b>
             <p style="font-size: 12px;">{{item.created_at}}</p>
           </div>
-          <!-- <div class="column" style="width: 5%;">
-            <span class="right-menu-icons">
-            <div class="dropdown">
-              <span class="nav-item" data-toggle="dropdown" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
-              <i class="fas fa-ellipsis-h"></i>
-              <Dropdown/>
-              </span>
-              </div>
-            </span>
-          </div> -->
         </div>
         <p style="margin: 10px; margin-top: 10px; word-wrap: break-word;">{{item.text}}</p>
       </div>
@@ -114,15 +104,14 @@ export default{
   },
   methods: {
     makeActive(icon){
-      if(icon === 'dropdown-menu'){
-        this.settingFlag = true
-        this.menuFlag = true
-        this.notifFlag = false
-      }
+      this.$refs.dropdown.forEdit = this.data
     },
     shareModalShow() {
       this.status = null
       $('#shareModal').modal('show')
+    },
+    closeModal() {
+      $('#shareModal').modal('hide')
     },
     sharePost() {
       if(this.status === null || this.status === '') {

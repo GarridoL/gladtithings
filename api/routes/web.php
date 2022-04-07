@@ -134,6 +134,7 @@ Route::post($route.'retrieve_by_merchant', $controller."retrieveSubscriptionByMe
 Route::post($route.'retrieve_subscribers_graph', $controller."retrieveSubscribersGraph");
 Route::post($route.'retrieve_dashboard', $controller."retrieveDashboard");
 Route::post($route.'retrieve_subscription_graph', $controller."retrieveSubscriptionsGraph");
+Route::post($route.'retrieve_donations', $controller."retrieveDonations");
 Route::post($route.'dashboard', $controller."dashboard");
 Route::post($route.'delete', $controller."delete");
 Route::post($route.'update', $controller."update");

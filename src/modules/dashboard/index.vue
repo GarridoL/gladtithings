@@ -23,19 +23,22 @@
         <p class="balances-text"><b>{{ ledger && ledger.currency && ledger.currency.toUpperCase()}} {{sent ? sent.toLocaleString() : '0.0'}}</b></p>
       </div>
       <div class="column third">
-        <p class="title">Received Last 30 Days</p>
+        <p class="title">Received Donations</p>
         <p class="balances-text"><b>{{ledger && ledger.currency && ledger.currency.toUpperCase()}} {{receive ? receive.toLocaleString() : '0.0'}}</b></p>
       </div>
     </div>
     <div class="row summary-column">
       <div class="column" style="width: 80%;">
         <p><b>Summary</b></p>
-        <p style="margin-top: 5px;">Here are the summary last month.</p>
+        <p style="margin-top: 5px;">Here are the summary over the year.</p>
       </div>
     </div>
-    <div class="graph">
-      <GraphHeader @temp="headSub" :data="data"/>
-      <BarGraph :data="data" v-if="data.labels.length > 0" :options="{responsive: true, maintainAspectRatio: false}"/>
+    <div class="graph" v-if="data.labels.length > 0">
+      <GraphHeader @temp="headSub" :data="data" :name="'Summary'"/>
+      <BarGraph :data="data" :options="{responsive: true, maintainAspectRatio: false}" ref="subscription"/>
+    </div>
+    <div v-else>
+      <empty v-if="data.length === 0" :title="'Last summary is not available!'" :action="'Keep growing.'"></empty>
     </div>
     <div class="modal fade" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -62,8 +65,8 @@
 <script>
 import AUTH from 'src/services/auth'
 import Posts from 'src/modules/generic/Posts.vue'
-import BarGraph from 'src/modules/generic/BarGraph.vue'
-import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
+import BarGraph from 'src/modules/generic/BarGraphDashboard.vue'
+import GraphHeader from 'src/modules/generic/HeaderGraphDashboard.vue'
 import VueQrcode from 'qrcode.vue'
 export default{
   mounted(){
@@ -100,12 +103,18 @@ export default{
     Posts,
     VueQrcode,
     BarGraph,
-    GraphHeader
+    GraphHeader,
+    'empty': require('components/increment/generic/empty/Empty.vue')
   },
   methods: {
     headSub(e){
       this.selected = e
       this.retrieveGraphData()
+    },
+    summary(){
+      if(this.$refs.subscription && this.$refs.subscription.retrieve !== undefined){
+        this.$refs.subscription.retrieve(this.data, {responsive: true, maintainAspectRatio: false})
+      }
     },
     showQr(){
       $('#qrcode').modal('show')
@@ -133,7 +142,7 @@ export default{
     retrieveGraphData(){
       let parameter = {
         account_id: this.user.userID,
-        date: this.selected === null ? 'last_month' : this.selected
+        date: this.selected === null ? 'yearly' : this.selected
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('subscriptions/retrieve_dashboard', parameter).then(response => {
@@ -143,6 +152,7 @@ export default{
           this.data.datasets[0].data = response.data.total_amount_received
           this.receive = response.data.received
           this.sent = Math.abs(response.data.sends)
+          this.summary()
         }
       })
     }

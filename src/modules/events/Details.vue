@@ -7,15 +7,15 @@
       <div class="column image-container">
         <div class="row">
           <div class="column image">
-            <img :src="config.BACKEND_URL + details.image[0].category" width="85%" height="100%" v-if="details && details.image.length > 0">
+            <img :src="config.BACKEND_URL + details.image[0].category" width="100%" height="auto" v-if="details && details.image.length > 0">
             <i class="far fa-image" style="font-size: 80px; color: gray;" v-else></i>
           </div>
           <div class="column text-container">
             <p style="margin: 0;"><b>{{details.name}}</b></p>
             <p style="margin: 0;"><b>{{details.limit}}</b></p>
-            <p class="gray" style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2 gray"></i>{{details.location}}</p>
-            <span class="mr-4 gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.start_date}}</span>
-            <span class="gray"><i class="fas fa-calendar-alt mr-1 gray"></i>{{details.end_date}}</span>
+            <p style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2"></i>{{details.location}}</p>
+            <span class="mr-4"><i class="fas fa-calendar-alt mr-1"></i>{{details.start_date}}</span>
+            <span><i class="fas fa-calendar-alt mr-1"></i>{{details.end_date}}</span>
             <p class="long-text">{{details.description}}</p>
           </div>
         </div>
@@ -179,7 +179,9 @@ button:focus{
 }
 .image{
   width: 35%;
-  text-align: center;
+  padding: 10px;
+  align-items: center;
+  display: flex;
 }
 .black{
   height: 48.5%;

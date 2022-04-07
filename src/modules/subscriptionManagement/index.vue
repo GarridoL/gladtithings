@@ -18,8 +18,8 @@
                 :grid="['list', 'th-large']">
               </basic-filter>
             </div>
-            <div class="table-container">
-              <table class="table table-bordered table-responsive" v-if="data.length > 0">
+            <div class="table-container" v-if="data.length > 0">
+              <table class="table table-bordered table-responsive">
                 <thead>
                   <tr>
                       <td class="header"><b>Username</b></td>
@@ -37,8 +37,8 @@
                   </tr>
                 </tbody>
               </table>
-              <empty v-if="data.length === 0" :title="'No Subscriptions available!'" :action="'Keep growing.'"></empty>
             </div>
+            <empty class="table-container" v-if="data.length === 0" :title="'No Subscriptions available!'" :action="'Keep growing.'"></empty>
           <Pager
           :pages="numPages"
           :active="activePage"
@@ -49,19 +49,23 @@
           <p class="list-of"><b>Subscribers Graph</b></p>
           <p>The following data shows status of subscribers.</p>
         </div>
-        <div class="graph">
-          <GraphHeader v-if="graphSubscribe.labels.length > 0" @temp="headSub" :data="graphSub" :name="'Subscription'"/>
-          <BarGraph v-if="graphSubscribe.labels.length > 0" :data="graphSub" :options="{responsive: true, maintainAspectRatio: false}"/>
-          <empty v-else :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
+        <div class="graph" v-if="graphSubscribe.labels.length > 0">
+          <GraphHeader @temp="headSub" :data="graphSubscribe" :name="'Subscription'"/>
+          <BarGraph ref="subscription" :data="graphSubscribe" :options="{responsive: true, maintainAspectRatio: false}"/>
         </div>
-        <div>
+        <div v-else>
+          <empty class="table-container" :title="'You do not have any subscriptions!'" :action="'Keep growing.'"></empty>
+        </div>
+        <div>  
           <p class="list-of"><b>Donations Graph</b></p>
           <p>The following data shows status of donations.</p>
         </div>
-        <div class="graph">
-          <GraphHeader v-if="graphDonations.labels.length > 0" @temp="headDonate" :data="graphDon" :name="'Donations'"/>
-          <BarGraph v-if="graphDonations.labels.length > 0" :data="graphDon" :options="{responsive: true, maintainAspectRatio: false}"/>
-          <empty v-else :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
+        <div class="graph" v-if="graphDonations.labels.length > 0">
+          <GraphHeaderDonate @tempDonate="headDonate" :dataDonate="graphDonations" :name="'Donations'"/>
+          <BarGraphDonate ref="donation" :chartData="graphDonations" :options="{responsive: true, maintainAspectRatio: false}"/>
+        </div>
+        <div v-else>
+          <empty class="table-container" :title="'You do not have any donations!'" :action="'Keep growing.'"></empty>
         </div>
       </div>
       <div v-else>
@@ -77,14 +81,9 @@ import CONFIG from 'src/config.js'
 import Pager from 'src/modules/generic/Pager.vue'
 import BarGraph from 'src/modules/generic/BarGraph.vue'
 import GraphHeader from 'src/modules/generic/HeaderGraph.vue'
+import BarGraphDonate from 'src/modules/generic/BarGraphDonate.vue'
+import GraphHeaderDonate from 'src/modules/generic/HeaderGraphDonate.vue'
 export default{
-  mounted(){
-    if(this.user.merchant !== null){
-      this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
-      this.donationGraph(this.donateSelected)
-      this.subscriptionGraph(this.subSelected)
-    }
-  },
   data(){
     return {
       user: AUTH.user,
@@ -130,13 +129,14 @@ export default{
         labels: [],
         datasets: [
           {
-            fill: true,
-            borderColor: '#f87979',
-            backgroundColor: '#56C596',
+            fill: false,
+            backgroundColor: '#f87979',
+            borderColor: '#56C596',
             label: 'SUBSCRIBERS',
             data: []
           }
-        ]
+        ],
+        details: []
       },
       graphDonations: {
         labels: [],
@@ -148,8 +148,14 @@ export default{
             label: 'AMOUNT OF DONATIONS',
             data: []
           }
-        ]
+        ],
+        details: []
       }
+    }
+  },
+  mounted(){
+    if(this.user.merchant !== null){
+      this.retrieve({'T1.username': 'desc'}, {column: 'username', value: ''})
     }
   },
   computed: {
@@ -166,9 +172,21 @@ export default{
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
     BarGraph,
-    GraphHeader
+    GraphHeader,
+    BarGraphDonate,
+    GraphHeaderDonate
   },
   methods: {
+    donation(){
+      if(this.$refs.donation && this.$refs.donation.retrieve !== undefined){
+        this.$refs.donation.retrieve(this.graphDonations, {responsive: true, maintainAspectRatio: false})
+      }
+    },
+    subscription(){
+      if(this.$refs.subscription && this.$refs.subscription.retrieve !== undefined){
+        this.$refs.subscription.retrieve(this.graphSubscribe, {responsive: true, maintainAspectRatio: false})
+      }
+    },
     redirect(route){
       ROUTER.push(route)
     },
@@ -199,15 +217,15 @@ export default{
       this.APIRequest('subscriptions/retrieve_by_merchant', parameter).then(response => {
         if(response.data.length > 0){
           this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+          this.donationGraph(this.donateSelected)
+          this.subscriptionGraph(this.subSelected)
         }else{
           this.data = []
-          this.numPages = null
         }
       })
     },
-    headDonate(e){
-      this.donateSelected = e
+    headDonate(ex){
+      this.donateSelected = ex
       this.donationGraph(this.donateSelected)
     },
     donationGraph(e){
@@ -217,32 +235,34 @@ export default{
         date: this.donateSelected === null ? 'yearly' : this.donateSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
+      this.APIRequest('subscriptions/retrieve_donations', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphDonations.labels = response.data.dates
           this.graphDonations.datasets[0].data = response.data.result
+          this.graphDonations.details = response.data.details
+          this.donation()
         }
       })
     },
     headSub(e){
-      console.log('[head sub]', e)
       this.subSelected = e
       this.subscriptionGraph(this.subSelected)
     },
     subscriptionGraph(e){
       this.subSelected = e
       let parameter = {
-        merchant_id: this.user.merchant.id,
+        account_id: this.user.userID,
         date: this.subSelected === null ? 'yearly' : this.subSelected
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('subscriptions/retrieve_subscribers_graph', parameter).then(response => {
-        console.log('[subscription]', parameter)
+      this.APIRequest('subscriptions/retrieve_subscription_graph', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.dates.length > 0){
           this.graphSubscribe.labels = response.data.dates
           this.graphSubscribe.datasets[0].data = response.data.result
+          this.graphSubscribe.details = response.data.details
+          this.subscription()
         }
       })
     }

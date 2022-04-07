@@ -15,18 +15,20 @@
     <div class="row" v-if="data">
       <div class="column data-col">
         <p class="title with-border"><b>More Details</b></p>
-        <p class="title">Trasaction #</p>
-        <p class="title">Trasaction Type</p>
+        <p class="title" v-if="data.other_details && data.other_details.amount">Amount</p>
         <p class="title" v-if="data.other_details && data.other_details.amount">Total</p>
         <p class="title with-border" v-if="data.other_details && data.other_details.charge">Fee</p>
+        <p class="title">Trasaction #</p>
+        <p class="title">Trasaction Type</p>
         <p class="title" v-if="data.other_details && data.other_details.account">{{data.other_details ? data.other_details.type === 'receive' ? 'From' : 'To' : 'From'}}</p>
       </div>
       <div class="column data-col">
         <p class="title with-border"><b>&nbsp;</b></p>
+        <p class="title" v-if="data.other_details && data.other_details.amount">{{data.other_details.amount}}</p>
+        <p class="title" v-if="data.amount">{{data.amount}}</p>
+        <p class="title with-border" v-if="data.other_details && data.other_details.charge">{{data.other_details.charge}}</p>
         <p class="title" v-if="data && data.code">****{{data.code.substring(data.code.length - 4, data.code.length)}}</p>
         <p class="title">{{data.description.toUpperCase()}}</p>
-        <p class="title" v-if="data.other_details && data.other_details.amount">{{data.other_details.amount}}</p>
-        <p class="title with-border" v-if="data.other_details && data.other_details.charge">{{data.other_details.charge}}</p>
         <p class="title" v-if="data.other_details && data.other_details.account">****{{data.other_details.account.code.substring(data.other_details.account.code.length - 4, data.other_details.account.code.length)}}</p>
       </div>
     </div>
