@@ -39,13 +39,40 @@ export default {
     return {
       PdfTemplate: TemplatePdf,
       custom: null,
-      tempStyle: null
+      tempStyle: null,
+      datum: []
     }
   },
   components: {
     DatePicker
   },
   methods: {
+    details(){
+      this.datum = []
+      for (let ndx = 0; ndx < this.data.details.length; ndx++) {
+        var obj = {
+          currency: this.setDetailsCurrency(this.data.details[ndx], ndx),
+          from: this.setDetailsFrom(this.data.details[ndx], ndx),
+          description: this.setDetailsDescription(this.data.details[ndx], ndx)
+        }
+        this.datum.push(obj)
+      }
+    },
+    setDetailsCurrency(data, ndx){
+      if(data.details !== null){
+        return Array.isArray(data.details) ? data.details[ndx].currency : data.details.currency
+      }
+    },
+    setDetailsFrom(data, ndx){
+      if(data.details !== null){
+        return Array.isArray(data.details) ? data.details[ndx].details.from : data.details.details.from
+      }
+    },
+    setDetailsDescription(data, ndx){
+      if(data.details !== null){
+        return Array.isArray(data.details) ? data.details[ndx].description : data.details.description
+      }
+    },
     dataSet(data){
       return data
     },
@@ -61,8 +88,9 @@ export default {
         useBom: true,
         // useKeysAsHeaders: true,
         filename: this.data !== undefined ? this.data.datasets[0].label : 'No Summary',
-        headers: ['Date', 'Amount']
+        headers: ['DATE/YEAR', 'CURRENCY', 'AMOUNT', 'DESCRIPTION', 'FROM']
       }
+      this.details()
       var exportData = []
       if(this.data !== undefined && this.data.labels.length > 0 && this.data.datasets[0].data.length > 0){
         for (let index = 0; index < this.data.labels.length; index++) {
@@ -70,7 +98,10 @@ export default {
           const item = this.dataSet(this.data.datasets[0].data[index])
           let obj = {
             date: items,
-            amount: item
+            from: this.datum[index].from !== undefined ? this.datum[index].from : 'N/A',
+            currencu: this.datum[index].currency !== undefined ? this.datum[index].currency : 'N/A',
+            amount: item,
+            description: this.datum[index].description !== undefined ? this.datum[index].description : 'N/A'
           }
           exportData.push(obj)
         }
