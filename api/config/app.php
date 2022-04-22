@@ -182,6 +182,7 @@ return [
         Increment\Common\Ticket\TicketServiceProvider::class,
         Increment\Common\Notification\NotificationServiceProvider::class,
         Increment\Common\Invitation\InvitationServiceProvider::class,
+        Increment\Common\ContactUs\ContactUsServiceProvider::class,
         Increment\Messenger\MessengerServiceProvider::class,
         Increment\Common\MyCircle\MyCircleServiceProvider::class,
         Increment\Finance\FinanceProvider::class,
