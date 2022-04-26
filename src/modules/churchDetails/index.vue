@@ -198,6 +198,9 @@ export default{
       }
     },
     updateSchedule(){
+      if(this.church === null) {
+        return
+      }
       let status = false
       this.days.forEach(element => {
         if(element.schedule.length > 0) {
@@ -347,12 +350,23 @@ export default{
       this.APIRequest('account_merchants/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
+          this.updateAccountType()
           this.retrieve()
           this.status = 'udpate'
           this.errorMessage = null
           this.errorMessage1 = null
           this.successMessage = 'Successfully updated.'
         }
+      })
+    },
+    updateAccountType() {
+      let parameter = {
+        id: this.user.userID,
+        account_type: 'CHURCH'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('accounts/update_type', parameter).then(response => {
+        $('#loading').css({display: 'none'})
       })
     },
     updatePhoto(object){
