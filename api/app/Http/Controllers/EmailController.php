@@ -14,6 +14,7 @@ use App\Mail\Receipt;
 use App\Mail\NewMessage;
 use App\Mail\Ledger;
 use App\Mail\Deposit;
+use App\Mail\VerificationStatus;
 use Illuminate\Http\Request;
 
 class EmailController extends APIController
@@ -221,5 +222,17 @@ class EmailController extends APIController
         } else {
           echo $response;
         }
+    }
+
+    public function verification_status($accountId, $details){
+        if(env('EMAIL_STATUS') == false){
+            return false;
+        }
+        $user = $this->retrieveAccountDetails($accountId);
+        if($user != null && $user['status'] != 'INVALID_EMAIL'){
+            Mail::to($user['email'])->send(new VerificationStatus($user, $details, $this->response['timezone']));
+            return true;
+        }
+        return false;
     }
 }
