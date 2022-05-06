@@ -169,13 +169,21 @@ export default{
       ROUTER.push('/settings')
     },
     getResult($event) {
+      console.log($event, typeof $event)
       if($event !== null) {
-        let address = {
-          name: $event.formatted_address,
-          latitude: $event.latitude,
-          longitude: $event.longitude
+        if(typeof $event !== 'object') {
+          this.errorMessage = 'Choose address from the autocomplete results.'
+          this.successMessage = null
+          return
+        } else {
+          let address = {
+            name: $event.formatted_address,
+            latitude: $event.latitude,
+            longitude: $event.longitude
+          }
+          this.errorMessage = null
+          this.address = JSON.stringify(address)
         }
-        this.address = JSON.stringify(address)
       } else {
         // this.data.address = null
       }
@@ -225,6 +233,7 @@ export default{
     remove(index) {
       let i = this.days.map(e => e.title).indexOf(this.selectedDay)
       this.days[i].schedule.splice(index, 1)
+      this.updateSchedule()
     },
     addSchedModal(item, index) {
       if(item !== null && index !== null) {
@@ -260,10 +269,17 @@ export default{
         this.schedEndTime = null
         this.schedName = null
         $('#addSched').modal('hide')
+        this.updateSchedule()
       } else {
         if(this.item.startTime === null || this.item.startTime === '' || this.item.language === null || this.item.language === '') {
           this.modalErrorMessage = 'Fields with * are all required.'
           return
+        }
+        if(this.item.endTime === null || this.item.endTime === '') {
+          this.item.endTime = ''
+        }
+        if(this.item.name === null || this.item.name === '') {
+          this.item.name = 'Unknown'
         }
         if(this.dateErrorMessage !== null) {
           return
@@ -271,6 +287,7 @@ export default{
         let index = this.days.map(e => e.title).indexOf(this.selectedDay)
         this.days[index].schedule[this.item.index] = this.item
         $('#addSched').modal('hide')
+        this.updateSchedule()
       }
       this.item = null
     },
@@ -316,6 +333,9 @@ export default{
           this.errorMessage = 'All fields are required.'
           this.errorMessage1 = null
           this.$refs.featured.errorMessage = null
+          return
+        }
+        if(this.errorMessage === 'Choose address from the autocomplete results.') {
           return
         }
         let parameter = {
