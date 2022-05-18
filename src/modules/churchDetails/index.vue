@@ -76,12 +76,12 @@
                 <input placeholder="Start Time" class="generic-input" type="time" v-model="schedStartTime" v-else @change="checkTime(schedStartTime, schedEndTime)">
               </div>
                <div class="column time">
-                <label><b>End Time&nbsp;</b><span style="color: red;">*</span></label><br>
+                <label><b>End Time&nbsp;</b><span>(Optional)</span></label><br>
                 <input placeholder="End Time" class="generic-input" type="time" v-model="item.endTime" v-if="item" @change="checkTime(item.startTime, item.endTime)">
                 <input placeholder="End Time" class="generic-input" type="time" v-model="schedEndTime" v-else @change="checkTime(schedStartTime, schedEndTime)">
               </div>
             </div>
-            <label><b>Presider&nbsp;</b><span style="color: red;">*</span></label><br>
+            <label><b>Presider&nbsp;</b><span>(Optional)</span></label><br>
             <input placeholder="Presider" class="generic-input" v-model="item.name" v-if="item">
             <input placeholder="Presider" class="generic-input" v-model="schedName" v-else>
             <label><b>Language&nbsp;</b><span style="color: red;">*</span></label><br>
@@ -169,35 +169,48 @@ export default{
       ROUTER.push('/settings')
     },
     getResult($event) {
+      console.log($event, typeof $event)
       if($event !== null) {
-        let address = {
-          name: $event.formatted_address,
-          latitude: $event.latitude,
-          longitude: $event.longitude
+        if(typeof $event !== 'object') {
+          this.errorMessage = 'Choose address from the autocomplete results.'
+          this.successMessage = null
+          return
+        } else {
+          let address = {
+            name: $event.formatted_address,
+            latitude: $event.latitude,
+            longitude: $event.longitude
+          }
+          this.errorMessage = null
+          this.address = JSON.stringify(address)
         }
-        this.address = JSON.stringify(address)
       } else {
         // this.data.address = null
       }
     },
     checkTime(startTime, endTime) {
-      let a = null
-      let b = null
-      if(startTime) {
-        a = new Date(`01-01-2021 ${startTime}:00`)
-      }
-      if(endTime) {
-        b = new Date(`01-01-2021 ${endTime}:00`)
-      }
-      if((a && a.getTime()) === (b && b.getTime())) {
-        this.dateErrorMessage = 'Start time and End time should not be equal.'
-      } else if((a && a.getTime()) > (b && b.getTime())) {
-        this.dateErrorMessage = 'Start time should be less than the end time.'
-      } else {
-        this.dateErrorMessage = null
+      if(startTime !== null && endTime !== null) {
+        let a = null
+        let b = null
+        if(startTime) {
+          a = new Date(`01-01-2021 ${startTime}:00`)
+        }
+        if(endTime) {
+          b = new Date(`01-01-2021 ${endTime}:00`)
+        }
+        if((a && a.getTime()) === (b && b.getTime())) {
+          this.dateErrorMessage = 'Start time and End time should not be equal.'
+        } else if((a && a.getTime()) > (b && b.getTime())) {
+          this.dateErrorMessage = 'Start time should be less than the end time.'
+        } else {
+          this.dateErrorMessage = null
+        }
       }
     },
     updateSchedule(){
+      if(this.church === null) {
+        return
+      }
       let status = false
       this.days.forEach(element => {
         if(element.schedule.length > 0) {
@@ -220,6 +233,7 @@ export default{
     remove(index) {
       let i = this.days.map(e => e.title).indexOf(this.selectedDay)
       this.days[i].schedule.splice(index, 1)
+      this.updateSchedule()
     },
     addSchedModal(item, index) {
       if(item !== null && index !== null) {
@@ -232,8 +246,8 @@ export default{
     },
     addToSchedulePerDay(option) {
       if(option === 'add') {
-        if(this.schedName === '' || this.schedName === null || this.schedStartTime === null || this.schedStartTime === '' || this.schedEndTime === null || this.schedEndTime === '' || this.schedLanguage === null || this.schedLanguage === '') {
-          this.modalErrorMessage = 'All fields are required.'
+        if(this.schedStartTime === null || this.schedStartTime === '' || this.schedLanguage === null || this.schedLanguage === '') {
+          this.modalErrorMessage = 'Fields with * are all required.'
           return
         } else {
           this.modalErrorMessage = null
@@ -245,8 +259,8 @@ export default{
         this.days[index].schedule.push(
           {
             startTime: this.schedStartTime,
-            endTime: this.schedEndTime,
-            name: this.schedName,
+            endTime: this.schedEndTime !== null && this.schedEndTime !== '' ? this.schedEndTime : '',
+            name: this.schedName !== null && this.schedName !== '' ? this.schedName : 'Unknown',
             language: this.schedLanguage
           }
         )
@@ -255,10 +269,17 @@ export default{
         this.schedEndTime = null
         this.schedName = null
         $('#addSched').modal('hide')
+        this.updateSchedule()
       } else {
-        if(this.item.name === '' || this.item.name === null || this.item.startTime === null || this.item.startTime === '' || this.item.endTime === null || this.item.endTime === '' || this.item.language === null || this.item.language === '') {
-          this.modalErrorMessage = 'All fields are required.'
+        if(this.item.startTime === null || this.item.startTime === '' || this.item.language === null || this.item.language === '') {
+          this.modalErrorMessage = 'Fields with * are all required.'
           return
+        }
+        if(this.item.endTime === null || this.item.endTime === '') {
+          this.item.endTime = ''
+        }
+        if(this.item.name === null || this.item.name === '') {
+          this.item.name = 'Unknown'
         }
         if(this.dateErrorMessage !== null) {
           return
@@ -266,6 +287,7 @@ export default{
         let index = this.days.map(e => e.title).indexOf(this.selectedDay)
         this.days[index].schedule[this.item.index] = this.item
         $('#addSched').modal('hide')
+        this.updateSchedule()
       }
       this.item = null
     },
@@ -313,6 +335,9 @@ export default{
           this.$refs.featured.errorMessage = null
           return
         }
+        if(this.errorMessage === 'Choose address from the autocomplete results.') {
+          return
+        }
         let parameter = {
           id: this.church.id,
           name: this.name,
@@ -347,12 +372,23 @@ export default{
       this.APIRequest('account_merchants/create', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data) {
+          this.updateAccountType()
           this.retrieve()
           this.status = 'udpate'
           this.errorMessage = null
           this.errorMessage1 = null
           this.successMessage = 'Successfully updated.'
         }
+      })
+    },
+    updateAccountType() {
+      let parameter = {
+        id: this.user.userID,
+        account_type: 'CHURCH'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('accounts/update_type', parameter).then(response => {
+        $('#loading').css({display: 'none'})
       })
     },
     updatePhoto(object){

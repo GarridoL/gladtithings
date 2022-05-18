@@ -161,11 +161,9 @@ export default{
         id: event.id
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('payment_methods/delete', parameter, response => {
+      this.APIRequest('events/delete', parameter, response => {
         $('#loading').css({display: 'none'})
-        if(response.data > 0) {
-          this.retrieve()
-        }
+        this.retrieve({created_at: 'asc'}, {column: 'created_at', value: ''})
       })
     }
   }
