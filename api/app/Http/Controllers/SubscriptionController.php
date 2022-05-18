@@ -536,7 +536,7 @@ class SubscriptionController extends APIController
     public function retrieveDonations(Request $request){
         $data = $request->all();
         $currDate = Carbon::now();
-        $fTransaction = Ledger::where('description', '=', 'Event Donation')->where('details', '=', $data['account_id'])->first();
+        $fTransaction = Ledger::where('description',  'like', '%Donation%')->first();
         $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
