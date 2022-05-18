@@ -542,8 +542,8 @@ class SubscriptionController extends APIController
         $resData = [];
         $resDetails = [];
         $whereArray= array(
-            array('details', '=', $data['account_id']),
-            array('description', '=', 'Event Donation'),
+            // array('details', '=', $data['account_id']),
+            array('description', 'like', '%Donation%'),
         );
 
         $dates = [];
