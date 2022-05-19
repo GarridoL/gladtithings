@@ -243,7 +243,7 @@ class SubscriptionController extends APIController
           array('amount', '>', 0),
           array(function($query){
             $query->where('details', 'like', '%'.'"payment_payload":"direct_transfer"'.'%')
-              ->orWhere('details', '=', 'subscription');
+              ->orWhere('details',  'like', '%'.'"name":"subscription"'.'%');
           })
         );
         
@@ -260,7 +260,7 @@ class SubscriptionController extends APIController
             $fTransaction['created_at'] = $fTransaction['created_at']->toDateTimeString();
             $tempYearly = CarbonPeriod::create($fTransaction['created_at'], $currDate->toDateTimeString());
             foreach ($tempYearly as $year) {
-              array_push($dates, $year->toDateString());
+              array_push($dates, $year->format('Y'));
             }
           }
         }else if($data['date'] === 'current_year'){
@@ -301,9 +301,11 @@ class SubscriptionController extends APIController
           if(sizeof($temp) > 0){
             for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
               $item = $temp[$i];
-              array_push($resDates, $item['year']);
               array_push($resData, abs($item['amount']));
+              array_push($resDates, $item['year']);
             }
+          }else{
+            array_push($resDates, Carbon::now()->format('Y'));
           }
         }else if($data['date'] === 'current_year'){
           foreach ($dates as $key) {
@@ -343,12 +345,6 @@ class SubscriptionController extends APIController
                 array_push($resDates, $day);
                 array_push($resData, abs($temp));
             }
-        }else if($date['custom'] === 'custom'){
-          foreach ($dates as $key) {
-            $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$key.'%')->sum('amount');
-            array_push($resDates, $key);
-            array_push($resData, abs($temp));
-          }
         }
     
         $fin = array(
@@ -536,13 +532,14 @@ class SubscriptionController extends APIController
     public function retrieveDonations(Request $request){
         $data = $request->all();
         $currDate = Carbon::now();
-        $fTransaction = Ledger::where('description',  'like', '%Donation%')->first();
+        $fTransaction = Ledger::where('description',  'like', '%Donation%')->where('amount', '<', 0)->where('account_id', '=', $data['account_id'])->first();
         $ends = array('th','st','nd','rd','th','th','th','th','th','th');
         $resDates = [];
         $resData = [];
         $resDetails = [];
         $whereArray= array(
-            // array('details', '=', $data['account_id']),
+            array('account_id', '=', $data['account_id']),
+            array('amount', '<', 0),
             array('description', 'like', '%Donation%'),
         );
 
@@ -552,7 +549,7 @@ class SubscriptionController extends APIController
             $fTransaction['created_at'] = $fTransaction['created_at']->toDateTimeString();
             $tempYearly = CarbonPeriod::create($fTransaction['created_at'], $currDate->toDateTimeString());
             foreach ($tempYearly as $year) {
-                array_push($dates, $year->toDateString());
+                array_push($dates, $year->format('Y'));
             }
             }
         }else if($data['date'] === 'current_year'){
@@ -585,26 +582,44 @@ class SubscriptionController extends APIController
         }
 
         if($data['date'] === 'yearly'){
-            $temp = Ledger::select('*', DB::raw('sum(amount) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
+            $temp = Ledger::select('*', DB::raw('sum(ABS(amount)) as `amount`'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),  DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
             ->where($whereArray)
-            ->groupby('year')
+            ->groupby('description')
+            ->orderBy('id', 'desc')
             ->get();
-            if(sizeof($temp) > 0){
-                for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
-                    $item = $temp[$i];
-                    if(isset($item['details']->to)){
-                        $temp[$i]['details']->to = $this->retrieveNameOnly($item['details']->to);
-                        $temp[$i]['details']->from = $this->retrieveNameOnly($item['details']->from);
-                    }
-                    $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
-                    $additionals = array(
-                        'details' => $item
+            $temp = $temp->groupBy('year');
+            for ($i=0; $i <= sizeof($dates)-1 ; $i++) { 
+                $item = $dates[$i];
+                $tempData  = $temp[$item];
+                $resDates[] = $item;
+                $tempStats = [];
+                for ($a=0; $a <= sizeof($tempData)-1 ; $a++) { 
+                    $each = $tempData[$a];
+                    $totalPerGroup = array(
+                        'description' => $each['description'],
+                        'amount' => $each['amount'],
                     );
-                    array_push($resDates, $item['year']);
-                    array_push($resData, ((float)$item['amount'] * -1));
-                    array_push($resDetails, $additionals);
+                    $resData[] = $totalPerGroup;
+                    $resDetails[] = $each;
                 }
+
             }
+            // if(sizeof($temp) > 0){
+            //     for ($i=0; $i <= sizeof($temp)-1 ; $i++) { 
+            //         $item = $temp[$i];
+            //         if(isset($item['details']->to)){
+            //             $temp[$i]['details']->to = $this->retrieveNameOnly($item['details']->to);
+            //             $temp[$i]['details']->from = $this->retrieveNameOnly($item['details']->from);
+            //         }
+            //         $account = app('Increment\Account\Http\AccountController')->retrieveAccountInfo($item['account_id']);
+            //         $additionals = array(
+            //             'details' => $item
+            //         );
+            //         array_push($resDates, $item['year']);
+            //         array_push($resData, ((float)$item['amount'] * -1));
+            //         array_push($resDetails, $additionals);
+            //     }
+            // }
         }else if($data['date'] === 'current_year'){
             foreach ($dates as $key) {
                 $temp = Ledger::where($whereArray)->where('created_at', 'like', '%'.$currDate->year.'-'.$key.'%')->sum('amount');
