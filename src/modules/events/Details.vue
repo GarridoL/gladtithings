@@ -12,7 +12,7 @@
           </div>
           <div class="column text-container">
             <p style="margin: 0;"><b>{{details.name}}</b></p>
-            <p style="margin: 0;"><b>{{details.limit}}</b></p>
+            <p style="margin: 0;"><i class="fa fa-users mr-1 mt-2" aria-hidden="true"></i><b>{{details.limit}}</b></p>
             <p style="margin: 0;"><i class="fas fa-map-marker-alt mr-1 mt-2"></i>{{details.location}}</p>
             <span class="mr-4"><i class="fas fa-calendar-alt mr-1"></i>{{details.start_date}}</span>
             <span><i class="fas fa-calendar-alt mr-1"></i>{{details.end_date}}</span>

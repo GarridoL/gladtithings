@@ -11,7 +11,7 @@
     <br>
     <div class="tabs" style="margin-bottom: 30px;">
       <button :class="secondClass" @click="communityClick()">Communities</button>
-      <button :class="firstClass" @click="messageClick()">Pope's Messages</button>
+      <button :class="firstClass" @click="messageClick()">Pope Francis</button>
     </div>
     <br>
     <br>
