@@ -135,11 +135,13 @@ export default{
           text: this.data.text,
           to: this.user.userID,
           from: this.user.userID,
-          route: 'statusStack'
+          route: 'statusStack',
+          created_at: this.data.created_at
         }
         $('#loading').css({display: 'block'})
         this.APIRequest('comments/create', par).then(res => {
           $('#loading').css({display: 'none'})
+          this.$parent.retrieve()
         })
       })
     },
